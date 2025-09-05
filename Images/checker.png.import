@@ -2,26 +2,27 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b73y5cam3211y"
-path="res://.godot/imported/crosshair_plus.png-462b7f0916846bc4340c802ba28400f3.ctex"
+uid="uid://dxbkjfh5l0n4o"
+path.s3tc="res://.godot/imported/checker.png-cbcfe3f77da6ab3cdeaed61e0e8b8f83.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
-source_file="res://Textures/crosshair_plus.png"
-dest_files=["res://.godot/imported/crosshair_plus.png-462b7f0916846bc4340c802ba28400f3.ctex"]
+source_file="res://Images/checker.png"
+dest_files=["res://.godot/imported/checker.png-cbcfe3f77da6ab3cdeaed61e0e8b8f83.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=false
+mipmaps/generate=true
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -31,4 +32,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

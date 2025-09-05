@@ -13,7 +13,7 @@ config_version=5
 config/name="3d-explore"
 run/main_scene="uid://dmhoe5lj17si8"
 config/features=PackedStringArray("4.4", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Images/icon.svg"
 
 [display]
 
