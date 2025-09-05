@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2fjk8sjrgt5b"]
+
+[ext_resource type="Script" uid="uid://cg3ief3pfmqr7" path="res://Scripts/camera.gd" id="1_x7t1k"]
+[ext_resource type="PackedScene" uid="uid://bx5n31jm0mov6" path="res://Scenes/bullet.tscn" id="2_35i88"]
+
+[node name="Marksman" type="Marker3D"]
+
+[node name="Pivot" type="Node3D" parent="."]
+script = ExtResource("1_x7t1k")
+bullet_scene = ExtResource("2_35i88")
+
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
+fov = 20.0
