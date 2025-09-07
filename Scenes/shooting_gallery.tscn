@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmhoe5lj17si8"]
+[gd_scene load_steps=10 format=3 uid="uid://dmhoe5lj17si8"]
 
 [ext_resource type="Script" uid="uid://dygeferva8e0t" path="res://Scripts/shooting_gallery.gd" id="1_42nf8"]
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
 [ext_resource type="PackedScene" uid="uid://bx5n31jm0mov6" path="res://Scenes/bullet.tscn" id="3_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
+[ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="7_ahrfq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hqr8d"]
 albedo_texture = ExtResource("1_es7xq")
@@ -37,12 +38,15 @@ wait_time = 0.5
 autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay"]
-position = Vector2(368, 292)
-scale = Vector2(11.6439, 11.6439)
+position = Vector2(360, 270)
+scale = Vector2(5, 5)
 texture = ExtResource("5_au61t")
+offset = Vector2(0.5, 0.5)
 
-[connection signal="gun0_fired" from="Marksman" to="." method="_on_marksman_gun_0_fired"]
+[node name="Cylinder" parent="." instance=ExtResource("7_ahrfq")]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 10.8419, 0, 0)
+
+[connection signal="gun_0_fired" from="Marksman" to="." method="_on_marksman_gun_0_fired"]
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

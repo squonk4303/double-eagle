@@ -14,8 +14,6 @@ func _on_ball_timer_timeout() -> void:
     add_child(ball)
 
 func _on_marksman_gun_0_fired(b_position: Vector3, b_rotation: Vector3) -> void:
-    pass # Replace with function body.
-
     print("Firing @ ", b_position, b_rotation)
     var bullet = bullet_scene.instantiate()
     bullet.initialize(b_position, b_rotation)

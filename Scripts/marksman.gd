@@ -10,7 +10,8 @@ var MIN_PITCH = deg_to_rad(-90)
 
 var to_rotate: Vector3
 
-signal gun0_fired(b_position: Vector3, b_rotation: Vector3)
+signal gun_0_fired(b_position: Vector3, b_rotation: Vector3)
+
 
 func _ready():
     # Capture mouse
@@ -28,9 +29,10 @@ func _unhandled_input(event):
 
     if event.is_action_pressed("primary_fire"):
         # Tweak position before emitting
-        var bullet_position = camera.global_position + Vector3(0.1, -0.1, -0.1)
+        var offset = Vector3(1, -1, -1) * 0.01
+        var bullet_position = camera.global_position + offset
         # Emit signal to spawn a bullet in parent scene
-        gun0_fired.emit(bullet_position, camera.global_rotation)
+        gun_0_fired.emit(bullet_position, camera.global_rotation)
 
     if event.is_action_pressed("LMB"):
         # Recapture mouse upon clicking inside window
