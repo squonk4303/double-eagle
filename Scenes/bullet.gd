@@ -25,10 +25,8 @@ func _physics_process(delta):
 
 
 func collided(body):
-    print("hit something", position)
-    if !hit_something_yet:
-        if body.has_method("bullet_hit"):
-            pass
+    if !hit_something_yet and body.has_method("bullet_hit"):
+            body.bullet_hit(position)
 
     hit_something_yet = true
     queue_free()

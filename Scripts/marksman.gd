@@ -24,6 +24,7 @@ func _unhandled_input(event):
         Input.mouse_mode == Input.MOUSE_MODE_CAPTURED
     ):
         # Set distances to rotate camera
+        # Continued in _process(...)
         to_rotate.y = -1 * event.relative.x * mouse_sens
         to_rotate.x = -1 * event.relative.y * mouse_sens
 
@@ -34,13 +35,16 @@ func _unhandled_input(event):
         # Emit signal to spawn a bullet in parent scene
         gun_0_fired.emit(bullet_position, camera.global_rotation)
 
-    if event.is_action_pressed("LMB"):
-        # Recapture mouse upon clicking inside window
-        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-
-    if event.is_action_pressed("ESCAPE"):
+    # Hard-coded input events
+    if event is InputEventKey:
         # Yield control of mouse when "esc" is pressed
-        Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+        if event.pressed and event.keycode == KEY_ESCAPE:
+            Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+    if event is InputEventMouseButton:
+        # Recapture mouse upon clicking inside window
+        if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+            Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
 func _process(delta: float) -> void:
@@ -48,8 +52,8 @@ func _process(delta: float) -> void:
     # Find this out.
 
     # Rotate Pivot along y-axis
+    # And Camera along its x-axis
     pivot.rotate_y(to_rotate.y * delta)
-    # Rotate Camera along its x-axis
     camera.rotate_x(to_rotate.x * delta)
     camera.rotation.x = clamp(camera.rotation.x, MIN_PITCH, MAX_PITCH)
     # Reset rotation vector
