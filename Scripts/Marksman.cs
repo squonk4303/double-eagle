@@ -50,32 +50,25 @@ public partial class Marksman : Node3D
             EmitSignal(SignalName.FireGun00, bulletPosition, GlobalRotation);
         }
 
-        // # Hard-coded input events
-        // if event is InputEventKey:
-        //     # Yield control of mouse when "esc" is pressed
-        //     if event.pressed and event.keycode == KEY_ESCAPE:
-        //         Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+        // Escape mouse capture with Esc key
+        if (
+            @event is InputEventKey keyEvent &&
+            keyEvent.Pressed &&
+            keyEvent.Keycode == Key.Escape
+        ) {
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+        }
 
         if (@event is InputEventMouseButton mouseButtonEvent)
         {
-            if (mouseButtonEvent.ButtonIndex == MouseButton.Left)
-            {
-                if (mouseButtonEvent.Pressed)
-                {
-                    GD.Print("Left mouse button pressed");
-                    Input.MouseMode = Input.MouseModeEnum.Captured;
-                }
-                else
-                {
-                    GD.Print("Left mouse button released");
-                }
+            // Capture mouse on left-click
+            if (
+                mouseButtonEvent.ButtonIndex == MouseButton.Left &&
+                mouseButtonEvent.Pressed
+            ) {
+                Input.MouseMode = Input.MouseModeEnum.Captured;
             }
         }
-
-        // if event is InputEventMouseButton:
-        //     # Recapture mouse upon clicking inside window
-        //     if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-        //         Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
     }
 
     public override void _Process(double delta)
