@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d2fjk8sjrgt5b"]
 
-[ext_resource type="Script" uid="uid://cg3ief3pfmqr7" path="res://Scripts/marksman.gd" id="1_x7t1k"]
+[ext_resource type="Script" uid="uid://cld883p4rngl8" path="res://Scripts/Marksman.cs" id="1_x7t1k"]
 
 [node name="Marksman" type="Marker3D"]
 script = ExtResource("1_x7t1k")

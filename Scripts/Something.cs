@@ -18,7 +18,8 @@ public partial class Something : Node3D
         Ball ball = scene.Instantiate() as Ball;
         AddChild(ball);
 
-        // TODO: Switch back to random once ball is C#
+        // Randomizes the z-position for a bit o variety
+        // TODO: Would prefer to use C#'s Random class.
         var z_pos = GD.Randi() % 5;
         var spawnLocation = new Vector3(-5.0f, 0.0f, z_pos);
 
