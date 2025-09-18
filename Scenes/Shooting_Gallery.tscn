@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://bv0keprb0h6fn"]
 
-[ext_resource type="Script" uid="uid://dxisbph7la50v" path="res://Scripts/Something.cs" id="1_dva8p"]
+[ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_c8rnd"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="2_mit81"]
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="3_c8rnd"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="4_10pbj"]
@@ -13,7 +13,7 @@ texture_filter = 0
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
 
 [node name="Shooting_Gallery" type="Node3D"]
-script = ExtResource("1_dva8p")
+script = ExtResource("1_c8rnd")
 
 [node name="Marksman" parent="." instance=ExtResource("2_mit81")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)

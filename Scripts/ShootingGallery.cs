@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public partial class Something : Node3D
+public partial class ShootingGallery : Node3D
 {
     public override void _Ready()
     {
