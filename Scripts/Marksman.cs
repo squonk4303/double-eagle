@@ -19,6 +19,9 @@ public partial class Marksman : Node3D
 
     public override void _Ready()
     {
+        // Capture mouse once player instantiates
+        Input.MouseMode = Input.MouseModeEnum.Captured;
+
         pivot = GetNode<Node3D>("Pivot");
         camera = GetNode<Camera3D>("Pivot/Camera3D");
     }
@@ -39,7 +42,7 @@ public partial class Marksman : Node3D
         if (@event.IsActionPressed("primary_fire"))
         {
             // Tweak position before emitting
-            Vector3 offset = new Vector3(1, -1, -1) * 0.01f;
+            Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
             Vector3 bulletPosition = camera.GlobalPosition + offset;
 
             // Emit signal to spawn a bullet in parent scene
@@ -47,18 +50,27 @@ public partial class Marksman : Node3D
             EmitSignal(SignalName.FireGun00, bulletPosition, GlobalRotation);
         }
 
-        // if event.is_action_pressed("primary_fire"):
-        //     # Tweak position before emitting
-        //     var offset = Vector3(1, -1, -1) * 0.01
-        //     var bullet_position = camera.global_position + offset
-        //     # Emit signal to spawn a bullet in parent scene
-        //     gun_0_fired.emit(bullet_position, camera.global_rotation)
-
         // # Hard-coded input events
         // if event is InputEventKey:
         //     # Yield control of mouse when "esc" is pressed
         //     if event.pressed and event.keycode == KEY_ESCAPE:
         //         Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+
+        if (@event is InputEventMouseButton mouseButtonEvent)
+        {
+            if (mouseButtonEvent.ButtonIndex == MouseButton.Left)
+            {
+                if (mouseButtonEvent.Pressed)
+                {
+                    GD.Print("Left mouse button pressed");
+                    Input.MouseMode = Input.MouseModeEnum.Captured;
+                }
+                else
+                {
+                    GD.Print("Left mouse button released");
+                }
+            }
+        }
 
         // if event is InputEventMouseButton:
         //     # Recapture mouse upon clicking inside window
@@ -76,8 +88,8 @@ public partial class Marksman : Node3D
         // Rotate Pivot along y-axis
         // And Camera along its x-axis
         // TODO: Is order significant?
-        pivot.Rotate(Vector3.Up, toRotate.Y * (float)delta);
-        camera.Rotate(Vector3.Right, toRotate.X * (float)delta);
+        pivot.Rotate(Vector3.Up, toRotate.X * (float)delta);
+        camera.Rotate(Vector3.Right, toRotate.Y * (float)delta);
         // camera.rotation.x = clamp(camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
         // TODO: Make this not suck
