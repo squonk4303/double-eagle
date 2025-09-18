@@ -20,6 +20,10 @@ config/icon="res://Images/icon.svg"
 window/size/viewport_width=720
 window/size/viewport_height=540
 
+[dotnet]
+
+project/assembly_name="3d-explore"
+
 [input]
 
 primary_fire={
