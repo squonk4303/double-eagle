@@ -19,8 +19,8 @@ public partial class Something : Node3D
         AddChild(ball);
 
         // TODO: Switch back to random once ball is C#
-        // var z_pos = rand.Next(5);
-        var spawnLocation = new Vector3(-5, 0, 5);
+        var z_pos = GD.Randi() % 5;
+        var spawnLocation = new Vector3(-5.0f, 0.0f, z_pos);
 
         ball.SetUp(spawnLocation);
     }

@@ -6,7 +6,7 @@ public partial class Ball : RigidBody3D
     public void SetUp(Vector3 startPosition)
     {
         this.Position = startPosition;
-        ApplyForce(new Vector3(1, 1, 0) * 350);
+        ApplyForce(new Vector3(1.0f, 1.0f, 0.0f) * 350);
     }
 
     public void bullet_hit(Vector3 b_pos)
@@ -15,7 +15,7 @@ public partial class Ball : RigidBody3D
         Vector3 direction = b_pos.DirectionTo(GlobalPosition);
         // Suppress force applied in z-direction
         // NOTE: This denormalizes the vector
-        direction.Z = 0.0F;
+        direction.Z = 0.0f;
         ApplyForce(direction * 1200);
     }
 
