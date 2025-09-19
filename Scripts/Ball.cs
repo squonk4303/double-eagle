@@ -9,12 +9,13 @@ public partial class Ball : RigidBody3D
     /// Prepare for getting spawned in
     public void Initialize(Vector3 spawn, Vector3 target)
     {
-        GD.Print(DateTime.Now.Second);
-        Position = spawn;
         Vector3 difference = target - spawn;
+        // TODO: All this does is get a higher angle. There should be a way
+        // to get the same result in a more controlled way.
         difference.Z = 0.0f;
         difference *= 0.5f;
         difference.Y += 3.0f;
+        Position = spawn;
         ApplyForce(difference * (ENTRY_FORCE + GD.Randf() * 40.0f));
         GD.Print(difference);
     }
@@ -30,10 +31,12 @@ public partial class Ball : RigidBody3D
         ApplyForce(direction * COLLISION_FORCE);
     }
 
-    /// What to do when leaving the player's FOV
-    public void _on_visible_on_screen_notifier_3d_screen_exited()
+    public override void _Process(double delta)
     {
-        // TODO: Will despawn anytime player looks away, which is unintended
-        QueueFree();
+        // Despawn once low enough
+        if (Position.Y <= -400.0f)
+        {
+            QueueFree();
+        }
     }
 }
