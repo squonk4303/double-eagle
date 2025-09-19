@@ -9,7 +9,7 @@ public partial class Ball : RigidBody3D
         ApplyForce(new Vector3(1.0f, 1.0f, 0.0f) * 350);
     }
 
-    public void bullet_hit(Vector3 b_pos)
+    public void bulletHit(Vector3 b_pos)
     {
         // Get direction from center of bullet to center of self
         Vector3 direction = b_pos.DirectionTo(GlobalPosition);

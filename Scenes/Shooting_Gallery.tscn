@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bv0keprb0h6fn"]
+[gd_scene load_steps=7 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_c8rnd"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="2_mit81"]

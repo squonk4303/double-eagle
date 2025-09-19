@@ -12,7 +12,6 @@ public partial class Bullet : Node3D
     {
         Area3D area = GetNode<Area3D>("Area3D");
         area.BodyEntered += Collided;
-        GD.Print("Something");
 
         Perish();
     }
@@ -42,13 +41,14 @@ public partial class Bullet : Node3D
         Translate(forwardDir * BULLET_SPEED * (float)delta);
     }
 
-    private void Collided(Node body)
+    private void Collided(Node3D body)
     {
-        GD.Print("entered something");
-        // if !hit_something_yet and body.has_method("bullet_hit"):
-        //         body.bullet_hit(position)
+        if (!hitSomethingYet && body.HasMethod("bulletHit"))
+        {
+            body.Call("bulletHit", GlobalPosition);
+        }
 
-        // hit_something_yet = true
-        // queue_free()
+        hitSomethingYet = true;
+        QueueFree();
     }
 }
