@@ -10,15 +10,19 @@ config_version=5
 
 [application]
 
-config/name="3d-explore"
+config/name="3d-explorer"
 run/main_scene="uid://dmhoe5lj17si8"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://Images/icon.svg"
 
 [display]
 
 window/size/viewport_width=720
 window/size/viewport_height=540
+
+[dotnet]
+
+project/assembly_name="3d-explorer"
 
 [input]
 
