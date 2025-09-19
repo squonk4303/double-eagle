@@ -22,7 +22,6 @@ public partial class Ball : RigidBody3D
     public void _on_visible_on_screen_notifier_3d_screen_exited()
     {
         // TODO: Will despawn anytime player looks away, which is unintended
-        GD.Print("freeing ", this);
         QueueFree();
     }
 }

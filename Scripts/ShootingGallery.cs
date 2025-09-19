@@ -4,10 +4,13 @@ using System;
 
 public partial class ShootingGallery : Node3D
 {
+    const string PATH_BALL = "res://Scenes/ball.tscn";
+    const string PATH_BULLET = "res://Scenes/bullet.tscn";
+
     public override void _Ready()
     {
-        var timer = GetNode<Timer>("BallTimer");
-        var marksman = GetNode<Marksman>("Marksman");
+        Timer timer = GetNode<Timer>("BallTimer");
+        Marksman marksman = GetNode<Marksman>("Marksman");
         // Connects signal to function
         timer.Timeout += OnBallTimerTimeout;
         marksman.FireGun00 += OnFireGun00;
@@ -16,7 +19,7 @@ public partial class ShootingGallery : Node3D
     /// Spawn a ball with velocity
     private void OnBallTimerTimeout()
     {
-        PackedScene scene = GD.Load<PackedScene>("res://Scenes/ball.tscn");
+        PackedScene scene = GD.Load<PackedScene>(PATH_BALL);
         Ball ball = scene.Instantiate() as Ball;
         AddChild(ball);
 
@@ -30,8 +33,8 @@ public partial class ShootingGallery : Node3D
 
     private void OnFireGun00(Vector3 position, Vector3 rotation)
     {
-        GD.Print("Firing @ ", position, rotation);
-        PackedScene scene = GD.Load<PackedScene>("res://Scenes/bullet.tscn");
+        // Loads, instantiates, and spawns bullet
+        PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
         Bullet bullet = scene.Instantiate() as Bullet;
         bullet.Initialize(position, rotation);
         AddChild(bullet);

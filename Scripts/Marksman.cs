@@ -39,6 +39,7 @@ public partial class Marksman : Node3D
             toRotate.X = mouseStretch.X;
             toRotate.Y = mouseStretch.Y;
         }
+
         if (@event.IsActionPressed("primary_fire"))
         {
             // Tweak position before emitting
@@ -47,7 +48,7 @@ public partial class Marksman : Node3D
 
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, camera.GlobalRotation);
-            EmitSignal(SignalName.FireGun00, bulletPosition, GlobalRotation);
+            EmitSignal(SignalName.FireGun00, bulletPosition, camera.GlobalRotation);
         }
 
         // Escape mouse capture with Esc key

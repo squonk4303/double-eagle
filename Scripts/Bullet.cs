@@ -12,6 +12,7 @@ public partial class Bullet : Node3D
     {
         Area3D area = GetNode<Area3D>("Area3D");
         area.BodyEntered += Collided;
+        GD.Print("Something");
 
         Perish();
     }

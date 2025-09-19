@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://dmhoe5lj17si8"]
 
-[ext_resource type="Script" path="res://Scripts/shooting_gallery.gd" id="1_42nf8"]
+[ext_resource type="Script" uid="uid://dygeferva8e0t" path="res://Scripts/shooting_gallery.gd" id="1_42nf8"]
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/ball.tscn" id="2_hqr8d"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
@@ -48,5 +48,4 @@ offset = Vector2(0.5, 0.5)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
 fov = 19.6142
 
-[connection signal="gun_0_fired" from="Marksman" to="." method="_on_marksman_gun_0_fired"]
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
