@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bx5n31jm0mov6"]
 
-[ext_resource type="Script" uid="uid://b7ju0db58gw10" path="res://Scripts/bullet.gd" id="1_xjght"]
+[ext_resource type="Script" uid="uid://cvl4ymwm0hpqm" path="res://Scripts/Bullet.cs" id="1_xjght"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_4mw4s"]
 
