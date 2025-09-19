@@ -20,7 +20,7 @@ public partial class ShootingGallery : Node3D
         Timer timer = GetNode<Timer>("BallTimer");
         timer.Timeout += OnBallTimerTimeout;
         Marksman marksman = GetNode<Marksman>("Marksman");
-        marksman.FireGun00 += OnFireGun00;
+        marksman.GunFire00 += OnGunFire00;
     }
 
     /// Spawn a ball at a random location
@@ -44,7 +44,7 @@ public partial class ShootingGallery : Node3D
     }
 
     /// Spawn a bullet wherever is demanded
-    private void OnFireGun00(Vector3 position, Vector3 rotation)
+    private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);

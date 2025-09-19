@@ -16,7 +16,7 @@ public partial class Marksman : Node3D
 
     // Declare signal for firing weapon
     [Signal]
-    public delegate void FireGun00EventHandler(Vector3 position, Vector3 rotation);
+    public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
 
     public override void _Ready()
     {
@@ -47,7 +47,7 @@ public partial class Marksman : Node3D
 
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
-            EmitSignal(SignalName.FireGun00, bulletPosition, Camera.GlobalRotation);
+            EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
         }
 
         // Escape mouse capture with Esc key
