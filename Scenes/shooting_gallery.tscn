@@ -1,22 +1,18 @@
-[gd_scene load_steps=9 format=3 uid="uid://dmhoe5lj17si8"]
+[gd_scene load_steps=7 format=3 uid="uid://noelnt65qoxs"]
 
-[ext_resource type="Script" uid="uid://dygeferva8e0t" path="res://Scripts/shooting_gallery.gd" id="1_42nf8"]
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
-[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/ball.tscn" id="2_hqr8d"]
+[ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
-[ext_resource type="PackedScene" uid="uid://bx5n31jm0mov6" path="res://Scenes/bullet.tscn" id="3_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hqr8d"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
 albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
-[sub_resource type="QuadMesh" id="QuadMesh_42nf8"]
+[sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
 
 [node name="Shooting_Gallery" type="Node3D"]
-script = ExtResource("1_42nf8")
-ball_scene = ExtResource("2_hqr8d")
-bullet_scene = ExtResource("3_oy0ci")
+script = ExtResource("1_npy5q")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
@@ -26,8 +22,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_hqr8d")
-mesh = SubResource("QuadMesh_42nf8")
+material_override = SubResource("StandardMaterial3D_ow0e6")
+mesh = SubResource("QuadMesh_pqnnw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 0)
