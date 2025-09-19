@@ -2,20 +2,21 @@ using Godot;
 using System;
 
 public partial class Marksman : Node3D
- {
+{
+    // Where to limit pitch
+    private const double MAX_PITCH = Mathf.Pi * 0.5f;
+    private const double MIN_PITCH = Mathf.Pi * 0.5f;
+
+    // Get child nodes for revolutionary actions (Completed in _Ready)
     private Node3D pivot;
     private Camera3D camera;
 
-    float mouseSensitivity = 0.02f;
+    private Vector3 toRotate;
+    private float mouseSensitivity = 0.02f;
 
-    const double MAX_PITCH = Mathf.Pi * 0.5f;
-    const double MIN_PITCH = Mathf.Pi * 0.5f;
-
-    Vector3 toRotate;
-
+    // Declare signal for firing weapon
     [Signal]
     public delegate void FireGun00EventHandler(Vector3 position, Vector3 rotation);
-    // signal gun_0_fired(b_position: Vector3, b_rotation: Vector3)
 
     public override void _Ready()
     {
@@ -26,6 +27,7 @@ public partial class Marksman : Node3D
         camera = GetNode<Camera3D>("Pivot/Camera3D");
     }
 
+    /// Handle marksman-related input
     public override void _UnhandledInput(InputEvent @event)
     {
         if (

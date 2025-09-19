@@ -3,19 +3,22 @@ using System;
 
 public partial class Bullet : Node3D
 {
-    const float BULLET_SPEED = 140.0f;
-    const float KILL_TIMER = 4.0f;
+    private const float BULLET_SPEED = 140.0f;
+    private const float KILL_TIMER = 4.0f;
 
-    bool hitSomethingYet = false;
+    private bool hitSomethingYet = false;
 
     public override void _Ready()
     {
+        // Call method Collided when something enters collision space
         Area3D area = GetNode<Area3D>("Area3D");
         area.BodyEntered += Collided;
 
+        // Die
         Perish();
     }
 
+    /// Get spawned in at specified position and angle
     public void Initialize(Vector3 startPosition, Vector3 startRotation)
     {
         Position = startPosition;
@@ -26,7 +29,9 @@ public partial class Bullet : Node3D
     private async void Perish()
     {
         // Start timer after which bullet despawns
-        await ToSignal(GetTree().CreateTimer(KILL_TIMER), SceneTreeTimer.SignalName.Timeout);
+        await ToSignal(
+            GetTree().CreateTimer(KILL_TIMER), SceneTreeTimer.SignalName.Timeout
+        );
         QueueFree();
     }
 
@@ -41,6 +46,7 @@ public partial class Bullet : Node3D
         Translate(forwardDir * BULLET_SPEED * (float)delta);
     }
 
+    /// Prompt others to respond when colliding into them
     private void Collided(Node3D body)
     {
         if (!hitSomethingYet && body.HasMethod("bulletHit"))
