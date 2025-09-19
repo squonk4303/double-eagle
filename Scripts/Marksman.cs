@@ -20,9 +20,6 @@ public partial class Marksman : Node3D
 
     public override void _Ready()
     {
-        // Capture mouse once player instantiates
-        Input.MouseMode = Input.MouseModeEnum.Captured;
-
         Pivot = GetNode<Node3D>("Pivot");
         Camera = GetNode<Camera3D>("Pivot/Camera3D");
     }
