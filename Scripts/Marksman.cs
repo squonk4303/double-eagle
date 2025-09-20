@@ -13,6 +13,7 @@ public partial class Marksman : Node3D
 
     private Vector3 toRotate;
     private float mouseSensitivity = 0.02f;
+    private float noclipSpeed = 5.0f; // Units per second
 
     // Declare signal for firing weapon
     [Signal]
@@ -95,5 +96,27 @@ public partial class Marksman : Node3D
 
         // Reset rotation vector
         toRotate = new Vector3(0, 0, 0);
+
+        // Noclip movement
+        Vector3 direction = Vector3.Zero;
+
+        if (Input.IsActionPressed("move_forward"))
+            direction -= camera.GlobalTransform.Basis.Z;
+        if (Input.IsActionPressed("move_back"))
+            direction += camera.GlobalTransform.Basis.Z;
+        if (Input.IsActionPressed("move_left"))
+            direction -= camera.GlobalTransform.Basis.X;
+        if (Input.IsActionPressed("move_right"))
+            direction += camera.GlobalTransform.Basis.X;
+        if (Input.IsActionPressed("move_up"))
+            direction += camera.GlobalTransform.Basis.Y;
+        if (Input.IsActionPressed("move_down"))
+            direction -= camera.GlobalTransform.Basis.Y;
+
+        if (direction != Vector3.Zero)
+        {
+            direction = direction.Normalized();
+            GlobalPosition += direction * noclipSpeed * (float)delta;
+        }
     }
 }
