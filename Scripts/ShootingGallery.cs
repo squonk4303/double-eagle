@@ -56,9 +56,17 @@ public partial class ShootingGallery : Node3D
 
     private void OnGunFireRay(Vector3 position, Vector3 rotation)
     {
-        PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
-        Bullet bullet = scene.Instantiate() as Bullet;
-        bullet.Initialize(position, rotation);
-        AddChild(bullet);
+        var ray = new RayCast3D();
+        ray.Position = position;
+        ray.Rotation = rotation;
+
+        AddChild(ray);
+        GD.Print("Ray: ", ray, ray.Position, " ", ray.Rotation);
+
+
+        // PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
+        // Bullet bullet = scene.Instantiate() as Bullet;
+        // bullet.Initialize(position, rotation);
+        // AddChild(bullet);
     }
 }
