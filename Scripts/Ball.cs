@@ -17,7 +17,6 @@ public partial class Ball : RigidBody3D
         difference.Y += 3.0f;
         Position = spawn;
         ApplyForce(difference * (ENTRY_FORCE + GD.Randf() * 40.0f));
-        GD.Print(difference);
     }
 
     /// How to respond when hit by a bullet
