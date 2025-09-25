@@ -3,14 +3,19 @@ using System;
 
 public partial class Laser : Node3D
 {
+    private AnimationPlayer _animation;
+
     public override void _Ready()
     {
-        // Play fade-out animation
-        var animation = GetNode<AnimationPlayer>("AnimationPlayer");
-        animation.Play("fade");
+        _animation = GetNode<AnimationPlayer>("AnimationPlayer");
 
-        // TODO: Will have to see if there's anything that needs doing to
-        // free this object like the bullet.
+        // Connect signal to free object when animation finishes
+        AnimationMixer.AnimationFinishedEventHandler AnimationFinishedAction;
+        AnimationFinishedAction = (StringName animName) => OnAnimationFinished(animName);
+        _animation.AnimationFinished += AnimationFinishedAction;
+
+        // Play fade-out animation
+        _animation.Play("fade");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -29,7 +34,13 @@ public partial class Laser : Node3D
         }
         else
         {
-            // GD.Print("... Did not collide");
+            GD.Print("... Did not collide", DateTime.Now);
         }
+    }
+
+    private void OnAnimationFinished(String animName)
+    {
+        GD.Print("Kill " + animName);
+        QueueFree();
     }
 }
