@@ -6,6 +6,7 @@ public partial class ShootingGallery : Node3D
 {
     private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
+    private const string PATH_LASER = "res://Scenes/laser.tscn";
 
     private readonly string[] PATH_LOCATIONS = new string[]
     {
@@ -56,7 +57,8 @@ public partial class ShootingGallery : Node3D
 
     private void OnGunFireRay(Vector3 position, Vector3 rotation)
     {
-        var ray = new RayCast3D();
+        var scene = GD.Load<PackedScene>(PATH_LASER);
+        Node3D ray = scene.Instantiate() as Node3D;
         ray.Position = position;
         ray.Rotation = rotation;
 

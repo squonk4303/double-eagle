@@ -55,7 +55,7 @@ public partial class Marksman : Node3D
 
         if (@event.IsActionPressed("secondary_fire"))
         {
-            Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.4f;
+            Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
             Vector3 bulletPosition = Camera.GlobalPosition + offset;
             EmitSignal(SignalName.GunFireRay, bulletPosition, Camera.GlobalRotation);
         }
