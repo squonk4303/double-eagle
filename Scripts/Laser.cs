@@ -15,7 +15,8 @@ public partial class Laser : Node3D
         _animation.AnimationFinished += AnimationFinishedAction;
 
         // Play fade-out animation
-        _animation.Play("fade");
+        _animation.Play("fade-out");
+        _animation.SpeedScale = 4;
     }
 
     public override void _PhysicsProcess(double delta)
