@@ -32,12 +32,14 @@ public partial class Ball : RigidBody3D
 
     public void LaserHit()
     {
-        // QueueFree();
         var mesh = GetNode<MeshInstance3D>("MeshInstance3D");
-        // Gets material override (StandardMaterial3D)
-        // And changes its color
-        StandardMaterial3D materialOverride = (StandardMaterial3D)mesh.GetMaterialOverride();
-        materialOverride.AlbedoColor = new Color(1, 0, 0);
+        // To change color, duplicate the material override,
+        Material materialOverride = mesh.GetMaterialOverride();
+        StandardMaterial3D newMaterial = (StandardMaterial3D)materialOverride.Duplicate();
+        // Recolor the duplicate
+        newMaterial.AlbedoColor = new Color(1, 0, 0);
+        // And replace the original
+        mesh.MaterialOverride = newMaterial;
     }
 
     public override void _Process(double delta)
