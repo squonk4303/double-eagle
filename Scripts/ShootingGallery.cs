@@ -7,6 +7,12 @@ public partial class ShootingGallery : Node3D
     private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
 
+    private readonly string[] PATH_LOCATIONS = new string[]
+    {
+        "Spawns/Path0/Stretch",
+        "Spawns/Path1/Stretch",
+    };
+
     public override void _Ready()
     {
         // Connect signals from periodic spawn-timer
@@ -14,28 +20,31 @@ public partial class ShootingGallery : Node3D
         Timer timer = GetNode<Timer>("BallTimer");
         timer.Timeout += OnBallTimerTimeout;
         Marksman marksman = GetNode<Marksman>("Marksman");
-        marksman.FireGun00 += OnFireGun00;
+        marksman.GunFire00 += OnGunFire00;
     }
 
-    /// Spawn a ball at a certain location
+    /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        // Add ball to node tree
-        PackedScene scene = GD.Load<PackedScene>(PATH_BALL);
-        Ball ball = scene.Instantiate() as Ball;
+        PackedScene ballScene = GD.Load<PackedScene>(PATH_BALL);
+        var ball = ballScene.Instantiate() as Ball;
+        var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
+
+        // Picks a random spot on the path to spawn.
+        // Randomizes the z-position a bit too.
+        // TODO: Would prefer to use C#'s Random class (perhaps for seed control?).
+        var zJiggle = GD.Randf() * 4.0f + 1.0f;
+        path.ProgressRatio = GD.Randf();
+        // Randomly flip the Y-coordinate
+        float flipper = (GD.Randi() % 2 - 0.5f) * 2.0f;
+        var spawn = new Vector3(path.Position.X * flipper, path.Position.Y, zJiggle);
+        var target = new Vector3(0, 7.0f, 0);
+        ball.Initialize(spawn, target);
         AddChild(ball);
-
-        // Randomizes the z-position for a bit o variety
-        // TODO: Would prefer to use C#'s Random class.
-        var z_pos = GD.Randi() % 5;
-        var spawnLocation = new Vector3(-5.0f, 0.0f, z_pos);
-
-        // Set ball position and add some force
-        ball.Initialize(spawnLocation);
     }
 
     /// Spawn a bullet wherever is demanded
-    private void OnFireGun00(Vector3 position, Vector3 rotation)
+    private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);

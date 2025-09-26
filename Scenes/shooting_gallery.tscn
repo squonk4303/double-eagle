@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=8 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -10,6 +10,13 @@ albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+
+[sub_resource type="Curve3D" id="Curve3D_npy5q"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -10.008, -4, 0, 0, 0, 0, 0, 0, 0, -10, 6, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
 
 [node name="Shooting_Gallery" type="Node3D"]
 script = ExtResource("1_npy5q")
@@ -26,7 +33,7 @@ material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 0)
+transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 12.4747)
 
 [node name="BallTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -40,8 +47,24 @@ scale = Vector2(5, 5)
 texture = ExtResource("5_au61t")
 offset = Vector2(0.5, 0.5)
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
 fov = 19.6142
+
+[node name="Spawns" type="Node3D" parent="."]
+
+[node name="Path0" type="Path3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+curve = SubResource("Curve3D_npy5q")
+
+[node name="Stretch" type="PathFollow3D" parent="Spawns/Path0"]
+transform = Transform3D(-1.62937e-07, 0.999995, -0.000772073, -5.77324e-08, -0.000772071, -0.999998, -0.999994, -1.62893e-07, 5.78583e-08, -10.008, -4, 0)
+
+[node name="Path1" type="Path3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
+curve = SubResource("Curve3D_npy5q")
+
+[node name="Stretch" type="PathFollow3D" parent="Spawns/Path1"]
+transform = Transform3D(-1.62937e-07, 0.999995, -0.000772073, -5.77324e-08, -0.000772071, -0.999998, -0.999994, -1.62893e-07, 5.78583e-08, -10.008, -4, 0)
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

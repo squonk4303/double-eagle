@@ -6,7 +6,7 @@ public partial class Bullet : Node3D
     private const float BULLET_SPEED = 140.0f;
     private const float KILL_TIMER = 4.0f;
 
-    private bool hitSomethingYet = false;
+    private bool HitSomethingYet = false;
 
     public override void _Ready()
     {
@@ -21,8 +21,8 @@ public partial class Bullet : Node3D
     /// Get spawned in at specified position and angle
     public void Initialize(Vector3 startPosition, Vector3 startRotation)
     {
-        Position = startPosition;
-        Rotation = startRotation;
+        this.Position = startPosition;
+        this.Rotation = startRotation;
     }
 
     /// Start a timer to remove bullet after a period of time
@@ -49,12 +49,12 @@ public partial class Bullet : Node3D
     /// Prompt others to respond when colliding into them
     private void Collided(Node3D body)
     {
-        if (!hitSomethingYet && body.HasMethod("bulletHit"))
+        if (!HitSomethingYet && body.HasMethod("bulletHit"))
         {
             body.Call("bulletHit", GlobalPosition);
         }
 
-        hitSomethingYet = true;
+        HitSomethingYet = true;
         QueueFree();
     }
 }
