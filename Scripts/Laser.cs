@@ -4,6 +4,7 @@ using System;
 public partial class Laser : Node3D
 {
     private AnimationPlayer _animation;
+    private Boolean _doneRaycast = false;
 
     public override void _Ready()
     {
@@ -21,21 +22,42 @@ public partial class Laser : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
-        // Check for raycast collision
-        var ray = GetNode<RayCast3D>("RayCast3D");
-        ray.CollideWithAreas = true;
-        ray.Enabled = true;
-
-        if (ray.IsColliding())
+        if (!_doneRaycast)
         {
-            var collider = ray.GetCollider() as CollisionObject3D;
-            GD.Print("Collided with ", collider);
-            if (collider.HasMethod("LaserHit")) {
-                collider.Call("LaserHit");
+            // ---------------------------------------------------------------------------
+            // Check for raycast collision
+            var ray = GetNode<RayCast3D>("RayCast3D");
+            ray.ForceRaycastUpdate();
+            ray.CollideWithAreas = true;
+            ray.Enabled = true;
+
+            Boolean going = true;
+            int counter = 0;
+
+            while (counter <= 5 && going)
+            {
+                GD.Print("Loopin " + counter);
+                if (ray.IsColliding())
+                {
+                    var collider = ray.GetCollider() as CollisionObject3D;
+                    GD.Print("Collided with ", collider);
+                    if (collider.HasMethod("LaserHit"))
+                    {
+                        collider.Call("LaserHit");
+                    }
+                    ray.AddException(collider);
+                    // Add collider to list of exceptions
+                    // And add list of exceptions to ray exceptions
+                }
+                else
+                {
+                    going = false;
+                }
+
+                counter += 1;
             }
-            ray.AddException(collider);
-            // Add collider to list of exceptions
-            // And add list of exceptions to exceptions
+            // ---------------------------------------------------------------------------
+            _doneRaycast = true;
         }
     }
 
