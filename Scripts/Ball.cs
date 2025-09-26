@@ -30,6 +30,16 @@ public partial class Ball : RigidBody3D
         ApplyForce(direction * COLLISION_FORCE);
     }
 
+    public void LaserHit()
+    {
+        // QueueFree();
+        var mesh = GetNode<MeshInstance3D>("MeshInstance3D");
+        // Gets material override (StandardMaterial3D)
+        // And changes its color
+        StandardMaterial3D materialOverride = (StandardMaterial3D)mesh.GetMaterialOverride();
+        materialOverride.AlbedoColor = new Color(1, 0, 0);
+    }
+
     public override void _Process(double delta)
     {
         // Despawn once low enough

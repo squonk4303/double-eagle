@@ -30,6 +30,9 @@ public partial class Laser : Node3D
         {
             var collider = ray.GetCollider();
             GD.Print("Collided with ", collider);
+            if (collider.HasMethod("LaserHit")) {
+                collider.Call("LaserHit");
+            }
             ray.GetCollisionNormal();
         }
     }
