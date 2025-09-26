@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr2354ob6anfi"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_drvgu"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ulcgi"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+transform = Transform3D(20.8184, 0, 0, 0, 1, 0, 0, 0, 20.8184, 0, 0, 0)
+shape = SubResource("CylinderShape3D_drvgu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+transform = Transform3D(20.8187, 0, 0, 0, 0.997797, 0, 0, 0, 20.8187, 0, 0, 0)
+mesh = SubResource("CylinderMesh_ulcgi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.773044, 0.634353, 0, -0.634353, 0.773044, 0, 4.72522, 0)
+shadow_enabled = true

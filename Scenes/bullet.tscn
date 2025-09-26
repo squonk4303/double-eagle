@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bx5n31jm0mov6"]
+
+[ext_resource type="Script" uid="uid://cvl4ymwm0hpqm" path="res://Scripts/Bullet.cs" id="1_xjght"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_4mw4s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xjght"]
+
+[node name="Bullet" type="Node3D"]
+script = ExtResource("1_xjght")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PrismMesh_4mw4s")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_xjght")

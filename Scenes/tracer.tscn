@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkvbmaoycrse1"]
+
+[ext_resource type="Script" uid="uid://23l78leh6w1m" path="res://Scripts/tracer.gd" id="1_rds43"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4mw4s"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xjght"]
+size = Vector3(0.00489453, 258.841, 0.00782776)
+
+[node name="Tracer" type="Area3D"]
+script = ExtResource("1_rds43")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.002, 0, 0, 0, -1.31134e-07, 0.002, 0, -3, -8.74228e-11, 0, 0, -3.021)
+mesh = SubResource("CylinderMesh_4mw4s")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.0002027, -0.00128309, -129.445)
+shape = SubResource("BoxShape3D_xjght")
