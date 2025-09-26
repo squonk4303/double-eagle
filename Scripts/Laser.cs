@@ -28,12 +28,14 @@ public partial class Laser : Node3D
 
         if (ray.IsColliding())
         {
-            var collider = ray.GetCollider();
+            var collider = ray.GetCollider() as CollisionObject3D;
             GD.Print("Collided with ", collider);
             if (collider.HasMethod("LaserHit")) {
                 collider.Call("LaserHit");
             }
-            ray.GetCollisionNormal();
+            ray.AddException(collider);
+            // Add collider to list of exceptions
+            // And add list of exceptions to exceptions
         }
     }
 
