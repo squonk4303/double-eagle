@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://pbpkt74ok7u6"]
+[gd_scene load_steps=6 format=3 uid="uid://bmjdy8wl1xy0v"]
 
 [ext_resource type="Script" uid="uid://cg17gbpxu81nh" path="res://Scripts/Laser.cs" id="1_mou6w"]
 [ext_resource type="Texture2D" uid="uid://dw512o4mfhjl4" path="res://Images/icon.svg" id="1_r1bh0"]
@@ -92,6 +92,7 @@ script = ExtResource("1_mou6w")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+target_position = Vector3(0, -1000, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

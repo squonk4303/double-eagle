@@ -29,19 +29,13 @@ public partial class Laser : Node3D
         if (ray.IsColliding())
         {
             var collider = ray.GetCollider();
-            GD.Print("+++ Did collide");
             GD.Print("Collided with ", collider);
             ray.GetCollisionNormal();
-        }
-        else
-        {
-            GD.Print("... Did not collide", DateTime.Now);
         }
     }
 
     private void OnAnimationFinished(String animName)
     {
-        GD.Print("Kill " + animName);
         QueueFree();
     }
 }
