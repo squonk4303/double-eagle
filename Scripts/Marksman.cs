@@ -18,6 +18,9 @@ public partial class Marksman : Node3D
     [Signal]
     public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
 
+    [Signal]
+    public delegate void GunFireRayEventHandler(Vector3 position, Vector3 rotation);
+
     public override void _Ready()
     {
         Pivot = GetNode<Node3D>("Pivot");
@@ -48,6 +51,13 @@ public partial class Marksman : Node3D
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
             EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
+        }
+
+        if (@event.IsActionPressed("secondary_fire"))
+        {
+            Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
+            Vector3 bulletPosition = Camera.GlobalPosition + offset;
+            EmitSignal(SignalName.GunFireRay, bulletPosition, Camera.GlobalRotation);
         }
 
         // Escape mouse capture with Esc key

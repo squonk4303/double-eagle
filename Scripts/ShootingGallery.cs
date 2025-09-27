@@ -6,6 +6,7 @@ public partial class ShootingGallery : Node3D
 {
     private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
+    private const string PATH_LASER = "res://Scenes/laser.tscn";
 
     private readonly string[] PATH_LOCATIONS = new string[]
     {
@@ -21,6 +22,7 @@ public partial class ShootingGallery : Node3D
         timer.Timeout += OnBallTimerTimeout;
         Marksman marksman = GetNode<Marksman>("Marksman");
         marksman.GunFire00 += OnGunFire00;
+        marksman.GunFireRay += OnGunFireRay;
     }
 
     /// Spawn a ball at a random location
@@ -51,5 +53,20 @@ public partial class ShootingGallery : Node3D
         Bullet bullet = scene.Instantiate() as Bullet;
         bullet.Initialize(position, rotation);
         AddChild(bullet);
+    }
+
+    private void OnGunFireRay(Vector3 position, Vector3 rotation)
+    {
+        var scene = GD.Load<PackedScene>(PATH_LASER);
+        Node3D ray = scene.Instantiate() as Node3D;
+        ray.Position = position;
+        ray.Rotation = rotation;
+
+        AddChild(ray);
+
+        // PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
+        // Bullet bullet = scene.Instantiate() as Bullet;
+        // bullet.Initialize(position, rotation);
+        // AddChild(bullet);
     }
 }
