@@ -1,15 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=10 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
+[ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="4_au61t"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
-albedo_texture = ExtResource("1_es7xq")
-texture_filter = 0
-
-[sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/ball.tscn" id="6_oy0ci"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -18,19 +14,17 @@ _data = {
 }
 point_count = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
+albedo_texture = ExtResource("1_es7xq")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+
 [node name="Shooting_Gallery" type="Node3D"]
 script = ExtResource("1_npy5q")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
-
-[node name="StaticBody3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ow0e6")
-mesh = SubResource("QuadMesh_pqnnw")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 12.4747)
@@ -58,13 +52,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 curve = SubResource("Curve3D_npy5q")
 
 [node name="Stretch" type="PathFollow3D" parent="Spawns/Path0"]
-transform = Transform3D(-1.62937e-07, 0.999995, -0.000772073, -5.77324e-08, -0.000772071, -0.999998, -0.999994, -1.62893e-07, 5.78583e-08, -10.008, -4, 0)
+transform = Transform3D(1.3113333e-07, 0.999995, -0.00077207346, -6.7496515e-11, -0.0007720712, -0.999998, -0.999994, 1.3113355e-07, -3.3748403e-11, -10.008, -4, 0)
 
 [node name="Path1" type="Path3D" parent="Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
 curve = SubResource("Curve3D_npy5q")
 
 [node name="Stretch" type="PathFollow3D" parent="Spawns/Path1"]
-transform = Transform3D(-1.62937e-07, 0.999995, -0.000772073, -5.77324e-08, -0.000772071, -0.999998, -0.999994, -1.62893e-07, 5.78583e-08, -10.008, -4, 0)
+transform = Transform3D(1.3113333e-07, 0.999995, -0.00077207346, -6.7496515e-11, -0.0007720712, -0.999998, -0.999994, 1.3113355e-07, -3.3748403e-11, -10.008, -4, 0)
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Cylinder" parent="Props" instance=ExtResource("4_au61t")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 17.398169, -5, 0)
+
+[node name="Cylinder2" parent="Props" instance=ExtResource("4_au61t")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -0.07816887, 0, 60.199547)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_ow0e6")
+mesh = SubResource("QuadMesh_pqnnw")
+
+[node name="Ball" parent="Props" instance=ExtResource("6_oy0ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.497204, 0.5, -0.44582307)
+
+[node name="Ball2" parent="Props" instance=ExtResource("6_oy0ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.392036, 0.5, 0.10644579)
+
+[node name="Ball3" parent="Props" instance=ExtResource("6_oy0ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.17007, 0.5, 0.9726546)
+
+[node name="Ball4" parent="Props" instance=ExtResource("6_oy0ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.828924, 0.5, -1.4869375)
+
+[node name="Ball5" parent="Props" instance=ExtResource("6_oy0ci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.939526, 0.5, 1.7561381)
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
