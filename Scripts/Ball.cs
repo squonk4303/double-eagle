@@ -6,6 +6,15 @@ public partial class Ball : RigidBody3D
     private const float COLLISION_FORCE = 1200.0f;
     private const float ENTRY_FORCE = 60.0f;
 
+    private AnimationPlayer _animation;
+    private int _timesHit = 0;
+
+    public override void _Ready()
+    {
+        _animation = GetNode<AnimationPlayer>("AnimationPlayer");
+        _animation.SpeedScale = 4;
+    }
+
     /// Prepare for getting spawned in
     public void Initialize(Vector3 spawn, Vector3 target)
     {
@@ -17,7 +26,6 @@ public partial class Ball : RigidBody3D
         difference.Y += 3.0f;
         Position = spawn;
         ApplyForce(difference * (ENTRY_FORCE + GD.Randf() * 40.0f));
-        GD.Print(difference);
     }
 
     /// How to respond when hit by a bullet
@@ -29,6 +37,15 @@ public partial class Ball : RigidBody3D
         // NOTE: This denormalizes the vector
         direction.Z = 0.0f;
         ApplyForce(direction * COLLISION_FORCE);
+    }
+
+    public void LaserHit()
+    {
+        if (_timesHit <= 0)
+        {
+            _animation.Play("turn_red");
+        }
+        _timesHit += 1;
     }
 
     public override void _Process(double delta)
