@@ -11,13 +11,16 @@ public partial class Marksman : Node3D
 	private Node3D Pivot;
 	private Camera3D Camera;
 
-	private Vector3 toRotate;
-	private float mouseSensitivity = 0.02f;
-	private float noclipSpeed = 5.0f; // Units per second
+	private Vector3 ToRotate;
+	private float MouseSensitivity = 0.02f;
+	private float noclipSpeed = 5.0f;
 
 	// Declare signal for firing weapon
 	[Signal]
 	public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
+
+	[Signal]
+	public delegate void GunFireRayEventHandler(Vector3 position, Vector3 rotation);
 
 	public override void _Ready()
 	{
@@ -36,9 +39,9 @@ public partial class Marksman : Node3D
 			// Set distances to rotate camera
 			// Continued in _Process(...)
 			// TODO: Evaluate Relative vs. ScreenRelative
-			Vector2 mouseStretch = -1.0f * mouseMotion.Relative * mouseSensitivity;
-			toRotate.X = mouseStretch.X;
-			toRotate.Y = mouseStretch.Y;
+			Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
+			ToRotate.X = mouseStretch.X;
+			ToRotate.Y = mouseStretch.Y;
 		}
 
 		if (@event.IsActionPressed("primary_fire"))
@@ -50,6 +53,13 @@ public partial class Marksman : Node3D
 			// Emit signal to spawn a bullet in parent scene
 			// Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
 			EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
+		}
+
+		if (@event.IsActionPressed("secondary_fire"))
+		{
+			Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
+			Vector3 bulletPosition = Camera.GlobalPosition + offset;
+			EmitSignal(SignalName.GunFireRay, bulletPosition, Camera.GlobalRotation);
 		}
 
 		// Escape mouse capture with Esc key
@@ -85,8 +95,8 @@ public partial class Marksman : Node3D
 		// Rotate Pivot along y-axis
 		// And Camera along its x-axis
 		// TODO: Is order significant?
-		Pivot.Rotate(Vector3.Up, toRotate.X * (float)delta);
-		Camera.Rotate(Vector3.Right, toRotate.Y * (float)delta);
+		Pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
+		Camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
 		// Camera.rotation.x = clamp(Camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
 		// TODO: Make this not suck
@@ -95,11 +105,11 @@ public partial class Marksman : Node3D
 		// Camera.Rotation = camRot;
 
 		// Reset rotation vector
-		toRotate = new Vector3(0, 0, 0);
+		ToRotate = new Vector3(0, 0, 0);
 
 		// Noclip movement:
 
-		// Get direction to move in
+		// Initialize direction vector
 		Vector3 direction = Vector3.Zero;
 
 		// Move in the direction you are facing
