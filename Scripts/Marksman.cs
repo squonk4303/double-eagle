@@ -3,117 +3,128 @@ using System;
 
 public partial class Marksman : Node3D
 {
-    // Where to limit pitch
-    private const double MAX_PITCH = Mathf.Pi * 0.5f;
-    private const double MIN_PITCH = Mathf.Pi * 0.5f;
+	// Where to limit pitch
+	private const double MAX_PITCH = Mathf.Pi * 0.5f;
+	private const double MIN_PITCH = Mathf.Pi * 0.5f;
 
-    // Get child nodes for revolutionary actions (Completed in _Ready)
-    private Node3D Pivot;
-    private Camera3D Camera;
+	// Get child nodes for revolutionary actions (Completed in _Ready)
+	private Node3D Pivot;
+	private Camera3D Camera;
 
-    private Vector3 toRotate;
-    private float mouseSensitivity = 0.02f;
-    private float noclipSpeed = 5.0f; // Units per second
+	private Vector3 toRotate;
+	private float mouseSensitivity = 0.02f;
+	private float noclipSpeed = 5.0f; // Units per second
 
-    // Declare signal for firing weapon
-    [Signal]
-    public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
+	// Declare signal for firing weapon
+	[Signal]
+	public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
 
-    public override void _Ready()
-    {
-        Pivot = GetNode<Node3D>("Pivot");
-        Camera = GetNode<Camera3D>("Pivot/Camera3D");
-    }
+	public override void _Ready()
+	{
+		Pivot = GetNode<Node3D>("Pivot");
+		Camera = GetNode<Camera3D>("Pivot/Camera3D");
+	}
 
-    /// Handle marksman-related input
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if (
-            @event is InputEventMouseMotion mouseMotion &&
-            Input.MouseMode == Input.MouseModeEnum.Captured
-        ) {
-            // Set distances to rotate camera
-            // Continued in _Process(...)
-            // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
-            ToRotate.X = mouseStretch.X;
-            ToRotate.Y = mouseStretch.Y;
-        }
+	/// Handle marksman-related input
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (
+			@event is InputEventMouseMotion mouseMotion &&
+			Input.MouseMode == Input.MouseModeEnum.Captured
+		)
+		{
+			// Set distances to rotate camera
+			// Continued in _Process(...)
+			// TODO: Evaluate Relative vs. ScreenRelative
+			Vector2 mouseStretch = -1.0f * mouseMotion.Relative * mouseSensitivity;
+			toRotate.X = mouseStretch.X;
+			toRotate.Y = mouseStretch.Y;
+		}
 
-        if (@event.IsActionPressed("primary_fire"))
-        {
-            // Tweak position before emitting
-            Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
-            Vector3 bulletPosition = Camera.GlobalPosition + offset;
+		if (@event.IsActionPressed("primary_fire"))
+		{
+			// Tweak position before emitting
+			Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
+			Vector3 bulletPosition = Camera.GlobalPosition + offset;
 
-            // Emit signal to spawn a bullet in parent scene
-            // Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
-            EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
-        }
+			// Emit signal to spawn a bullet in parent scene
+			// Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
+			EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
+		}
 
-        // Escape mouse capture with Esc key
-        if (
-            @event is InputEventKey keyEvent &&
-            keyEvent.Pressed &&
-            keyEvent.Keycode == Key.Escape
-        ) {
-            Input.MouseMode = Input.MouseModeEnum.Visible;
-        }
+		// Escape mouse capture with Esc key
+		if (
+			@event is InputEventKey keyEvent &&
+			keyEvent.Pressed &&
+			keyEvent.Keycode == Key.Escape
+		)
+		{
+			Input.MouseMode = Input.MouseModeEnum.Visible;
+		}
 
-        if (@event is InputEventMouseButton mouseButtonEvent)
-        {
-            // Capture mouse on left-click
-            if (
-                mouseButtonEvent.ButtonIndex == MouseButton.Left &&
-                mouseButtonEvent.Pressed
-            ) {
-                Input.MouseMode = Input.MouseModeEnum.Captured;
-            }
-        }
-    }
+		if (@event is InputEventMouseButton mouseButtonEvent)
+		{
+			// Capture mouse on left-click
+			if (
+				mouseButtonEvent.ButtonIndex == MouseButton.Left &&
+				mouseButtonEvent.Pressed
+			)
+			{
+				Input.MouseMode = Input.MouseModeEnum.Captured;
+			}
+		}
+	}
 
-    public override void _Process(double delta)
-    {
-        // TODO: *SHOULD* mouse movement be tied to process delta?
-        // Find this out.
+	public override void _Process(double delta)
+	{
+		// TODO: *SHOULD* mouse movement be tied to process delta?
+		// Find this out.
 
-        // If mouse is captured, move to center of screen each frame
+		// If mouse is captured, move to center of screen each frame
 
-        // Rotate Pivot along y-axis
-        // And Camera along its x-axis
-        // TODO: Is order significant?
-        Pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
-        Camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
-        // Camera.rotation.x = clamp(Camera.rotation.x, MIN_PITCH, MAX_PITCH)
+		// Rotate Pivot along y-axis
+		// And Camera along its x-axis
+		// TODO: Is order significant?
+		Pivot.Rotate(Vector3.Up, toRotate.X * (float)delta);
+		Camera.Rotate(Vector3.Right, toRotate.Y * (float)delta);
+		// Camera.rotation.x = clamp(Camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
-        // TODO: Make this not suck
-        // Vector3 camRot = Camera.Rotation;
-        // camRot.X = (float)Mathf.Clamp(Camera.Rotation.X, MIN_PITCH, MAX_PITCH);
-        // Camera.Rotation = camRot;
+		// TODO: Make this not suck
+		// Vector3 camRot = Camera.Rotation;
+		// camRot.X = (float)Mathf.Clamp(Camera.Rotation.X, MIN_PITCH, MAX_PITCH);
+		// Camera.Rotation = camRot;
 
-        // Reset rotation vector
-        toRotate = new Vector3(0, 0, 0);
+		// Reset rotation vector
+		toRotate = new Vector3(0, 0, 0);
 
-        // Noclip movement
-        Vector3 direction = Vector3.Zero;
+		// Noclip movement:
 
-        if (Input.IsActionPressed("move_forward"))
-            direction -= camera.GlobalTransform.Basis.Z;
-        if (Input.IsActionPressed("move_back"))
-            direction += camera.GlobalTransform.Basis.Z;
-        if (Input.IsActionPressed("move_left"))
-            direction -= camera.GlobalTransform.Basis.X;
-        if (Input.IsActionPressed("move_right"))
-            direction += camera.GlobalTransform.Basis.X;
-        if (Input.IsActionPressed("move_up"))
-            direction += camera.GlobalTransform.Basis.Y;
-        if (Input.IsActionPressed("move_down"))
-            direction -= camera.GlobalTransform.Basis.Y;
+		// Get direction to move in
+		Vector3 direction = Vector3.Zero;
 
-        if (direction != Vector3.Zero)
-        {
-            direction = direction.Normalized();
-            GlobalPosition += direction * noclipSpeed * (float)delta;
-        }
-    }
+		// Move in the direction you are facing
+		// by getting the camera's directional vectors
+		if (Input.IsActionPressed("move_forward"))
+			direction -= Camera.GlobalTransform.Basis.Z;
+		if (Input.IsActionPressed("move_back"))
+			direction += Camera.GlobalTransform.Basis.Z;
+		if (Input.IsActionPressed("move_left"))
+			direction -= Camera.GlobalTransform.Basis.X;
+		if (Input.IsActionPressed("move_right"))
+			direction += Camera.GlobalTransform.Basis.X;
+		if (Input.IsActionPressed("move_up"))
+			direction += Camera.GlobalTransform.Basis.Y;
+		if (Input.IsActionPressed("move_down"))
+			direction -= Camera.GlobalTransform.Basis.Y;
+
+		// If there is any movement, normalize direction and move marksman
+		if (direction != Vector3.Zero)
+		{
+			direction = direction.Normalized();
+			// Update marksman global position
+			GlobalPosition += direction * noclipSpeed * (float)delta;
+			// Show position in output log 
+			GD.Print($"Marksman Position: ({GlobalPosition.X:F2}, {GlobalPosition.Y:F2}, {GlobalPosition.Z:F2})");
+		}
+	}
 }
