@@ -1,7 +1,7 @@
 # Godot 4+ specific ignores
 /android/
 .godot/
-
+.vs/
 # Other
 Sandbox/
 tags
