@@ -133,8 +133,6 @@ public partial class Marksman : Node3D
             direction = direction.Normalized();
             // Update marksman global position
             GlobalPosition += direction * noclipSpeed * (float)delta;
-            // Show position in output log 
-            GD.Print($"Marksman Position: ({GlobalPosition.X:F2}, {GlobalPosition.Y:F2}, {GlobalPosition.Z:F2})");
         }
     }
 }

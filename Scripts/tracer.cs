@@ -12,7 +12,7 @@ public partial class Tracer : Node3D
     }
     public void OnBodyEntered()
     {
-        GD.Print("something entered bullet");
+        // TODO: collision behaviour
     }
     public override void _PhysicsProcess(double delta)
     {
