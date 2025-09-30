@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;  // For List
 
 public partial class Laser : Node3D
 {
@@ -7,6 +8,8 @@ public partial class Laser : Node3D
 
     private AnimationPlayer _animation;
     private AudioStreamPlayer3D _audioStream;
+    // Conditions to be fulfilled before freeing the Laser object.
+    private List<string> _freeConditions = new List<string>{"animation", "sfx"};
 
     public override void _Ready()
     {
@@ -17,6 +20,9 @@ public partial class Laser : Node3D
         AnimationMixer.AnimationFinishedEventHandler AnimationFinishedAction;
         AnimationFinishedAction = (StringName animName) => OnAnimationFinished(animName);
         _animation.AnimationFinished += AnimationFinishedAction;
+
+        // And for audio
+        _audioStream.Finished += OnAudioFinished;
 
         // Play fade-out animation and sound effect
         _animation.Play("fade-out");
@@ -83,6 +89,21 @@ public partial class Laser : Node3D
 
     private void OnAnimationFinished(String animName)
     {
-        QueueFree();
+        _freeConditions.Remove("animation");
+        // If list is empty, free laser.
+        if(_freeConditions.Count == 0)
+        {
+            QueueFree();
+        }
+    }
+
+    private void OnAudioFinished()
+    {
+        _freeConditions.Remove("sfx");
+        // If list is empty, free laser.
+        if(_freeConditions.Count == 0)
+        {
+            QueueFree();
+        }
     }
 }
