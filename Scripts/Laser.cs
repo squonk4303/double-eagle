@@ -6,19 +6,22 @@ public partial class Laser : Node3D
     private const int MAX_COLLISIONS = 2;
 
     private AnimationPlayer _animation;
+    private AudioStreamPlayer3D _audioStream;
 
     public override void _Ready()
     {
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
+        _audioStream = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
 
         // Connect signal to free object when animation finishes
         AnimationMixer.AnimationFinishedEventHandler AnimationFinishedAction;
         AnimationFinishedAction = (StringName animName) => OnAnimationFinished(animName);
         _animation.AnimationFinished += AnimationFinishedAction;
 
-        // Play fade-out animation
+        // Play fade-out animation and sound effect
         _animation.Play("fade-out");
         _animation.SpeedScale = 4;
+        _audioStream.Play();
     }
 
     public override void _PhysicsProcess(double delta)
