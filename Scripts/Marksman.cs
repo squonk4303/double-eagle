@@ -6,10 +6,12 @@ public partial class Marksman : Node3D
     // Where to limit pitch
     private const double MAX_PITCH = Mathf.Pi * 0.5f;
     private const double MIN_PITCH = Mathf.Pi * 0.5f;
+    private const string GUN_FIRE_SFX = "res://Audio/gun_fire.wav";
 
     // Get child nodes for revolutionary actions (Completed in _Ready)
-    private Node3D Pivot;
-    private Camera3D Camera;
+    private Node3D _pivot;
+    private Camera3D _camera;
+    private AudioStreamPlayer3D _audioStream;
 
     private Vector3 ToRotate;
     private float MouseSensitivity = 0.02f;
@@ -23,8 +25,9 @@ public partial class Marksman : Node3D
 
     public override void _Ready()
     {
-        Pivot = GetNode<Node3D>("Pivot");
-        Camera = GetNode<Camera3D>("Pivot/Camera3D");
+        _pivot = GetNode<Node3D>("Pivot");
+        _camera = GetNode<Camera3D>("Pivot/Camera3D");
+        _audioStream = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
     }
 
     /// Handle marksman-related input
@@ -46,18 +49,22 @@ public partial class Marksman : Node3D
         {
             // Tweak position before emitting
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
-            Vector3 bulletPosition = Camera.GlobalPosition + offset;
+            Vector3 bulletPosition = _camera.GlobalPosition + offset;
+
+            // Instantiate and play sfx
+            _audioStream.Stream = GD.Load<AudioStream>(GUN_FIRE_SFX);
+            _audioStream.Play();
 
             // Emit signal to spawn a bullet in parent scene
-            // Gun00Fired.emit(bulletPosition, Camera.GlobalRotation);
-            EmitSignal(SignalName.GunFire00, bulletPosition, Camera.GlobalRotation);
+            // Gun00Fired.emit(bulletPosition, _camera.GlobalRotation);
+            EmitSignal(SignalName.GunFire00, bulletPosition, _camera.GlobalRotation);
         }
 
         if (@event.IsActionPressed("secondary_fire"))
         {
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
-            Vector3 bulletPosition = Camera.GlobalPosition + offset;
-            EmitSignal(SignalName.GunFireRay, bulletPosition, Camera.GlobalRotation);
+            Vector3 bulletPosition = _camera.GlobalPosition + offset;
+            EmitSignal(SignalName.GunFireRay, bulletPosition, _camera.GlobalRotation);
         }
 
         // Escape mouse capture with Esc key
@@ -91,14 +98,14 @@ public partial class Marksman : Node3D
         // Rotate Pivot along y-axis
         // And Camera along its x-axis
         // TODO: Is order significant?
-        Pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
-        Camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
-        // Camera.rotation.x = clamp(Camera.rotation.x, MIN_PITCH, MAX_PITCH)
+        _pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
+        _camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
+        // _camera.rotation.x = clamp(_camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
         // TODO: Make this not suck
-        // Vector3 camRot = Camera.Rotation;
-        // camRot.X = (float)Mathf.Clamp(Camera.Rotation.X, MIN_PITCH, MAX_PITCH);
-        // Camera.Rotation = camRot;
+        // Vector3 camRot = _camera.Rotation;
+        // camRot.X = (float)Mathf.Clamp(_camera.Rotation.X, MIN_PITCH, MAX_PITCH);
+        // _camera.Rotation = camRot;
 
         // Reset rotation vector
         ToRotate = new Vector3(0, 0, 0);
