@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://bmjdy8wl1xy0v"]
+[gd_scene load_steps=7 format=3 uid="uid://bmjdy8wl1xy0v"]
 
 [ext_resource type="Script" uid="uid://cg17gbpxu81nh" path="res://Scripts/Laser.cs" id="1_mou6w"]
 [ext_resource type="Texture2D" uid="uid://dw512o4mfhjl4" path="res://Images/icon.svg" id="1_r1bh0"]
+[ext_resource type="AudioStream" uid="uid://630af34x0oiq" path="res://Audio/laser_2.wav" id="2_3pc01"]
 
 [sub_resource type="Animation" id="Animation_mou6w"]
 length = 0.001
@@ -98,6 +99,9 @@ target_position = Vector3(0, -1000, 0)
 libraries = {
 &"": SubResource("AnimationLibrary_mou6w")
 }
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_3pc01")
 
 [node name="Sprites" type="Node3D" parent="."]
 
