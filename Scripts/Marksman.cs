@@ -3,18 +3,20 @@ using System;
 
 public partial class Marksman : Node3D
 {
+    private const string GUNFIRE_SFX = "res://Audio/gun_fire.wav";
+
     // Where to limit pitch
     private const double MAX_PITCH = Mathf.Pi * 0.5f;
     private const double MIN_PITCH = Mathf.Pi * 0.5f;
-    private const string GUN_FIRE_SFX = "res://Audio/gun_fire.wav";
 
     // Get child nodes for revolutionary actions (Completed in _Ready)
     private Node3D _pivot;
     private Camera3D _camera;
-    private AudioStreamPlayer3D _audioStream;
 
-    private Vector3 ToRotate;
+    private AudioStream _gunfireSfx;
+    private AudioStreamPlayer3D _audioPlayer;
     private float MouseSensitivity = 0.02f;
+    private Vector3 ToRotate;
 
     // Declare signal for firing weapon
     [Signal]
@@ -23,11 +25,17 @@ public partial class Marksman : Node3D
     [Signal]
     public delegate void GunFireRayEventHandler(Vector3 position, Vector3 rotation);
 
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+        _gunfireSfx = GD.Load<AudioStream>(GUNFIRE_SFX);
+    }
+
     public override void _Ready()
     {
         _pivot = GetNode<Node3D>("Pivot");
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
-        _audioStream = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
     }
 
     /// Handle marksman-related input
@@ -52,8 +60,8 @@ public partial class Marksman : Node3D
             Vector3 bulletPosition = _camera.GlobalPosition + offset;
 
             // Instantiate and play sfx
-            _audioStream.Stream = GD.Load<AudioStream>(GUN_FIRE_SFX);
-            _audioStream.Play();
+            _audioPlayer.Stream = _gunfireSfx;
+            _audioPlayer.Play();
 
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, _camera.GlobalRotation);
