@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=11 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="4_au61t"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/ball.tscn" id="6_oy0ci"]
+[ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="7_ahrfq"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -91,5 +92,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.392036, 0.5, 0.10644579)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.17007, 0.5, 0.9726546)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="PauseMenu" parent="." instance=ExtResource("7_ahrfq")]
+process_mode = 3
+visible = false
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
