@@ -10,21 +10,6 @@ albedo_color = Color(0.419608, 0.368627, 1, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_d60mj"]
 
-[sub_resource type="Animation" id="Animation_d60mj"]
-resource_name = "turn_red"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:material_override:albedo_color")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.16666667, 1),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(0.419608, 0.368627, 1, 1), Color(1, 1, 1, 1), Color(0.7490196, 0, 0, 1)]
-}
-
 [sub_resource type="Animation" id="Animation_ij5cq"]
 length = 0.001
 tracks/0/type = "value"
@@ -38,6 +23,21 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Color(0.419608, 0.368627, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_d60mj"]
+resource_name = "turn_red"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:material_override:albedo_color")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.419608, 0.368627, 1, 1), Color(1, 1, 1, 1), Color(0.7490196, 0, 0, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_376qj"]
@@ -63,6 +63,8 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 libraries = {
 &"": SubResource("AnimationLibrary_376qj")
 }
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 
 [connection signal="body_shape_exited" from="." to="." method="_on_body_shape_exited"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier3D" to="." method="_on_visible_on_screen_notifier_3d_screen_exited"]

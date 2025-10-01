@@ -5,14 +5,24 @@ public partial class Ball : RigidBody3D
 {
     private const float COLLISION_FORCE = 1200.0f;
     private const float ENTRY_FORCE = 60.0f;
+    private const string BULLET_HIT_SFX = "res://Audio/582265__rocketpancake__justa-slap-smack.wav";
+    private const string LASER_HIT_SFX = "res://Audio/789793__quatricise__pop-4.wav";
 
     private AnimationPlayer _animation;
+    private AudioStreamPlayer3D _audioPlayer;
+    private AudioStream _bulletHitSfx;
+    private AudioStream _laserHitSfx;
     private int _timesHit = 0;
 
     public override void _Ready()
     {
+        _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
         _animation.SpeedScale = 4;
+
+        // Load sfx resources
+        _bulletHitSfx = GD.Load<AudioStream>(BULLET_HIT_SFX);
+        _laserHitSfx = GD.Load<AudioStream>(LASER_HIT_SFX);
     }
 
     /// Prepare for getting spawned in
@@ -37,6 +47,13 @@ public partial class Ball : RigidBody3D
         // NOTE: This denormalizes the vector
         direction.Z = 0.0f;
         ApplyForce(direction * COLLISION_FORCE);
+
+        // Select and playe sfx
+        _audioPlayer.Stream = _bulletHitSfx;
+        // Randomize pitch [0.5, 2.0]
+        _audioPlayer.PitchScale = GD.Randf() * 1.5f + 0.5f;
+        _audioPlayer.VolumeDb = 00.0f;
+        _audioPlayer.Play();
     }
 
     public void LaserHit()
@@ -44,6 +61,13 @@ public partial class Ball : RigidBody3D
         if (_timesHit <= 0)
         {
             _animation.Play("turn_red");
+
+            // Select and playe sfx
+            _audioPlayer.Stream = _laserHitSfx;
+            // Randomize pitch [0.5, 2.0]
+            _audioPlayer.PitchScale = GD.Randf() * 1.5f + 0.5f;
+            _audioPlayer.VolumeDb = 70.0f;
+            _audioPlayer.Play();
         }
         _timesHit += 1;
     }
