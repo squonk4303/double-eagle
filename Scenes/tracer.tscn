@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dkvbmaoycrse1"]
 
-[ext_resource type="Script" uid="uid://23l78leh6w1m" path="res://Scripts/tracer.gd" id="1_rds43"]
+[ext_resource type="Script" path="res://Scripts/Tracer.cs" id="1_rds43"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4mw4s"]
 

@@ -15,8 +15,10 @@ public partial class Marksman : Node3D
 
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
-    private float MouseSensitivity = 0.02f;
     private Vector3 ToRotate;
+
+    private float MouseSensitivity = 0.02f;
+    private float noclipSpeed = 5.0f;
 
     // Declare signal for firing weapon
     [Signal]
@@ -44,7 +46,8 @@ public partial class Marksman : Node3D
         if (
             @event is InputEventMouseMotion mouseMotion &&
             Input.MouseMode == Input.MouseModeEnum.Captured
-        ) {
+        )
+        {
             // Set distances to rotate camera
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
@@ -80,7 +83,8 @@ public partial class Marksman : Node3D
             @event is InputEventKey keyEvent &&
             keyEvent.Pressed &&
             keyEvent.Keycode == Key.Escape
-        ) {
+        )
+        {
             Input.MouseMode = Input.MouseModeEnum.Visible;
         }
 
@@ -90,7 +94,8 @@ public partial class Marksman : Node3D
             if (
                 mouseButtonEvent.ButtonIndex == MouseButton.Left &&
                 mouseButtonEvent.Pressed
-            ) {
+            )
+            {
                 Input.MouseMode = Input.MouseModeEnum.Captured;
             }
         }
@@ -117,5 +122,33 @@ public partial class Marksman : Node3D
 
         // Reset rotation vector
         ToRotate = new Vector3(0, 0, 0);
+
+        // Noclip movement:
+
+        // Initialize direction vector
+        Vector3 direction = Vector3.Zero;
+
+        // Move in the direction you are facing
+        // by getting the camera's directional vectors
+        if (Input.IsActionPressed("move_forward"))
+            direction -= _camera.GlobalTransform.Basis.Z;
+        if (Input.IsActionPressed("move_back"))
+            direction += _camera.GlobalTransform.Basis.Z;
+        if (Input.IsActionPressed("move_left"))
+            direction -= _camera.GlobalTransform.Basis.X;
+        if (Input.IsActionPressed("move_right"))
+            direction += _camera.GlobalTransform.Basis.X;
+        if (Input.IsActionPressed("move_up"))
+            direction += _camera.GlobalTransform.Basis.Y;
+        if (Input.IsActionPressed("move_down"))
+            direction -= _camera.GlobalTransform.Basis.Y;
+
+        // If there is any movement, normalize direction and move marksman
+        if (direction != Vector3.Zero)
+        {
+            direction = direction.Normalized();
+            // Update marksman global position
+            GlobalPosition += direction * noclipSpeed * (float)delta;
+        }
     }
 }
