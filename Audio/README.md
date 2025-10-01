@@ -16,3 +16,7 @@
 ## https://freesound.org/people/quatricise/sounds/789793/
 - License: CC0
 - Used in `789793__quatricise__pop-4.wav`
+
+## https://freesound.org/people/Robinhood76/sounds/828238/
+- License: [Attribution NonCommercial 4.0](https://creativecommons.org/licenses/by-nc/4.0/)
+- Used in `gun_fire.wav`
