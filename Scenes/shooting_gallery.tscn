@@ -90,4 +90,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.392036, 0.5, 0.10644579)
 [node name="Ball3" parent="Props" instance=ExtResource("6_oy0ci")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.17007, 0.5, 0.9726546)
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

@@ -7,12 +7,15 @@ public partial class ShootingGallery : Node3D
     private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
+    private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
 
     private readonly string[] PATH_LOCATIONS = new string[]
     {
         "Spawns/Path0/Stretch",
         "Spawns/Path1/Stretch",
     };
+
+    private AudioStreamPlayer _audioPlayer;
 
     public override void _Ready()
     {
@@ -23,6 +26,14 @@ public partial class ShootingGallery : Node3D
         Marksman marksman = GetNode<Marksman>("Marksman");
         marksman.GunFire00 += OnGunFire00;
         marksman.GunFireRay += OnGunFireRay;
+
+        // Set music to play through non-positional audio player
+        _audioPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+        _audioPlayer.Stream = GD.Load<AudioStream>(PATH_BGM);
+        // Restart playback on track finish.
+        _audioPlayer.Finished += () => _audioPlayer.Play();
+        _audioPlayer.VolumeDb = -100.0f;  // TODO: Inaudible until useful.
+        _audioPlayer.Play();
     }
 
     /// Spawn a ball at a random location
