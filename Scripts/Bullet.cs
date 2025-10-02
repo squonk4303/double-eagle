@@ -6,7 +6,7 @@ public partial class Bullet : Node3D
     private const float BULLET_SPEED = 140.0f;
     private const float KILL_TIMER = 4.0f;
 
-    private bool HitSomethingYet = false;
+    private bool _hitSomethingYet = false;
 
     public override void _Ready()
     {
@@ -49,12 +49,12 @@ public partial class Bullet : Node3D
     /// Prompt others to respond when colliding into them
     private void Collided(Node3D body)
     {
-        if (!HitSomethingYet && body.HasMethod("bulletHit"))
+        if (!_hitSomethingYet && body.HasMethod("bulletHit"))
         {
             body.Call("bulletHit", GlobalPosition);
         }
 
-        HitSomethingYet = true;
+        _hitSomethingYet = true;
         QueueFree();
     }
 }

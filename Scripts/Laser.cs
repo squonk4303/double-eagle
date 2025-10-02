@@ -7,14 +7,21 @@ public partial class Laser : Node3D
     private const int MAX_COLLISIONS = 2;
 
     private AnimationPlayer _animation;
-    private AudioStreamPlayer3D _audioStream;
+    private AudioStreamPlayer3D _audioPlayer;
+    private RayCast3D _ray;
+
     // Conditions to be fulfilled before freeing the Laser object.
     private List<string> _freeConditions = new List<string>{"animation", "sfx"};
 
     public override void _Ready()
     {
+        // Retrieve the Raycast object and do some alterations
+        _ray = GetNode<RayCast3D>("RayCast3D");
+        _ray.CollideWithAreas = true;
+        _ray.Enabled = true;
+
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
-        _audioStream = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
 
         // Connect signal to free object when animation finishes
         AnimationMixer.AnimationFinishedEventHandler AnimationFinishedAction;
@@ -22,50 +29,48 @@ public partial class Laser : Node3D
         _animation.AnimationFinished += AnimationFinishedAction;
 
         // And for audio
-        _audioStream.Finished += OnAudioFinished;
+        _audioPlayer.Finished += OnAudioFinished;
 
         // Play fade-out animation and sound effect
         _animation.Play("fade-out");
         _animation.SpeedScale = 4;
-        _audioStream.Play();
+        _audioPlayer.Play();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        CheckPenetrations();
+        // Check raycast collisions for first frame
+        if (_ray.Enabled)
+        {
+            CheckPenetrations(_ray);
+        }
     }
 
-    /// Check for ray collisions, allowing for multiple, through penetration
-    private void CheckPenetrations()
+    /// Check for _ray collisions, allowing for multiple, through penetration
+    private void CheckPenetrations(RayCast3D _ray)
     {
-        // Retrieve the Raycast object and do some alterations
-        var ray = GetNode<RayCast3D>("RayCast3D");
-        ray.CollideWithAreas = true;
-        ray.Enabled = true;
-
         // Track objects the laser will ignore due to it penetrating through them.
         var exceptions = new Godot.Collections.Array<CollisionObject3D>();
 
         // Do a new raycast collision check after each penetration left
-        Boolean keepChecking = true;
         int collisionsLeft = MAX_COLLISIONS;
 
-        while (collisionsLeft > 0 && keepChecking)
+        while (collisionsLeft > 0)
         {
             // Ignore collision with objects through which have already been penetrated
             foreach (var e in exceptions)
             {
-                ray.AddException(e);
+                _ray.AddException(e);
             }
 
             // Update raycast before end of physics frame.
             // This ensures the multiple collisions are enacted
             // without the need for multiple active frames.
-            ray.ForceRaycastUpdate();
+            _ray.ForceRaycastUpdate();
 
-            if (ray.IsColliding())
+            if (_ray.IsColliding())
             {
-                var collider = ray.GetCollider() as CollisionObject3D;
+                var collider = _ray.GetCollider() as CollisionObject3D;
                 // Prompt collision subject for their reaction
                 if (collider.HasMethod("LaserHit"))
                 {
@@ -76,15 +81,15 @@ public partial class Laser : Node3D
             }
             else
             {
-                // Stop checking for collisions after hitting a wall or null
-                keepChecking = false;
+                // Stop checking for collisions after hitting a wall or hitting null
+                collisionsLeft = 0;
             }
 
             collisionsLeft -= 1;
         }
 
-        // Remove Raycast from scene so as to only check collisions for the first frame
-        ray.QueueFree();
+        // Disable Raycast so as to only check collisions for the first frame
+        _ray.Enabled = false;
     }
 
     private void OnAnimationFinished(String animName)
