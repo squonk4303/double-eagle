@@ -21,7 +21,7 @@ public partial class Laser : Node3D
         _ray.Enabled = true;
 
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
-        _audioStream = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
 
         // Connect signal to free object when animation finishes
         AnimationMixer.AnimationFinishedEventHandler AnimationFinishedAction;
@@ -29,12 +29,12 @@ public partial class Laser : Node3D
         _animation.AnimationFinished += AnimationFinishedAction;
 
         // And for audio
-        _audioStream.Finished += OnAudioFinished;
+        _audioPlayer.Finished += OnAudioFinished;
 
         // Play fade-out animation and sound effect
         _animation.Play("fade-out");
         _animation.SpeedScale = 4;
-        _audioStream.Play();
+        _audioPlayer.Play();
     }
 
     public override void _PhysicsProcess(double delta)
