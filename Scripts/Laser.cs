@@ -7,7 +7,7 @@ public partial class Laser : Node3D
     private const int MAX_COLLISIONS = 2;
 
     private AnimationPlayer _animation;
-    private AudioStreamPlayer3D _audioStream;
+    private AudioStreamPlayer3D _audioPlayer;
     private RayCast3D _ray;
 
     // Conditions to be fulfilled before freeing the Laser object.
