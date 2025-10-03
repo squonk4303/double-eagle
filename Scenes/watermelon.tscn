@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://dcw1gfj28rgl5"]
 
-[ext_resource type="Script" uid="uid://dr5054muvrgil" path="res://Scripts/Ball.cs" id="1_j8smb"]
+[ext_resource type="Script" uid="uid://bj60qe6u7qko1" path="res://Scripts/Watermelon.cs" id="1_j8smb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25osk"]
 resource_local_to_scene = true
@@ -48,7 +48,7 @@ _data = {
 &"turn_red": SubResource("Animation_d60mj")
 }
 
-[node name="Ball" type="RigidBody3D"]
+[node name="Watermelon" type="RigidBody3D"]
 collision_mask = 0
 script = ExtResource("1_j8smb")
 
