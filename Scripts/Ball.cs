@@ -14,11 +14,13 @@ public partial class Ball : RigidBody3D
     private AudioStream _laserHitSfx;
     private int _timesHit = 0;
 
+    public float AnimationSpeedScale = 4;
+
     public override void _Ready()
     {
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
-        _animation.SpeedScale = 4;
+        _animation.SpeedScale = AnimationSpeedScale;
 
         // Load sfx resources
         _bulletHitSfx = GD.Load<AudioStream>(BULLET_HIT_SFX);
