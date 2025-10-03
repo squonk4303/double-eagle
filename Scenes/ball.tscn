@@ -47,6 +47,7 @@ _data = {
 }
 
 [node name="Ball" type="RigidBody3D"]
+collision_mask = 0
 script = ExtResource("1_d60mj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
