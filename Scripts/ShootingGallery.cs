@@ -52,12 +52,8 @@ public partial class ShootingGallery : Node3D
         return ballScene;
     }
 
-    /// Spawn a ball at a random location
-    private void OnBallTimerTimeout()
+    private Vector3 GetSpawnPosition()
     {
-        var ballScene = GetRandomBall();
-
-        var ball = ballScene.Instantiate() as Ball;
         var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
 
         // Picks a random spot on the path to spawn.
@@ -67,7 +63,14 @@ public partial class ShootingGallery : Node3D
         path.ProgressRatio = GD.Randf();
         // Randomly flip the Y-coordinate
         float flipper = (GD.Randi() % 2 - 0.5f) * 2.0f;
-        var spawn = new Vector3(path.Position.X * flipper, path.Position.Y, zJiggle);
+        return new Vector3(path.Position.X * flipper, path.Position.Y, zJiggle);
+    }
+
+    /// Spawn a ball at a random location
+    private void OnBallTimerTimeout()
+    {
+        var ball = GetRandomBall().Instantiate() as Ball;
+        Vector3 spawn = GetSpawnPosition();
         var target = new Vector3(0, 7.0f, 0);
         ball.Initialize(spawn, target);
         AddChild(ball);
