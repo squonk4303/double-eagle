@@ -1,14 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://cb3nu441yseiq"]
+[gd_scene load_steps=8 format=3 uid="uid://dcw1gfj28rgl5"]
 
 [ext_resource type="Script" uid="uid://dr5054muvrgil" path="res://Scripts/Ball.cs" id="1_j8smb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25osk"]
 resource_local_to_scene = true
-albedo_color = Color(0.419608, 0.368627, 1, 1)
+albedo_color = Color(0.45372, 0.57, 0.18239999, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_d60mj"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_d60mj"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_j8smb"]
+radius = 0.49902344
+height = 1.3186035
 
 [sub_resource type="Animation" id="Animation_ij5cq"]
 length = 0.001
@@ -22,7 +24,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(0.419608, 0.368627, 1, 1)]
+"values": [Color(0.45372, 0.57, 0.18239999, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_d60mj"]
@@ -37,7 +39,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.16666667, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(0.419608, 0.368627, 1, 1), Color(1, 1, 1, 1), Color(0.7490196, 0, 0, 1)]
+"values": [Color(0.45490196, 0.5686275, 0.18431373, 1), Color(1, 1, 1, 1), Color(0.7490196, 0, 0, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_376qj"]
@@ -47,18 +49,20 @@ _data = {
 }
 
 [node name="Ball" type="RigidBody3D"]
-transform = Transform3D(4.15, 0, 0, 0, 4.15, 0, 0, 0, 4.15, 0, 0, 0)
 script = ExtResource("1_j8smb")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(5.4832587, 0, 0, 0, 4.005, 0, 0, 0, 4.005, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_25osk")
 mesh = SubResource("SphereMesh_d60mj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_d60mj")
+transform = Transform3D(-1.7506412e-07, -4.005, 0, 4.005, -1.7506412e-07, 0, 0, 0, 4.005, 0.014177859, 6.197354e-10, 0)
+shape = SubResource("CapsuleShape3D_j8smb")
 
 [node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(2.015, 0, 0, 0, 2.015, 0, 0, 0, 2.015, 0, 0, 0)
+aabb = AABB(-1.3655721, -1, -1, 2.7311442, 2, 2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
