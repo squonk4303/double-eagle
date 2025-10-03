@@ -28,14 +28,19 @@ public partial class Ball : RigidBody3D
     /// Prepare for getting spawned in
     public void Initialize(Vector3 spawn, Vector3 target)
     {
+        Position = spawn;
+
+        // --- Get force with which to spawn ---
         Vector3 difference = target - spawn;
         // TODO: All this does is get a higher angle. There should be a way
         // to get the same result in a more controlled way.
         difference.Z = 0.0f;
         difference *= 0.5f;
         difference.Y += 3.0f;
-        Position = spawn;
         ApplyForce(difference * (ENTRY_FORCE + GD.Randf() * 40.0f));
+
+        // --- Make up an angle to spawn with ---
+        Rotation = difference.Normalized();
     }
 
     /// How to respond when hit by a bullet
