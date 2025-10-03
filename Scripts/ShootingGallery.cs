@@ -4,10 +4,15 @@ using System;
 
 public partial class ShootingGallery : Node3D
 {
-    private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
+
+    private readonly string[] PATH_BALLS = new string[]
+    {
+        "res://Scenes/ball.tscn",
+        "res://Scenes/watermelon.tscn",
+    };
 
     private readonly string[] PATH_LOCATIONS = new string[]
     {
@@ -36,10 +41,22 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Play();
     }
 
+    private PackedScene GetRandomBall()
+    {
+        // Load random ball asset
+        // ...It's uniform randomness, which is not quite right
+        PackedScene ballScene = GD.Load<PackedScene>(
+            PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
+        );
+
+        return ballScene;
+    }
+
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        PackedScene ballScene = GD.Load<PackedScene>(PATH_BALL);
+        var ballScene = GetRandomBall();
+
         var ball = ballScene.Instantiate() as Ball;
         var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
 
