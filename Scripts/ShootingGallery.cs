@@ -57,13 +57,11 @@ public partial class ShootingGallery : Node3D
         var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
 
         // Picks a random spot on the path to spawn.
-        // Randomizes the z-position a bit too.
         // TODO: Would prefer to use C#'s Random class (perhaps for seed control?).
-        var zJiggle = GD.Randf() * 4.0f + 1.0f;
         path.ProgressRatio = GD.Randf();
         // Randomly flip the Y-coordinate
         float flipper = (GD.Randi() % 2 - 0.5f) * 2.0f;
-        return new Vector3(path.Position.X * flipper, path.Position.Y, zJiggle);
+        return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
     }
 
     /// Spawn a ball at a random location

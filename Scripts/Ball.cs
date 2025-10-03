@@ -30,7 +30,7 @@ public partial class Ball : RigidBody3D
     }
 
     /// Prepare for getting spawned in
-    public void Initialize(Vector3 spawn, Vector3 target)
+    public virtual void Initialize(Vector3 spawn, Vector3 target)
     {
         Position = spawn;
 

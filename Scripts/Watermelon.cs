@@ -10,4 +10,10 @@ public partial class Watermelon : Ball
         PitchConstant = 0.8f;
         PitchFactor = 0.1f;
     }
+
+    public override void Initialize(Vector3 spawn, Vector3 target)
+    {
+        spawn.Z = 0.0f;
+        base.Initialize(spawn, target);
+    }
 }
