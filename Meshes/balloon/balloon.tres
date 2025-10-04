@@ -1,8 +1,11 @@
 [gd_resource type="ArrayMesh" load_steps=3 format=4 uid="uid://ho8mkiemx3qb"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4daky"]
+resource_local_to_scene = true
+albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_ltgyf"]
+resource_local_to_scene = true
 _surfaces = [{
 "aabb": AABB(-0.93797106, -1.6442513, -0.9557231, 1.8759421, 2.6069148, 1.9114462),
 "format": 34896613377,
@@ -17,6 +20,7 @@ _surfaces = [{
 blend_shape_mode = 0
 
 [resource]
+resource_local_to_scene = true
 resource_name = "balloon_Icosphere_002"
 _surfaces = [{
 "aabb": AABB(-0.93797106, -1.6442513, -0.9557231, 1.8759421, 2.6069148, 1.9114462),
