@@ -1,12 +1,13 @@
 [gd_scene load_steps=8 format=3 uid="uid://bmdepcsj1pbay"]
 
-[ext_resource type="Script" uid="uid://ckmqn43t2aouw" path="res://Scripts/Ball.cs" id="1_4wcav"]
+[ext_resource type="Script" uid="uid://dm52vhp38tonq" path="res://Scripts/Balloon.cs" id="1_4wcav"]
 [ext_resource type="ArrayMesh" uid="uid://ho8mkiemx3qb" path="res://Meshes/balloon/balloon.tres" id="2_4wcav"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hkhi7"]
+radius = 0.7655112
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4wcav"]
-radius = 0.3307053
+radius = 0.6053629
 
 [sub_resource type="Animation" id="Animation_ij5cq"]
 length = 0.001
@@ -45,10 +46,11 @@ _data = {
 }
 
 [node name="Balloon" type="RigidBody3D"]
+collision_mask = 0
 script = ExtResource("1_4wcav")
 
 [node name="Icosphere" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
 mesh = ExtResource("2_4wcav")
 skeleton = NodePath("")
 
@@ -56,12 +58,12 @@ skeleton = NodePath("")
 shape = SubResource("SphereShape3D_hkhi7")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.43171817, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.64487386, 0)
 shape = SubResource("SphereShape3D_4wcav")
 
 [node name="VisibleOnScreenNotifier3D" type="VisibleOnScreenNotifier3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-aabb = AABB(-1, -1.2939866, -1, 2, 2.587973, 2)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -0.28989196, 0)
+aabb = AABB(-1.6199837, -2.2082942, -1.6199837, 3.2399673, 4.4165883, 3.2399673)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
