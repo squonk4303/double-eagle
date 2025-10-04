@@ -10,6 +10,7 @@ public partial class ShootingGallery : Node3D
 
     private readonly string[] PATH_BALLS = new string[]
     {
+        "res://Scenes/balloon.tscn",
         "res://Scenes/small_ball.tscn",
         "res://Scenes/watermelon.tscn",
     };
