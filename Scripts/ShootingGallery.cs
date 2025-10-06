@@ -28,7 +28,8 @@ public partial class ShootingGallery : Node3D
         "res://Scenes/balloon.tscn",
         "res://Scenes/balloon.tscn",
         "res://Scenes/watermelon.tscn",
-        "res://Scenes/watermelon.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
@@ -38,6 +39,8 @@ public partial class ShootingGallery : Node3D
 
     private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
+    private Label _healthLabel;
+    private float _health = 100.0f;
 
     public override void _Ready()
     {
@@ -56,6 +59,10 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Finished += () => _audioPlayer.Play();
         _audioPlayer.VolumeDb = -100.0f;  // TODO: Inaudible until useful.
         _audioPlayer.Play();
+
+        // Initialize HP-HUD
+        _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
+        AddHealth(0.0f);
     }
 
     /// Loads balls in from a randomized queue
@@ -99,6 +106,12 @@ public partial class ShootingGallery : Node3D
         return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
     }
 
+    private void AddHealth(float value)
+    {
+        _health += value;
+        _healthLabel.Text = $"HP: {_health}";
+    }
+
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
@@ -112,6 +125,8 @@ public partial class ShootingGallery : Node3D
     /// Spawn a bullet wherever is demanded
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
+        AddHealth(-1.0f);
+
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
         Bullet bullet = scene.Instantiate() as Bullet;
@@ -121,6 +136,9 @@ public partial class ShootingGallery : Node3D
 
     private void OnGunFireRay(Vector3 position, Vector3 rotation)
     {
+        AddHealth(-5.0f);
+
+        // Loads, instantiates, and spawns laser
         var scene = GD.Load<PackedScene>(PATH_LASER);
         Node3D ray = scene.Instantiate() as Node3D;
         ray.Position = position;
