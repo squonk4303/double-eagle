@@ -22,7 +22,8 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path1/Stretch",
     };
 
-    private List<string> _ballQueueTemplate = new List<string>
+    // A queue (shuffled elsewhere) which determines rate of balls spawning
+    private string[] _ballQueueTemplate = new string[]
     {
         "res://Scenes/balloon.tscn",
         "res://Scenes/balloon.tscn",
@@ -36,8 +37,6 @@ public partial class ShootingGallery : Node3D
     };
 
     private List<string> _ballQueue = new List<string>();
-
-
     private AudioStreamPlayer _audioPlayer;
 
     public override void _Ready()
@@ -59,6 +58,7 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Play();
     }
 
+    /// Loads balls in from a randomized queue
     private PackedScene LoadRandomBall()
     {
         PackedScene ballScene;
@@ -66,12 +66,12 @@ public partial class ShootingGallery : Node3D
         // When queue is empty
         if (_ballQueue.Count == 0)
         {
-            // Reload queue
+            // Reload queue with a shuffled template
+            Random.Shared.Shuffle(_ballQueueTemplate);
             _ballQueue = new List<string>(_ballQueueTemplate);
-            // 2. Shuffle the queue
-            // Shuffle(_ballQueue);
 
             // Load and return one with uniform randomness
+            // For a bit o' spice
             ballScene = GD.Load<PackedScene>(
                 PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
             );
