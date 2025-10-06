@@ -125,12 +125,16 @@ public partial class ShootingGallery : Node3D
     /// Spawn a bullet wherever is demanded
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
+        // Cost health for shootin
         AddHealth(-1.0f);
 
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
         Bullet bullet = scene.Instantiate() as Bullet;
         bullet.Initialize(position, rotation);
+        // Connect Bullet's signal to ShootingGallery's slot
+        bullet.Connect("BulletReport", Callable.From(OnBulletReport));
+
         AddChild(bullet);
     }
 
@@ -141,7 +145,7 @@ public partial class ShootingGallery : Node3D
         Node3D laser = scene.Instantiate() as Node3D;
         laser.Position = position;
         laser.Rotation = rotation;
-        // Connect Laser's signal to our method
+        // Connect Laser's signal to ShootingGallery's slot
         laser.Connect(
             "LaserReport",
             // Make a callable From this lambda
@@ -153,9 +157,15 @@ public partial class ShootingGallery : Node3D
         AddChild(laser);
     }
 
+    private void OnBulletReport()
+    {
+        // Refund the health lost by shooting in the first place
+        AddHealth(1.0f);
+    }
+
     private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
     {
-        // Add/remove health based on how many hits
+        // Add/remove health based on how many targets hit with laser
         // $$ f(x) = 5x^{1.5} - 4 $$
         // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => Math.Round(5 * Math.Pow(x, 1.5) - 4);
