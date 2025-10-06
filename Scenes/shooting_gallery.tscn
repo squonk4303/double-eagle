@@ -1,11 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=9 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
 [ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="4_au61t"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
-[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/small_ball.tscn" id="6_oy0ci"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -41,6 +40,13 @@ scale = Vector2(5, 5)
 texture = ExtResource("5_au61t")
 offset = Vector2(0.5, 0.5)
 
+[node name="Health" type="Label" parent="HeadsUpDisplay"]
+offset_left = 331.0
+offset_top = 325.0
+offset_right = 389.0
+offset_bottom = 348.0
+text = "HP: 999"
+
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
 fov = 19.6142
@@ -75,20 +81,70 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
 
-[node name="Ball" parent="Props" instance=ExtResource("6_oy0ci")]
+[node name="Ball" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.497204, 0.5, -0.44582307)
+script = null
 
-[node name="Ball4" parent="Props" instance=ExtResource("6_oy0ci")]
+[node name="Ball4" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.828924, 0.5, -1.4869375)
+script = null
 
-[node name="Ball5" parent="Props" instance=ExtResource("6_oy0ci")]
+[node name="Ball5" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.939526, 0.5, 1.7561381)
+script = null
 
-[node name="Ball2" parent="Props" instance=ExtResource("6_oy0ci")]
+[node name="Ball2" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.392036, 0.5, 0.10644579)
+script = null
 
-[node name="Ball3" parent="Props" instance=ExtResource("6_oy0ci")]
+[node name="Ball3" parent="Props"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.17007, 0.5, 0.9726546)
+script = null
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
