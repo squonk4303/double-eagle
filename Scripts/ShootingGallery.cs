@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;  // For List
 
 
 public partial class ShootingGallery : Node3D
@@ -20,6 +21,22 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path0/Stretch",
         "Spawns/Path1/Stretch",
     };
+
+    private List<string> _ballQueueTemplate = new List<string>
+    {
+        "res://Scenes/balloon.tscn",
+        "res://Scenes/balloon.tscn",
+        "res://Scenes/watermelon.tscn",
+        "res://Scenes/watermelon.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+    };
+
+    private List<string> _ballQueue = new List<string>();
+
 
     private AudioStreamPlayer _audioPlayer;
 
@@ -42,13 +59,30 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Play();
     }
 
-    private PackedScene GetRandomBall()
+    private PackedScene LoadRandomBall()
     {
-        // Load random ball asset
-        // ...It's uniform randomness, which is not quite right
-        PackedScene ballScene = GD.Load<PackedScene>(
-            PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
-        );
+        PackedScene ballScene;
+
+        // When queue is empty
+        if (_ballQueue.Count == 0)
+        {
+            // Reload queue
+            _ballQueue = new List<string>(_ballQueueTemplate);
+            // 2. Shuffle the queue
+            // Shuffle(_ballQueue);
+
+            // Load and return one with uniform randomness
+            ballScene = GD.Load<PackedScene>(
+                PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
+            );
+            return ballScene;
+        }
+        else
+        {
+            // Load one item and remove it from the queue
+            ballScene = GD.Load<PackedScene>(_ballQueue[0]);
+            _ballQueue.RemoveAt(0);
+        }
 
         return ballScene;
     }
@@ -68,7 +102,7 @@ public partial class ShootingGallery : Node3D
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        var ball = GetRandomBall().Instantiate();
+        var ball = LoadRandomBall().Instantiate();
         Vector3 spawn = GetSpawnPosition();
         var target = new Vector3(0, 7.0f, 0);
         ball.Call("Initialize", spawn, target);
