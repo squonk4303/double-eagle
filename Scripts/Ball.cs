@@ -14,7 +14,8 @@ public partial class Ball : RigidBody3D
 
     [Export] public float AnimationSpeedScale = 4;
     [Export] public float CollisionForce = 1200.0f;
-    [Export] public float EntryForce = 60.0f;
+    [Export] public float EntryForceFactor = 60.0f;
+    [Export] public float EntryForceConstant = 40.0f;
     [Export] public float PitchFactor = 1.5f;
     [Export] public float PitchConstant = 0.5f;
 
@@ -41,7 +42,8 @@ public partial class Ball : RigidBody3D
         difference.Z = 0.0f;
         difference *= 0.5f;
         difference.Y += 3.0f;
-        ApplyForce(difference * (EntryForce + GD.Randf() * 40.0f));
+
+        ApplyForce(difference * (EntryForceFactor + GD.Randf() * EntryForceConstant));
 
         // --- Make up an angle to spawn with ---
         Rotation = difference.Normalized();

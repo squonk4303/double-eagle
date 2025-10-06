@@ -68,10 +68,10 @@ public partial class ShootingGallery : Node3D
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        var ball = GetRandomBall().Instantiate() as Ball;
+        var ball = GetRandomBall().Instantiate();
         Vector3 spawn = GetSpawnPosition();
         var target = new Vector3(0, 7.0f, 0);
-        ball.Initialize(spawn, target);
+        ball.Call("Initialize", spawn, target);
         AddChild(ball);
     }
 
