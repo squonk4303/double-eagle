@@ -140,10 +140,23 @@ public partial class ShootingGallery : Node3D
 
         // Loads, instantiates, and spawns laser
         var scene = GD.Load<PackedScene>(PATH_LASER);
-        Node3D ray = scene.Instantiate() as Node3D;
-        ray.Position = position;
-        ray.Rotation = rotation;
+        Node3D laser = scene.Instantiate() as Node3D;
+        laser.Position = position;
+        laser.Rotation = rotation;
+        // Connect Laser's signal to our method
+        laser.Connect(
+            "LaserReport",
+            // Make a callable From this lambda
+            Callable.From(
+                (Godot.Collections.Array<CollisionObject3D> targets) => OnLaserReport(targets)
+            )
+        );
 
-        AddChild(ray);
+        AddChild(laser);
+    }
+
+    private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
+    {
+        GD.Print("Hi. ", targets);
     }
 }
