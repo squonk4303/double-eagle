@@ -40,7 +40,7 @@ public partial class ShootingGallery : Node3D
     private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
     private Label _healthLabel;
-    private float _health = 100.0f;
+    private double _health = 100.0f;
 
     public override void _Ready()
     {
@@ -106,7 +106,7 @@ public partial class ShootingGallery : Node3D
         return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
     }
 
-    private void AddHealth(float value)
+    private void AddHealth(double value)
     {
         _health += value;
         _healthLabel.Text = $"HP: {_health}";
@@ -136,8 +136,6 @@ public partial class ShootingGallery : Node3D
 
     private void OnGunFireRay(Vector3 position, Vector3 rotation)
     {
-        AddHealth(-5.0f);
-
         // Loads, instantiates, and spawns laser
         var scene = GD.Load<PackedScene>(PATH_LASER);
         Node3D laser = scene.Instantiate() as Node3D;
@@ -157,6 +155,10 @@ public partial class ShootingGallery : Node3D
 
     private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
     {
-        GD.Print("Hi. ", targets);
+        // Add/remove health based on how many hits
+        // $$ f(x) = 5x^{1.5} - 4 $$
+        // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
+        var f = (int x) => Math.Round(5 * Math.Pow(x, 1.5) - 4);
+        AddHealth(f(targets.Count));
     }
 }
