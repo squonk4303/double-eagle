@@ -123,7 +123,11 @@ public partial class ShootingGallery : Node3D
             // TODO: Implement game over mechanics
             //       This right now doesn't even lock HP
             _healthLabel.Text = "Game over, man...";
+            // Cool game-over effects
             Engine.TimeScale = 0.2;
+            var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
+            light.Rotation = new Vector3(0, 1.0f, 0);
+            light.LightColor = new Color("darkred");
         }
     }
 
