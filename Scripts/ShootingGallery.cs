@@ -62,6 +62,10 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.VolumeDb = -100.0f;  // TODO: Inaudible until useful.
         _audioPlayer.Play();
 
+        // Connect misc. signals
+        var falloutZone = GetNode<Fallout>("FalloutZone");
+        falloutZone.BodyFellOut += OnBodyFellOut;
+
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
         AddHealth(0.0d);
@@ -191,5 +195,18 @@ public partial class ShootingGallery : Node3D
         // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => Math.Round(5 * Math.Pow(x, 1.5) - 4);
         AddHealth(f(targets.Count));
+    }
+
+    private void OnBodyFellOut(Node3D body)
+    {
+        // Remove health when balls fall out of reach
+        if (body is Watermelon)
+        {
+            AddHealth(-3.0d);
+        }
+        else if (body is Balloon)
+        {
+            AddHealth(-2.0d);
+        }
     }
 }
