@@ -188,9 +188,9 @@ public partial class ShootingGallery : Node3D
 
     private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
     {
-        GD.Print(targets);
         // Add/remove health based on how many targets hit with laser
         // TODO: Bug where hitting a bullet will count positively here
+        //       And the world boundary... which is infinitely wide....
         // $$ f(x) = 5x^{1.5} - 4 $$
         // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => Math.Round(5 * Math.Pow(x, 1.5) - 4);
