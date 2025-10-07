@@ -9,6 +9,8 @@ public partial class ShootingGallery : Node3D
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
 
+    private const double MAX_HP = 100.0d;
+
     private readonly string[] PATH_BALLS = new string[]
     {
         "res://Scenes/balloon.tscn",
@@ -40,7 +42,7 @@ public partial class ShootingGallery : Node3D
     private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
     private Label _healthLabel;
-    private double _health = 100.0f;
+    private double _health = MAX_HP;
 
     public override void _Ready()
     {
@@ -62,7 +64,7 @@ public partial class ShootingGallery : Node3D
 
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
-        AddHealth(0.0f);
+        AddHealth(0.0d);
     }
 
     /// Loads balls in from a randomized queue
@@ -108,8 +110,21 @@ public partial class ShootingGallery : Node3D
 
     private void AddHealth(double value)
     {
-        _health += value;
-        _healthLabel.Text = $"HP: {_health}";
+        // Update health value
+        _health = Math.Clamp(_health + value, -MAX_HP, MAX_HP);
+
+        // Respond to certain health values
+        if (_health > 0)
+        {
+            _healthLabel.Text = $"HP: {_health}";
+        }
+        else
+        {
+            // TODO: Implement game over mechanics
+            //       This right now doesn't even lock HP
+            _healthLabel.Text = "Game over, man...";
+            Engine.TimeScale = 0.2;
+        }
     }
 
     /// Spawn a ball at a random location
@@ -126,7 +141,7 @@ public partial class ShootingGallery : Node3D
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
         // Cost health for shootin
-        AddHealth(-1.0f);
+        AddHealth(-1.0d);
 
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
@@ -160,12 +175,14 @@ public partial class ShootingGallery : Node3D
     private void OnBulletReport()
     {
         // Refund the health lost by shooting in the first place
-        AddHealth(1.0f);
+        AddHealth(1.0d);
     }
 
     private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
     {
+        GD.Print(targets);
         // Add/remove health based on how many targets hit with laser
+        // TODO: Bug where hitting a bullet will count positively here
         // $$ f(x) = 5x^{1.5} - 4 $$
         // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => Math.Round(5 * Math.Pow(x, 1.5) - 4);
