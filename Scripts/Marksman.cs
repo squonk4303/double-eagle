@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class Marksman : Node3D
+public partial class Marksman : CharacterBody3D
 {
     private const string GUNFIRE_SFX = "res://Audio/gun_fire.wav";
 
@@ -17,6 +17,7 @@ public partial class Marksman : Node3D
     private AudioStreamPlayer3D _audioPlayer;
     private Vector3 ToRotate;
 
+    private Vector3 _leaningVector = new Vector3();
     private float MouseSensitivity = 0.02f;
     private float noclipSpeed = 5.0f;
 
@@ -35,6 +36,10 @@ public partial class Marksman : Node3D
 
     public override void _Ready()
     {
+        // Set characterbody physics to disregard floors
+        MotionMode = MotionModeEnum.Floating;
+
+        // Retrieve child nodes
         _pivot = GetNode<Node3D>("Pivot");
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
@@ -43,6 +48,7 @@ public partial class Marksman : Node3D
     /// Handle marksman-related input
     public override void _UnhandledInput(InputEvent @event)
     {
+        // Check for mouse movement
         if (
             @event is InputEventMouseMotion mouseMotion &&
             Input.MouseMode == Input.MouseModeEnum.Captured
@@ -56,6 +62,7 @@ public partial class Marksman : Node3D
             ToRotate.Y = mouseStretch.Y;
         }
 
+        // Check for mouse buttons
         if (@event.IsActionPressed("primary_fire"))
         {
             // Tweak position before emitting
@@ -78,14 +85,32 @@ public partial class Marksman : Node3D
             EmitSignal(SignalName.GunFireRay, bulletPosition, _camera.GlobalRotation);
         }
 
-        // Escape mouse capture with Esc key
-        if (
-            @event is InputEventKey keyEvent &&
-            keyEvent.Pressed &&
-            keyEvent.Keycode == Key.Escape
-        )
+        // Check for keyboard events
+        if (@event is InputEventKey keyEvent)
         {
-            Input.MouseMode = Input.MouseModeEnum.Visible;
+            // --- Escape mouse capture with Esc key ---
+            if (keyEvent.Keycode == Key.Escape)
+            {
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            }
+
+            // --- Leaning-movement with Shift-WASD ---
+
+            // Check for keys pressed together with Shift
+            if (keyEvent.ShiftPressed)
+            {
+                if (keyEvent.Keycode == Key.A)
+                {
+                    if (keyEvent.Pressed)
+                    {
+                        GD.Print("Shift-event: ", @event);
+                    }
+                    else
+                    {
+                        GD.Print("Released.");
+                    }
+                }
+            }
         }
 
         if (@event is InputEventMouseButton mouseButtonEvent)
@@ -130,18 +155,18 @@ public partial class Marksman : Node3D
 
         // Move in the direction you are facing
         // by getting the camera's directional vectors
-        if (Input.IsActionPressed("move_forward"))
-            direction -= _camera.GlobalTransform.Basis.Z;
-        if (Input.IsActionPressed("move_back"))
-            direction += _camera.GlobalTransform.Basis.Z;
-        if (Input.IsActionPressed("move_left"))
-            direction -= _camera.GlobalTransform.Basis.X;
-        if (Input.IsActionPressed("move_right"))
-            direction += _camera.GlobalTransform.Basis.X;
-        if (Input.IsActionPressed("move_up"))
-            direction += _camera.GlobalTransform.Basis.Y;
-        if (Input.IsActionPressed("move_down"))
-            direction -= _camera.GlobalTransform.Basis.Y;
+        // if (Input.IsActionPressed("move_forward"))
+        //     direction -= _camera.GlobalTransform.Basis.Z;
+        // if (Input.IsActionPressed("move_back"))
+        //     direction += _camera.GlobalTransform.Basis.Z;
+        // if (Input.IsActionPressed("move_left"))
+        //     direction -= _camera.GlobalTransform.Basis.X;
+        // if (Input.IsActionPressed("move_right"))
+        //     direction += _camera.GlobalTransform.Basis.X;
+        // if (Input.IsActionPressed("move_up"))
+        //     direction += _camera.GlobalTransform.Basis.Y;
+        // if (Input.IsActionPressed("move_down"))
+        //     direction -= _camera.GlobalTransform.Basis.Y;
 
         // If there is any movement, normalize direction and move marksman
         if (direction != Vector3.Zero)
