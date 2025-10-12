@@ -22,9 +22,6 @@ public partial class Marksman : CharacterBody3D
 
     // Positional Vectors
     private Vector3 _feetPosition;
-    private Vector3 _initialPosition;
-    private Vector3 _leaningInput = new Vector3();
-    private Vector3 _chasePosition = new Vector3();
 
     [Export] public bool NoclipMode = false;
 
@@ -47,7 +44,6 @@ public partial class Marksman : CharacterBody3D
         MotionMode = MotionModeEnum.Floating;
 
         // Set initial position
-        _initialPosition = GlobalPosition;
         _feetPosition = GlobalPosition;
 
         // Retrieve child nodes
@@ -146,38 +142,38 @@ public partial class Marksman : CharacterBody3D
     {
         // --- Leaning Movement ---
 
-        _leaningInput = Vector3.Zero;
-
         if (!NoclipMode)
         {
+            var lean = Vector3.Zero;
+
             if (Input.IsActionPressed("move_left"))
             {
-                _leaningInput.X -= 1.0f;
+                lean -= _camera.GlobalTransform.Basis.X;
             }
             if (Input.IsActionPressed("move_right"))
             {
-                _leaningInput.X += 1.0f;
+                lean += _camera.GlobalTransform.Basis.X;
             }
             if (Input.IsActionPressed("move_back"))
             {
-                _leaningInput.Y -= 1.0f;
+                lean -= _camera.GlobalTransform.Basis.Y;
             }
             if (Input.IsActionPressed("move_forward"))
             {
-                _leaningInput.Y += 1.0f;
+                lean += _camera.GlobalTransform.Basis.Y;
             }
+
+            if (lean != Vector3.Zero)
+            {
+                lean = lean.Normalized();
+            }
+
+            // Modify head position with the specifications from input
+            Vector3 chase = _feetPosition + lean * 5.0f;
+
+            // Interpolate camera to desired position
+            GlobalPosition = GlobalPosition.Lerp(chase, 0.1f);
         }
-
-        _leaningInput = _leaningInput.Normalized();
-        // Modify head position with the specifications from input
-        // TODO: Has yet to account for yaw
-        _chasePosition = _feetPosition + _leaningInput * 5.0f;
-
-        // Interpolate camera to desired position
-        GlobalPosition = GlobalPosition.Lerp(_chasePosition, 0.1f);
-
-        GD.Print("Global: ", GlobalPosition, " Feet: ", _feetPosition, " Mod: ", _leaningInput);
-        // _leaningInput = _leaningInput.Lerp(Vector3.Zero, 0.5f);
 
 
         // --- Noclip Movement: ---
