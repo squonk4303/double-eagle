@@ -9,14 +9,15 @@ public partial class Marksman : CharacterBody3D
     private const double MAX_PITCH = Mathf.Pi * 0.5f;
     private const double MIN_PITCH = Mathf.Pi * 0.5f;
 
-    private AudioStream _gunfireSfx;
-    private AudioStreamPlayer3D _audioPlayer;
-
     // Get child nodes for revolutionary actions (Completed in _Ready)
     private Node3D _pivot;
     private Camera3D _camera;
-    private Vector3 ToRotate;
     private Vector3 _feetPosition;
+
+    private Vector3 _toRotate;
+    private AudioStream _gunfireSfx;
+    private AudioStreamPlayer3D _audioPlayer;
+
 
     [Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
@@ -64,8 +65,8 @@ public partial class Marksman : CharacterBody3D
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
             Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
-            ToRotate.X = mouseStretch.X;
-            ToRotate.Y = mouseStretch.Y;
+            _toRotate.X = mouseStretch.X;
+            _toRotate.Y = mouseStretch.Y;
         }
 
         // Check for mouse buttons
@@ -124,8 +125,8 @@ public partial class Marksman : CharacterBody3D
         // Rotate Pivot along y-axis
         // And Camera along its x-axis
         // TODO: Is order significant?
-        _pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
-        _camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
+        _pivot.Rotate(Vector3.Up, _toRotate.X * (float)delta);
+        _camera.Rotate(Vector3.Right, _toRotate.Y * (float)delta);
         // _camera.rotation.x = clamp(_camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
         // TODO: Make this not suck
@@ -134,7 +135,7 @@ public partial class Marksman : CharacterBody3D
         // _camera.Rotation = camRot;
 
         // Reset rotation vector
-        ToRotate = new Vector3(0, 0, 0);
+        _toRotate = new Vector3(0, 0, 0);
     }
 
     public override void _PhysicsProcess(double delta)

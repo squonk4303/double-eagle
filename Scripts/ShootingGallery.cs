@@ -74,10 +74,5 @@ public partial class ShootingGallery : Node3D
         ray.Rotation = rotation;
 
         AddChild(ray);
-
-        // PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
-        // Bullet bullet = scene.Instantiate() as Bullet;
-        // bullet.Initialize(position, rotation);
-        // AddChild(bullet);
     }
 }
