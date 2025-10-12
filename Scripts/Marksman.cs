@@ -15,14 +15,13 @@ public partial class Marksman : CharacterBody3D
     // Get child nodes for revolutionary actions (Completed in _Ready)
     private Node3D _pivot;
     private Camera3D _camera;
-
     private Vector3 ToRotate;
-    private float MouseSensitivity = 0.02f;
-    private float noclipSpeed = 5.0f;
-
-    // Positional Vectors
     private Vector3 _feetPosition;
 
+    [Export] public float MouseSensitivity = 0.02f;
+    [Export] public float LeanSpeed = 6.0f;
+    [Export] public float LeanLength = 5.0f;
+    [Export] public float NoclipSpeed = 5.0f;
     [Export] public bool NoclipMode = false;
 
     // Declare signal for firing weapon
@@ -169,14 +168,14 @@ public partial class Marksman : CharacterBody3D
             }
 
             // Modify head position with the specifications from input
-            Vector3 chase = _feetPosition + lean * 5.0f;
+            Vector3 chase = _feetPosition + lean * LeanLength;
 
             // Interpolate camera to desired position
-            GlobalPosition = GlobalPosition.Lerp(chase, 0.1f);
+            GlobalPosition = GlobalPosition.Lerp(chase, LeanSpeed * (float)delta);
         }
 
 
-        // --- Noclip Movement: ---
+        // --- Noclip Movement ---
 
         // Initialize direction vector
         Vector3 direction = Vector3.Zero;
@@ -204,7 +203,7 @@ public partial class Marksman : CharacterBody3D
         {
             direction = direction.Normalized();
             // Update marksman global position
-            GlobalPosition += direction * noclipSpeed * (float)delta;
+            GlobalPosition += direction * NoclipSpeed * (float)delta;
         }
     }
 }
