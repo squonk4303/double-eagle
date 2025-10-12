@@ -15,10 +15,10 @@ public partial class Marksman : Node3D
 
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
-    private Vector3 ToRotate;
+    private Vector3 _toRotate;
 
-    private float MouseSensitivity = 0.02f;
-    private float noclipSpeed = 5.0f;
+    private float _mouseSensitivity = 0.02f;
+    private float _noclipSpeed = 5.0f;
 
     // Declare signal for firing weapon
     [Signal]
@@ -51,9 +51,9 @@ public partial class Marksman : Node3D
             // Set distances to rotate camera
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
-            ToRotate.X = mouseStretch.X;
-            ToRotate.Y = mouseStretch.Y;
+            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * _mouseSensitivity;
+            _toRotate.X = mouseStretch.X;
+            _toRotate.Y = mouseStretch.Y;
         }
 
         if (@event.IsActionPressed("primary_fire"))
@@ -111,8 +111,8 @@ public partial class Marksman : Node3D
         // Rotate Pivot along y-axis
         // And Camera along its x-axis
         // TODO: Is order significant?
-        _pivot.Rotate(Vector3.Up, ToRotate.X * (float)delta);
-        _camera.Rotate(Vector3.Right, ToRotate.Y * (float)delta);
+        _pivot.Rotate(Vector3.Up, _toRotate.X * (float)delta);
+        _camera.Rotate(Vector3.Right, _toRotate.Y * (float)delta);
         // _camera.rotation.x = clamp(_camera.rotation.x, MIN_PITCH, MAX_PITCH)
 
         // TODO: Make this not suck
@@ -121,7 +121,7 @@ public partial class Marksman : Node3D
         // _camera.Rotation = camRot;
 
         // Reset rotation vector
-        ToRotate = new Vector3(0, 0, 0);
+        _toRotate = new Vector3(0, 0, 0);
 
         // Noclip movement:
 
@@ -148,7 +148,7 @@ public partial class Marksman : Node3D
         {
             direction = direction.Normalized();
             // Update marksman global position
-            GlobalPosition += direction * noclipSpeed * (float)delta;
+            GlobalPosition += direction * _noclipSpeed * (float)delta;
         }
     }
 }
