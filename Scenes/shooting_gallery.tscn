@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=12 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
+[ext_resource type="Script" uid="uid://fkq8gldnfuyw" path="res://Scripts/HPBar.cs" id="4_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
+[ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -49,6 +51,20 @@ offset_right = 389.0
 offset_bottom = 348.0
 text = "HP: 999"
 
+[node name="HPBar" type="Control" parent="HeadsUpDisplay"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 525.0
+offset_top = 470.0
+offset_right = 565.0
+offset_bottom = 510.0
+script = ExtResource("4_oy0ci")
+
+[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/HPBar"]
+layout_mode = 0
+offset_right = 157.0
+offset_bottom = 27.0
+
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
 fov = 19.6142
@@ -85,5 +101,8 @@ script = ExtResource("5_oy0ci")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="FalloutZone"]
 shape = SubResource("WorldBoundaryShape3D_npy5q")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("7_ahrfq")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
