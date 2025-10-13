@@ -12,12 +12,10 @@ public partial class Marksman : CharacterBody3D
     private const float MAX_YAW = 45.0f * TO_RADIANS;
     private const float MIN_YAW = -45.0f * TO_RADIANS;
 
-    private Camera3D _camera;
-    private Vector3 _feetPosition;
-
-    private Vector2 _accumulatedRotation;
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
+    private Vector2 _accumulatedRotation;
+    private Vector3 _feetPosition;
 
     [Export] public float MouseSensitivity = 0.00045f;
     [Export] public float LeanSpeed = 6.0f;
@@ -25,7 +23,6 @@ public partial class Marksman : CharacterBody3D
     [Export] public float NoclipSpeed = 5.0f;
     [Export] public bool NoclipMode = false;
 
-    // Declare signal for firing weapon
     [Signal]
     public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
 
@@ -42,12 +39,7 @@ public partial class Marksman : CharacterBody3D
     {
         // Set characterbody physics to disregard floors
         MotionMode = MotionModeEnum.Floating;
-
-        // Set initial position
         _feetPosition = GlobalPosition;
-
-        // Retrieve child nodes
-        _camera = GetNode<Camera3D>("Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
     }
 
@@ -82,22 +74,22 @@ public partial class Marksman : CharacterBody3D
         {
             // Tweak position before emitting
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
-            Vector3 bulletPosition = _camera.GlobalPosition + offset;
+            Vector3 bulletPosition = GlobalPosition + offset;
 
             // Instantiate and play sfx
             _audioPlayer.Stream = _gunfireSfx;
             _audioPlayer.Play();
 
             // Emit signal to spawn a bullet in parent scene
-            // Gun00Fired.emit(bulletPosition, _camera.GlobalRotation);
-            EmitSignal(SignalName.GunFire00, bulletPosition, _camera.GlobalRotation);
+            // Gun00Fired.emit(bulletPosition, GlobalRotation);
+            EmitSignal(SignalName.GunFire00, bulletPosition, GlobalRotation);
         }
 
         if (@event.IsActionPressed("secondary_fire"))
         {
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
-            Vector3 bulletPosition = _camera.GlobalPosition + offset;
-            EmitSignal(SignalName.GunFireRay, bulletPosition, _camera.GlobalRotation);
+            Vector3 bulletPosition = GlobalPosition + offset;
+            EmitSignal(SignalName.GunFireRay, bulletPosition, GlobalRotation);
         }
 
         // Check for keyboard events
@@ -135,19 +127,19 @@ public partial class Marksman : CharacterBody3D
 
             if (Input.IsActionPressed("move_left"))
             {
-                lean -= _camera.GlobalTransform.Basis.X;
+                lean -= GlobalTransform.Basis.X;
             }
             if (Input.IsActionPressed("move_right"))
             {
-                lean += _camera.GlobalTransform.Basis.X;
+                lean += GlobalTransform.Basis.X;
             }
             if (Input.IsActionPressed("move_back"))
             {
-                lean -= _camera.GlobalTransform.Basis.Y;
+                lean -= GlobalTransform.Basis.Y;
             }
             if (Input.IsActionPressed("move_forward"))
             {
-                lean += _camera.GlobalTransform.Basis.Y;
+                lean += GlobalTransform.Basis.Y;
             }
 
             if (lean != Vector3.Zero)
@@ -173,17 +165,17 @@ public partial class Marksman : CharacterBody3D
             // Move in the direction you are facing
             // by getting the camera's directional vectors
             if (Input.IsActionPressed("move_forward"))
-                direction -= _camera.GlobalTransform.Basis.Z;
+                direction -= GlobalTransform.Basis.Z;
             if (Input.IsActionPressed("move_back"))
-                direction += _camera.GlobalTransform.Basis.Z;
+                direction += GlobalTransform.Basis.Z;
             if (Input.IsActionPressed("move_left"))
-                direction -= _camera.GlobalTransform.Basis.X;
+                direction -= GlobalTransform.Basis.X;
             if (Input.IsActionPressed("move_right"))
-                direction += _camera.GlobalTransform.Basis.X;
+                direction += GlobalTransform.Basis.X;
             if (Input.IsActionPressed("move_up"))
-                direction += _camera.GlobalTransform.Basis.Y;
+                direction += GlobalTransform.Basis.Y;
             if (Input.IsActionPressed("move_down"))
-                direction -= _camera.GlobalTransform.Basis.Y;
+                direction -= GlobalTransform.Basis.Y;
         }
 
         // If there is any movement, normalize direction and move marksman
