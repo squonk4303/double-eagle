@@ -21,7 +21,7 @@ public partial class Marksman : CharacterBody3D
 
     [Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
-    [Export] public float LeanLength = 5.0f;
+    [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
     [Export] public bool NoclipMode = false;
 
@@ -144,7 +144,9 @@ public partial class Marksman : CharacterBody3D
 
         if (!NoclipMode)
         {
-            var lean = Vector3.Zero;
+            Vector3 chase;
+            Vector3 run;
+            Vector3 lean = Vector3.Zero;
 
             if (Input.IsActionPressed("move_left"))
             {
@@ -169,10 +171,10 @@ public partial class Marksman : CharacterBody3D
             }
 
             // Modify head position with the specifications from input
-            Vector3 chase = _feetPosition + lean * LeanLength;
-
-            // Interpolate camera to desired position
-            GlobalPosition = GlobalPosition.Lerp(chase, LeanSpeed * (float)delta);
+            // NOTE that lean is Vector3.Zero when user gives no input
+            chase = _feetPosition + lean * LeanLength;
+            run = chase - GlobalPosition;
+            MoveAndCollide(run * LeanSpeed * (float)delta);
         }
 
 
