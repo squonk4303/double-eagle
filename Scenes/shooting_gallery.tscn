@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
 [ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="4_au61t"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
-[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/ball.tscn" id="6_oy0ci"]
+[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/small_ball.tscn" id="6_oy0ci"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
