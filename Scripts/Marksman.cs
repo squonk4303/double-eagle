@@ -5,21 +5,23 @@ public partial class Marksman : CharacterBody3D
 {
     private const string GUNFIRE_SFX = "res://Audio/gun_fire.wav";
 
-    // Where to limit pitch
-    private const double MAX_PITCH = Mathf.Pi * 0.5f;
-    private const double MIN_PITCH = Mathf.Pi * 0.5f;
+    // Where to limit camera rotations
+    private const float TO_RADIANS = Mathf.Pi * 0.005555555555555556f;
+    private const float MAX_PITCH = 30.0f * TO_RADIANS;
+    private const float MIN_PITCH = -30.0f * TO_RADIANS;
+    private const float MAX_YAW = 45.0f * TO_RADIANS;
+    private const float MIN_YAW = -45.0f * TO_RADIANS;
 
     // Get child nodes for revolutionary actions (Completed in _Ready)
     private Node3D _pivot;
     private Camera3D _camera;
     private Vector3 _feetPosition;
 
-    private Vector3 _toRotate;
+    private Vector2 _accumulatedRotation;
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
 
-
-    [Export] public float MouseSensitivity = 0.02f;
+    [Export] public float MouseSensitivity = 0.00045f;
     [Export] public float LeanSpeed = 6.0f;
     [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
@@ -55,18 +57,32 @@ public partial class Marksman : CharacterBody3D
     /// Handle marksman-related input callbacks
     public override void _UnhandledInput(InputEvent @event)
     {
-        // Check for mouse movement
+        // --- Handle mouse movement ---
         if (
             @event is InputEventMouseMotion mouseMotion &&
             Input.MouseMode == Input.MouseModeEnum.Captured
         )
         {
-            // Set distances to rotate camera
-            // Continued in _Process(...)
+            // Accumulate mouse travel intro a Vector2
             // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
-            _toRotate.X = mouseStretch.X;
-            _toRotate.Y = mouseStretch.Y;
+            _accumulatedRotation += -1.0f * mouseMotion.Relative * MouseSensitivity;
+
+            // Reset rotation
+            Transform3D transform = Transform;
+            transform.Basis = Basis.Identity;
+            Transform = transform;
+
+            // Vector3 camRot = _camera.Rotation;
+            // camRot.X = (float)Mathf.Clamp(_camera.Rotation.X, MIN_PITCH, MAX_PITCH);
+            // _camera.Rotation = camRot;
+            GD.Print(_accumulatedRotation);
+
+            // Clamp rotations
+            _accumulatedRotation.X = Mathf.Clamp(_accumulatedRotation.X, MIN_YAW, MAX_YAW);
+            _accumulatedRotation.Y = Mathf.Clamp(_accumulatedRotation.Y, MIN_PITCH, MAX_PITCH);
+
+            RotateObjectLocal(Vector3.Up, _accumulatedRotation.X);
+            RotateObjectLocal(Vector3.Right, _accumulatedRotation.Y);
         }
 
         // Check for mouse buttons
@@ -113,29 +129,6 @@ public partial class Marksman : CharacterBody3D
                 Input.MouseMode = Input.MouseModeEnum.Captured;
             }
         }
-    }
-
-    public override void _Process(double delta)
-    {
-        // TODO: *SHOULD* mouse movement be tied to process delta?
-        // Find this out.
-
-        // If mouse is captured, move to center of screen each frame
-
-        // Rotate Pivot along y-axis
-        // And Camera along its x-axis
-        // TODO: Is order significant?
-        _pivot.Rotate(Vector3.Up, _toRotate.X * (float)delta);
-        _camera.Rotate(Vector3.Right, _toRotate.Y * (float)delta);
-        // _camera.rotation.x = clamp(_camera.rotation.x, MIN_PITCH, MAX_PITCH)
-
-        // TODO: Make this not suck
-        // Vector3 camRot = _camera.Rotation;
-        // camRot.X = (float)Mathf.Clamp(_camera.Rotation.X, MIN_PITCH, MAX_PITCH);
-        // _camera.Rotation = camRot;
-
-        // Reset rotation vector
-        _toRotate = new Vector3(0, 0, 0);
     }
 
     public override void _PhysicsProcess(double delta)
