@@ -53,8 +53,7 @@ public partial class Marksman : CharacterBody3D
         )
         {
             // Accumulate mouse travel intro a Vector2
-            // TODO: Evaluate Relative vs. ScreenRelative
-            _accumulatedRotation += -1.0f * mouseMotion.Relative * MouseSensitivity;
+            _accumulatedRotation += -1.0f * mouseMotion.ScreenRelative * MouseSensitivity;
 
             // Reset rotation
             Transform3D transform = Transform;
