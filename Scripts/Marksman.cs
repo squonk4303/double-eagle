@@ -12,8 +12,6 @@ public partial class Marksman : CharacterBody3D
     private const float MAX_YAW = 45.0f * TO_RADIANS;
     private const float MIN_YAW = -45.0f * TO_RADIANS;
 
-    // Get child nodes for revolutionary actions (Completed in _Ready)
-    private Node3D _pivot;
     private Camera3D _camera;
     private Vector3 _feetPosition;
 
@@ -49,8 +47,7 @@ public partial class Marksman : CharacterBody3D
         _feetPosition = GlobalPosition;
 
         // Retrieve child nodes
-        _pivot = GetNode<Node3D>("Pivot");
-        _camera = GetNode<Camera3D>("Pivot/Camera3D");
+        _camera = GetNode<Camera3D>("Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
     }
 
@@ -71,11 +68,6 @@ public partial class Marksman : CharacterBody3D
             Transform3D transform = Transform;
             transform.Basis = Basis.Identity;
             Transform = transform;
-
-            // Vector3 camRot = _camera.Rotation;
-            // camRot.X = (float)Mathf.Clamp(_camera.Rotation.X, MIN_PITCH, MAX_PITCH);
-            // _camera.Rotation = camRot;
-            GD.Print(_accumulatedRotation);
 
             // Clamp rotations
             _accumulatedRotation.X = Mathf.Clamp(_accumulatedRotation.X, MIN_YAW, MAX_YAW);
