@@ -20,6 +20,9 @@ public partial class Marksman : Node3D
     private float MouseSensitivity = 0.02f;
     private float noclipSpeed = 5.0f;
 
+    // Reference to PauseMenu node
+    private PauseMenu _pauseMenu;
+
     // Declare signal for firing weapon
     [Signal]
     public delegate void GunFire00EventHandler(Vector3 position, Vector3 rotation);
@@ -38,6 +41,7 @@ public partial class Marksman : Node3D
         _pivot = GetNode<Node3D>("Pivot");
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _pauseMenu = GetNode<PauseMenu>("PauseMenu");
     }
 
     /// Handle marksman-related input
@@ -85,7 +89,7 @@ public partial class Marksman : Node3D
             keyEvent.Keycode == Key.Escape
         )
         {
-            Input.MouseMode = Input.MouseModeEnum.Visible;
+            _pauseMenu.TogglePause();
         }
 
         if (@event is InputEventMouseButton mouseButtonEvent)
