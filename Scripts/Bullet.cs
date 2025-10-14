@@ -21,8 +21,9 @@ public partial class Bullet : Node3D
     /// Get spawned in at specified position and angle
     public void Initialize(Vector3 startPosition, Vector3 startRotation)
     {
-        this.Position = startPosition;
-        this.Rotation = startRotation;
+        Position = startPosition;
+        Position += new Vector3(0, -0.55f, 0);
+        Rotation = startRotation;
     }
 
     /// Start a timer to remove bullet after a period of time

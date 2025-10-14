@@ -5,7 +5,7 @@ using System.Collections.Generic;  // For List
 
 public partial class ShootingGallery : Node3D
 {
-    private const string PATH_BULLET = "res://Scenes/bullet.tscn";
+    private const string PATH_BULLET = "res://Scenes/bullet_00.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
 
