@@ -1,11 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=12 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
 [ext_resource type="PackedScene" uid="uid://d2fjk8sjrgt5b" path="res://Scenes/marksman.tscn" id="3_npy5q"]
-[ext_resource type="PackedScene" uid="uid://bajdpb1pwwe0d" path="res://Scenes/cylinder.tscn" id="4_au61t"]
+[ext_resource type="Script" uid="uid://fkq8gldnfuyw" path="res://Scripts/HPBar.cs" id="4_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
-[ext_resource type="PackedScene" uid="uid://eha8e1yuwui3" path="res://Scenes/small_ball.tscn" id="6_oy0ci"]
+[ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
+[ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -19,6 +20,8 @@ albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
 [node name="Shooting_Gallery" type="Node3D"]
 script = ExtResource("1_npy5q")
@@ -40,6 +43,27 @@ position = Vector2(360, 270)
 scale = Vector2(5, 5)
 texture = ExtResource("5_au61t")
 offset = Vector2(0.5, 0.5)
+
+[node name="Health" type="Label" parent="HeadsUpDisplay"]
+offset_left = 331.0
+offset_top = 325.0
+offset_right = 389.0
+offset_bottom = 348.0
+text = "HP: 999"
+
+[node name="HPBar" type="Control" parent="HeadsUpDisplay"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 525.0
+offset_top = 470.0
+offset_right = 565.0
+offset_bottom = 510.0
+script = ExtResource("4_oy0ci")
+
+[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/HPBar"]
+layout_mode = 0
+offset_right = 157.0
+offset_bottom = 27.0
 
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
@@ -64,32 +88,21 @@ transform = Transform3D(1.3113333e-07, 0.999995, -0.00077207346, -6.7496515e-11,
 [node name="Props" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
-[node name="Cylinder" parent="Props" instance=ExtResource("4_au61t")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 17.398169, -5, 0)
-
-[node name="Cylinder2" parent="Props" instance=ExtResource("4_au61t")]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -0.07816887, 0, 60.199547)
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
 
-[node name="Ball" parent="Props" instance=ExtResource("6_oy0ci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.497204, 0.5, -0.44582307)
-
-[node name="Ball4" parent="Props" instance=ExtResource("6_oy0ci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.828924, 0.5, -1.4869375)
-
-[node name="Ball5" parent="Props" instance=ExtResource("6_oy0ci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.939526, 0.5, 1.7561381)
-
-[node name="Ball2" parent="Props" instance=ExtResource("6_oy0ci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.392036, 0.5, 0.10644579)
-
-[node name="Ball3" parent="Props" instance=ExtResource("6_oy0ci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.17007, 0.5, 0.9726546)
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="FalloutZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0)
+script = ExtResource("5_oy0ci")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FalloutZone"]
+shape = SubResource("WorldBoundaryShape3D_npy5q")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("7_ahrfq")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

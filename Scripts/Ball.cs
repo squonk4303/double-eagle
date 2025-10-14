@@ -71,6 +71,7 @@ public partial class Ball : RigidBody3D
     {
         if (_timesHit <= 0)
         {
+            // Turn red
             _animation.Play("turn_red");
 
             // Select and playe sfx
@@ -79,6 +80,9 @@ public partial class Ball : RigidBody3D
             _audioPlayer.PitchScale = PitchConstant + GD.Randf() * PitchFactor;
             _audioPlayer.VolumeDb = 70.0f;
             _audioPlayer.Play();
+
+            // Disable collision
+            CollisionLayer = 0x0000;
         }
         _timesHit += 1;
     }
