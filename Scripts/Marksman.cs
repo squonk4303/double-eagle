@@ -42,6 +42,17 @@ public partial class Marksman : Node3D
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _pauseMenu = GetNode<PauseMenu>("PauseMenu");
+
+        // Load sensitivity from config
+        var config = new ConfigFile();
+        if (config.Load("user://settings.cfg") == Error.Ok)
+            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.f);
+    }
+
+    // Called when sensitivity is changed in options menu
+    public void OnSensitivityChanged(float value)
+    {
+        _mouseSensitivity = value;
     }
 
     /// Handle marksman-related input
