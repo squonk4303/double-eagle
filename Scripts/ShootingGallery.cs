@@ -124,31 +124,6 @@ public partial class ShootingGallery : Node3D
         return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
     }
 
-    /** Old health management code, now in Health.cs
-    private void AddHealth(double value)
-    {
-        // Update health value
-        _health = Math.Clamp(_health + value, -MAX_HP, MAX_HP);
-
-        // Respond to certain health values
-        if (_health > 0)
-        {
-            _healthLabel.Text = $"HP: {_health}";
-        }
-        else
-        {
-            // TODO: Implement game over mechanics
-            //       This right now doesn't even lock HP
-            _healthLabel.Text = "Game over, man...";
-            // Cool game-over effects
-            Engine.TimeScale = 0.2;
-            var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
-            light.Rotation = new Vector3(0, 1.0f, 0);
-            light.LightColor = new Color("darkred");
-        }
-    }
-    */
-
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
