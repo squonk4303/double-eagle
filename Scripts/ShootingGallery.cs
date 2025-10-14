@@ -9,6 +9,8 @@ public partial class ShootingGallery : Node3D
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
 
+    private const double MAX_HP = 100.0d;
+
     private readonly string[] PATH_BALLS = new string[]
     {
         "res://Scenes/balloon.tscn",
@@ -28,7 +30,8 @@ public partial class ShootingGallery : Node3D
         "res://Scenes/balloon.tscn",
         "res://Scenes/balloon.tscn",
         "res://Scenes/watermelon.tscn",
-        "res://Scenes/watermelon.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
         "res://Scenes/small_ball.tscn",
@@ -38,6 +41,10 @@ public partial class ShootingGallery : Node3D
 
     private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
+
+    private Health _health;
+    private HPBar _hpBar;
+    private Label _healthLabel;
 
     public override void _Ready()
     {
@@ -56,6 +63,24 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Finished += () => _audioPlayer.Play();
         _audioPlayer.VolumeDb = -100.0f;  // TODO: Inaudible until useful.
         _audioPlayer.Play();
+
+        // Connect misc. signals
+        var falloutZone = GetNode<Fallout>("FalloutZone");
+        falloutZone.BodyFellOut += OnBodyFellOut;
+
+        // Get health component
+        _health = GetNode<Health>("Health");
+
+        // Connect health signals
+        _health.HealthChanged += OnHealthChanged;
+        _health.Died += OnPlayerDied;
+
+        // Get HUD elements
+        _hpBar = GetNode<HPBar>("HeadsUpDisplay/HPBar");
+
+        // Initialize HP-HUD
+        _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
+
     }
 
     /// Loads balls in from a randomized queue
@@ -112,20 +137,81 @@ public partial class ShootingGallery : Node3D
     /// Spawn a bullet wherever is demanded
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
+        // Cost health for shootin
+        _health.TakeDamage(1.0f);
+
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
         Bullet bullet = scene.Instantiate() as Bullet;
         bullet.Initialize(position, rotation);
+        // Connect Bullet's signal to ShootingGallery's slot
+        bullet.Connect("BulletReport", Callable.From(OnBulletReport));
+
         AddChild(bullet);
     }
 
     private void OnGunFireRay(Vector3 position, Vector3 rotation)
     {
+        // Loads, instantiates, and spawns laser
         var scene = GD.Load<PackedScene>(PATH_LASER);
-        Node3D ray = scene.Instantiate() as Node3D;
-        ray.Position = position;
-        ray.Rotation = rotation;
+        Node3D laser = scene.Instantiate() as Node3D;
+        laser.Position = position;
+        laser.Rotation = rotation;
+        // Connect Laser's signal to ShootingGallery's slot
+        laser.Connect(
+            "LaserReport",
+            // Make a callable From this lambda
+            Callable.From(
+                (Godot.Collections.Array<CollisionObject3D> targets) => OnLaserReport(targets)
+            )
+        );
 
-        AddChild(ray);
+        AddChild(laser);
+    }
+
+    private void OnBulletReport()
+    {
+        // Refund the health lost by shooting in the first place
+        _health.Heal(1.0f);
+    }
+
+    private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
+    {
+        // Add/remove health based on how many targets hit with laser
+        // TODO: Bug where hitting a bullet will count positively here
+        //       And the world boundary... which is infinitely wide....
+        // $$ f(x) = 5x^{1.5} - 4 $$
+        // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
+        var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
+        _health.Heal(f(targets.Count));
+    }
+
+    private void OnBodyFellOut(Node3D body)
+    {
+        // Remove health when balls fall out of reach
+        if (body is Watermelon)
+        {
+            _health.TakeDamage(3.0f);
+        }
+        else if (body is Balloon)
+        {
+            _health.TakeDamage(2.0f);
+        }
+    }
+
+    private void OnHealthChanged(float current, float max)
+    {
+        // Update all UI elements
+        _hpBar.UpdateHealth(current, max);
+        _healthLabel.Text = $"HP: {current}";
+    }
+
+    private void OnPlayerDied()
+    {
+        _healthLabel.Text = "Game over, man...";
+        Engine.TimeScale = 0.2;
+        var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
+        light.Rotation = new Vector3(0, 1.0f, 0);
+        light.LightColor = new Color("darkred");
     }
 }
