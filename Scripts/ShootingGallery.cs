@@ -209,7 +209,7 @@ public partial class ShootingGallery : Node3D
         // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
         GD.Print(targets, "  ", f(targets.Count));
-        _health.TakeDamage(f(targets.Count));
+        _health.Heal(f(targets.Count));
     }
 
     private void OnBodyFellOut(Node3D body)
