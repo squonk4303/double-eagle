@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://eha8e1yuwui3"]
 
-[ext_resource type="Script" uid="uid://dr5054muvrgil" path="res://Scripts/Ball.cs" id="1_d60mj"]
+[ext_resource type="Script" uid="uid://ckmqn43t2aouw" path="res://Scripts/SmallBall.cs" id="1_d60mj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_25osk"]
 resource_local_to_scene = true
@@ -46,7 +46,8 @@ _data = {
 &"turn_red": SubResource("Animation_d60mj")
 }
 
-[node name="Ball" type="RigidBody3D"]
+[node name="SmallBall" type="RigidBody3D"]
+collision_mask = 0
 script = ExtResource("1_d60mj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

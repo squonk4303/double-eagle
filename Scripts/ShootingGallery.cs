@@ -1,13 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;  // For List
 
 
 public partial class ShootingGallery : Node3D
 {
-    private const string PATH_BALL = "res://Scenes/ball.tscn";
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
+
+    private readonly string[] PATH_BALLS = new string[]
+    {
+        "res://Scenes/balloon.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/watermelon.tscn",
+    };
 
     private readonly string[] PATH_LOCATIONS = new string[]
     {
@@ -15,6 +22,21 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path1/Stretch",
     };
 
+    // A queue (shuffled elsewhere) which determines rate of balls spawning
+    private string[] _ballQueueTemplate = new string[]
+    {
+        "res://Scenes/balloon.tscn",
+        "res://Scenes/balloon.tscn",
+        "res://Scenes/watermelon.tscn",
+        "res://Scenes/watermelon.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+        "res://Scenes/small_ball.tscn",
+    };
+
+    private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
 
     public override void _Ready()
@@ -36,23 +58,54 @@ public partial class ShootingGallery : Node3D
         _audioPlayer.Play();
     }
 
-    /// Spawn a ball at a random location
-    private void OnBallTimerTimeout()
+    /// Loads balls in from a randomized queue
+    private PackedScene LoadRandomBall()
     {
-        PackedScene ballScene = GD.Load<PackedScene>(PATH_BALL);
-        var ball = ballScene.Instantiate() as Ball;
+        PackedScene ballScene;
+
+        // When queue is empty
+        if (_ballQueue.Count == 0)
+        {
+            // Reload queue with a shuffled template
+            Random.Shared.Shuffle(_ballQueueTemplate);
+            _ballQueue = new List<string>(_ballQueueTemplate);
+
+            // Load and return one with uniform randomness
+            // For a bit o' spice
+            ballScene = GD.Load<PackedScene>(
+                PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
+            );
+            return ballScene;
+        }
+        else
+        {
+            // Load one item and remove it from the queue
+            ballScene = GD.Load<PackedScene>(_ballQueue[0]);
+            _ballQueue.RemoveAt(0);
+        }
+
+        return ballScene;
+    }
+
+    private Vector3 GetSpawnPosition()
+    {
         var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
 
         // Picks a random spot on the path to spawn.
-        // Randomizes the z-position a bit too.
         // TODO: Would prefer to use C#'s Random class (perhaps for seed control?).
-        var zJiggle = GD.Randf() * 4.0f + 1.0f;
         path.ProgressRatio = GD.Randf();
         // Randomly flip the Y-coordinate
         float flipper = (GD.Randi() % 2 - 0.5f) * 2.0f;
-        var spawn = new Vector3(path.Position.X * flipper, path.Position.Y, zJiggle);
+        return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
+    }
+
+    /// Spawn a ball at a random location
+    private void OnBallTimerTimeout()
+    {
+        var ball = LoadRandomBall().Instantiate();
+        Vector3 spawn = GetSpawnPosition();
         var target = new Vector3(0, 7.0f, 0);
-        ball.Initialize(spawn, target);
+        ball.Call("Initialize", spawn, target);
         AddChild(ball);
     }
 
