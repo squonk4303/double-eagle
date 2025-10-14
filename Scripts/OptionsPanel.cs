@@ -15,8 +15,12 @@ public partial class OptionsPanel : Control
     [Signal]
     public delegate void SensitivityChangedEventHandler(float value);
 
+    [Signal]
+    public delegate void BackPressedEventHandler();
+
     public override void _Ready()
     {
+        GD.Print("OptionsPanel ready");
         sensitivitySlider.MinValue = 0.1f;
         sensitivitySlider.MaxValue = 1.0f;
         sensitivitySlider.Step = 0.05f;
@@ -47,6 +51,8 @@ public partial class OptionsPanel : Control
     // Handle back button press
     private void OnBackPressed()
     {
+        GD.Print("Back pressed in OptionsPanel");
+        EmitSignal(SignalName.BackPressed);
         SaveSettings();
         QueueFree();
     }

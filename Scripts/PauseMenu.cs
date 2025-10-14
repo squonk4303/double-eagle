@@ -42,6 +42,7 @@ public partial class PauseMenu : Control
 
     private void OnOptionsPressed()
     {
+        GD.Print("Options pressed in PauseMenu");
         // Load and instance optios_panel scene
         var optionsScene = GD.Load<PackedScene>("res://Scenes/options_panel.tscn");
         var options = optionsScene.Instantiate<OptionsPanel>();
@@ -51,6 +52,14 @@ public partial class PauseMenu : Control
         // Connect sensitivity signal to Marksman
         var marksman = GetParent().GetNode<Marksman>("Marksman");
         options.SensitivityChanged += marksman.OnSensitivityChanged;
+
+        options.BackPressed += OnOptionsBack;
+    }
+
+    private void OnOptionsBack()
+    {
+        GD.Print("Back pressed in OptionsPanel from PauseMenu");
+        pauseButtons.Visible = true;
     }
 
     private void OnMainMenuPressed()

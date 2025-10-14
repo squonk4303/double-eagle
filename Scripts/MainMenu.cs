@@ -3,11 +3,15 @@ using System;
 
 public partial class MainMenu : Control
 {
+    // Exported nodes for easy access and customization
+    [Export] private VBoxContainer mainButtons;
+    [Export] private Control optionsContainer;
+
     public override void _Ready()
     {
-        GetNode<Button>("VBoxContainer/PlayButton").Pressed += OnPlayPressed;
-        GetNode<Button>("VBoxContainer/OptionsButton").Pressed += OnOptionsPressed;
-        GetNode<Button>("VBoxContainer/QuitButton").Pressed += OnQuitPressed;
+        GetNode<Button>("MainButtons/PlayButton").Pressed += OnPlayPressed;
+        GetNode<Button>("MainButtons/OptionsButton").Pressed += OnOptionsPressed;
+        GetNode<Button>("MainButtons/QuitButton").Pressed += OnQuitPressed;
     }
 
     private void OnPlayPressed()
@@ -18,7 +22,22 @@ public partial class MainMenu : Control
 
     private void OnOptionsPressed()
     {
-        // Open options menu
+        var optionsScene = GD.Load<PackedScene>("res://Scenes/options_panel.tscn");
+        var options = optionsScene.Instantiate<OptionsPanel>();
+        optionsContainer.AddChild(options);
+        mainButtons.Visible = false;
+
+        var marksman = GetParent().GetNode<Marksman>("Marksman");
+        options.SensitivityChanged += marksman.OnSensitivityChanged;
+
+        // Connect back signal
+        options.BackPressed += OnOptionsBack;
+    }
+
+    private void OnOptionsBack()
+    {
+        GD.Print("Back pressed in OptionsPanel from MainMenu");
+        mainButtons.Visible = true;
     }
 
     private void OnQuitPressed()

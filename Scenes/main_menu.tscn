@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b7c7c3tfkhq5t" path="res://Scripts/MainMenu.cs" id="1_28flt"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("mainButtons", "optionsContainer")]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -12,8 +12,10 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_28flt")
+mainButtons = NodePath("MainButtons")
+optionsContainer = NodePath("OptionsContainer")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MainButtons" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -26,16 +28,29 @@ offset_right = 35.0
 offset_bottom = 50.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_28flt")
 
-[node name="PlayButton" type="Button" parent="VBoxContainer"]
+[node name="PlayButton" type="Button" parent="MainButtons"]
 layout_mode = 2
 text = "Play"
 
-[node name="OptionsButton" type="Button" parent="VBoxContainer"]
+[node name="OptionsButton" type="Button" parent="MainButtons"]
 layout_mode = 2
 text = "Options"
 
-[node name="QuitButton" type="Button" parent="VBoxContainer"]
+[node name="QuitButton" type="Button" parent="MainButtons"]
 layout_mode = 2
 text = "Quit"
+
+[node name="OptionsContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
