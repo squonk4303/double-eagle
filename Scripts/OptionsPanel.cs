@@ -29,6 +29,7 @@ public partial class OptionsPanel : Control
         backButton.Pressed += OnBackPressed;
     }
 
+    // Called when sensitivity slider value changes
     private void OnSensitivityChanged(double value)
     {
         mouseSensitivity = (float)value;
@@ -36,12 +37,14 @@ public partial class OptionsPanel : Control
         EmitSignal(SignalName.SensitivityChanged, mouseSensitivity);
     }
 
+    // Update the label to show current sensitivity value
     private void UpdateSensitivityLabel(float value)
     {
         if (sensitivityValueLabel != null)
             sensitivityValueLabel.Text = value.ToString("F2");
     }
 
+    // Handle back button press
     private void OnBackPressed()
     {
         SaveSettings();
