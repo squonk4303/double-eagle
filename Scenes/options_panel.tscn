@@ -1,36 +1,68 @@
-[gd_scene format=3 uid="uid://c4sklqg32h87t"]
+[gd_scene load_steps=2 format=3 uid="uid://c4sklqg32h87t"]
 
-[node name="OptionsPanel" type="Control"]
+[ext_resource type="Script" uid="uid://d1kkngln3febk" path="res://Scripts/OptionsPanel.cs" id="1_828ss"]
+
+[node name="OptionsPanel" type="Control" node_paths=PackedStringArray("sensitivitySlider", "sensitivityValueLabel", "backButton")]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 42.0
-offset_top = 21.0
-offset_right = 42.0
-offset_bottom = 21.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_828ss")
+sensitivitySlider = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel/SensitivitySlider")
+sensitivityValueLabel = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel")
+backButton = NodePath("VBoxContainer/BackButton")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -42.5
+offset_right = 44.0
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Options"
+horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Sensitivity"
+text = "Sensitivity: "
 
-[node name="HSlider" type="HSlider" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
+[node name="SensitivityValueLabel" type="Label" parent="VBoxContainer/HBoxContainer/Label"]
+layout_mode = 0
+offset_left = 92.0
+offset_right = 93.0
+offset_bottom = 23.0
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="SensitivitySlider" type="HSlider" parent="VBoxContainer/HBoxContainer/Label/SensitivityValueLabel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 27.5
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Back"
