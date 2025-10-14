@@ -13,6 +13,11 @@ public partial class Laser : Node3D
     // Conditions to be fulfilled before freeing the Laser object.
     private List<string> _freeConditions = new List<string>{"animation", "sfx"};
 
+    [Signal]
+    public delegate void LaserReportEventHandler(
+        Godot.Collections.Array<CollisionObject3D> targets
+    );
+
     public override void _Ready()
     {
         // Retrieve the Raycast object and do some alterations
@@ -39,7 +44,7 @@ public partial class Laser : Node3D
 
     public override void _PhysicsProcess(double delta)
     {
-        // Check raycast collisions for first frame
+        // Check raycast collisions while its collision area is active
         if (_ray.Enabled)
         {
             CheckPenetrations(_ray);
@@ -50,15 +55,15 @@ public partial class Laser : Node3D
     private void CheckPenetrations(RayCast3D _ray)
     {
         // Track objects the laser will ignore due to it penetrating through them.
-        var exceptions = new Godot.Collections.Array<CollisionObject3D>();
+        var itemsPenetrated = new Godot.Collections.Array<CollisionObject3D>();
 
         // Do a new raycast collision check after each penetration left
         int collisionsLeft = MAX_COLLISIONS;
 
         while (collisionsLeft > 0)
         {
-            // Ignore collision with objects through which have already been penetrated
-            foreach (var e in exceptions)
+            // Ignore collision with objects which have already been penetrated
+            foreach (var e in itemsPenetrated)
             {
                 _ray.AddException(e);
             }
@@ -77,7 +82,7 @@ public partial class Laser : Node3D
                     collider.Call("LaserHit");
                 }
                 // Ignore collision subject in subsequent collision checks
-                exceptions.Add(collider);
+                itemsPenetrated.Add(collider);
             }
             else
             {
@@ -90,6 +95,9 @@ public partial class Laser : Node3D
 
         // Disable Raycast so as to only check collisions for the first frame
         _ray.Enabled = false;
+
+        // Emit signal to report which objects have been penetrated
+        EmitSignal(SignalName.LaserReport, itemsPenetrated);
     }
 
     private void OnAnimationFinished(String animName)

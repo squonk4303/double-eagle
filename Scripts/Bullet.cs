@@ -8,6 +8,9 @@ public partial class Bullet : Node3D
 
     private bool _hitSomethingYet = false;
 
+    [Signal]
+    public delegate void BulletReportEventHandler();
+
     public override void _Ready()
     {
         // Call method Collided when something enters collision space
@@ -52,6 +55,7 @@ public partial class Bullet : Node3D
         if (!_hitSomethingYet && body.HasMethod("bulletHit"))
         {
             body.Call("bulletHit", GlobalPosition);
+            EmitSignal(SignalName.BulletReport);
         }
 
         _hitSomethingYet = true;
