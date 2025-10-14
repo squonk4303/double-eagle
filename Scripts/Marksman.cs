@@ -17,7 +17,8 @@ public partial class Marksman : Node3D
     private AudioStreamPlayer3D _audioPlayer;
     private Vector3 _toRotate;
 
-    private float _mouseSensitivity = 0.02f;
+    private float _mouseSensitivity = 0.5f;
+    private float _sensitivityScale = 0.1f;
     private float _noclipSpeed = 5.0f;
 
     // Reference to PauseMenu node
@@ -46,7 +47,7 @@ public partial class Marksman : Node3D
         // Load sensitivity from config
         var config = new ConfigFile();
         if (config.Load("user://settings.cfg") == Error.Ok)
-            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.f);
+            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
     }
 
     // Called when sensitivity is changed in options menu
@@ -66,7 +67,8 @@ public partial class Marksman : Node3D
             // Set distances to rotate camera
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * _mouseSensitivity;
+            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * 
+                (_mouseSensitivity * _sensitivityScale);
             _toRotate.X = mouseStretch.X;
             _toRotate.Y = mouseStretch.Y;
         }
