@@ -8,8 +8,7 @@ public partial class ShootingGallery : Node3D
 {
     [Export] private CanvasLayer headsUpDisplay;
     [Export] private PauseMenu pauseMenu;
-    [Export] private Sprite2D crosshair;
-
+   
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
