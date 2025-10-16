@@ -20,7 +20,12 @@ public partial class Marksman : CharacterBody3D
 
     private PauseMenu _pauseMenu;
 
-    [Export] public float MouseSensitivity = 0.02f;
+    private float _mouseSensitivity = 0.5f;
+    // Sensitivity factor to tweak overall sensitivity
+    private float _sensitivityFactor = 0.1f;
+
+    // Comment out this since the sensitivity is loaded from config
+    //[Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
     [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
@@ -56,13 +61,13 @@ public partial class Marksman : CharacterBody3D
         // Load sensitivity from config
         var config = new ConfigFile();
         if (config.Load("user://settings.cfg") == Error.Ok)
-            MouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
+            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
     }
 
     // Called when sensitivity is changed in options menu
     public void OnSensitivityChanged(float value)
     {
-        MouseSensitivity = value;
+        _mouseSensitivity = value;
     }
 
     /// Handle marksman-related input callbacks
@@ -77,7 +82,7 @@ public partial class Marksman : CharacterBody3D
             // Set distances to rotate camera
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
+            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * _mouseSensitivity * _sensitivityFactor;
             _toRotate.X = mouseStretch.X;
             _toRotate.Y = mouseStretch.Y;
         }
