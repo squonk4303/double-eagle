@@ -24,8 +24,11 @@ texture_filter = 0
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
-[node name="Shooting_Gallery" type="Node3D"]
+[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu", "crosshair")]
 script = ExtResource("1_npy5q")
+headsUpDisplay = NodePath("HeadsUpDisplay")
+pauseMenu = NodePath("PauseMenu")
+crosshair = NodePath("HeadsUpDisplay/Crosshair")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
