@@ -18,6 +18,7 @@ public partial class Marksman : CharacterBody3D
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
 
+    private PauseMenu _pauseMenu;
 
     [Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
@@ -55,13 +56,13 @@ public partial class Marksman : CharacterBody3D
         // Load sensitivity from config
         var config = new ConfigFile();
         if (config.Load("user://settings.cfg") == Error.Ok)
-            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
+            MouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
     }
 
     // Called when sensitivity is changed in options menu
     public void OnSensitivityChanged(float value)
     {
-        _mouseSensitivity = value;
+        MouseSensitivity = value;
     }
 
     /// Handle marksman-related input callbacks
