@@ -111,7 +111,7 @@ public partial class Marksman : CharacterBody3D
             // --- Escape mouse capture with Esc key ---
             if (keyEvent.Keycode == Key.Escape)
             {
-                Input.MouseMode = Input.MouseModeEnum.Visible;
+                _pauseMenu.TogglePause();
             }
         }
 

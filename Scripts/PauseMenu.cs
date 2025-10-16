@@ -26,11 +26,22 @@ public partial class PauseMenu : Control
 
     public void TogglePause()
     {
-        Input.MouseMode = Input.MouseModeEnum.Visible;
+        // Toggle (in)visiblity and (un)pause
         Visible = !Visible;
-        GetTree().Paused = !GetTree().Paused;
-        pauseButtons.Visible = true;
-
+        bool isPaused = !GetTree().Paused;
+        GetTree().Paused = isPaused;
+        if (isPaused)
+        {
+            // Pausing - show cursor
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+            pauseButtons.Visible = true;
+        }
+        else
+        {
+            // Unpausing - capture mouse
+            Input.MouseMode = Input.MouseModeEnum.Captured;
+        }
+        // Clear options panel if it exists
         if (optionsContainer != null && optionsContainer.GetChildCount() > 0)
         {
             foreach (Node child in optionsContainer.GetChildren())
