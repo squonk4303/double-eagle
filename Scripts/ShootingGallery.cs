@@ -6,6 +6,9 @@ using System.Linq;  // for [].Count
 
 public partial class ShootingGallery : Node3D
 {
+    [Export] private CanvasLayer headsUpDisplay;
+    [Export] private PauseMenu pauseMenu;
+   
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
@@ -82,6 +85,11 @@ public partial class ShootingGallery : Node3D
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
 
+        // Connect to the PauseMenu's visibility changes
+        if (pauseMenu != null)
+        {
+            pauseMenu.VisibilityChanged += OnPauseMenuVisibilityChanged;
+        }
     }
 
     /// Loads balls in from a randomized queue
@@ -235,5 +243,11 @@ public partial class ShootingGallery : Node3D
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
         light.Rotation = new Vector3(0, 1.0f, 0);
         light.LightColor = new Color("darkred");
+    }
+
+    private void OnPauseMenuVisibilityChanged()
+    {
+        // Turn HUD off when pause menu is visible, or vice versa
+        headsUpDisplay.Visible = !pauseMenu.Visible;
     }
 }

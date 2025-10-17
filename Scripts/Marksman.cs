@@ -18,8 +18,14 @@ public partial class Marksman : CharacterBody3D
     private AudioStream _gunfireSfx;
     private AudioStreamPlayer3D _audioPlayer;
 
+    private PauseMenu _pauseMenu;
 
-    [Export] public float MouseSensitivity = 0.02f;
+    private float _mouseSensitivity = 0.5f;
+    // Sensitivity factor to tweak overall sensitivity
+    private float _sensitivityFactor = 0.1f;
+
+    // Comment out this since the sensitivity is loaded from config
+    //[Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
     [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
@@ -50,6 +56,18 @@ public partial class Marksman : CharacterBody3D
         _pivot = GetNode<Node3D>("Pivot");
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _pauseMenu = GetNode<PauseMenu>("PauseMenu");
+
+        // Load sensitivity from config
+        var config = new ConfigFile();
+        if (config.Load("user://settings.cfg") == Error.Ok)
+            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
+    }
+
+    // Called when sensitivity is changed in options menu
+    public void OnSensitivityChanged(float value)
+    {
+        _mouseSensitivity = value;
     }
 
     /// Handle marksman-related input callbacks
@@ -64,7 +82,7 @@ public partial class Marksman : CharacterBody3D
             // Set distances to rotate camera
             // Continued in _Process(...)
             // TODO: Evaluate Relative vs. ScreenRelative
-            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * MouseSensitivity;
+            Vector2 mouseStretch = -1.0f * mouseMotion.Relative * _mouseSensitivity * _sensitivityFactor;
             _toRotate.X = mouseStretch.X;
             _toRotate.Y = mouseStretch.Y;
         }
@@ -98,7 +116,7 @@ public partial class Marksman : CharacterBody3D
             // --- Escape mouse capture with Esc key ---
             if (keyEvent.Keycode == Key.Escape)
             {
-                Input.MouseMode = Input.MouseModeEnum.Visible;
+                _pauseMenu.TogglePause();
             }
         }
 
