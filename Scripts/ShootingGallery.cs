@@ -1,10 +1,14 @@
 using Godot;
 using System;
 using System.Collections.Generic;  // For List
+using System.Linq;  // for [].Count
 
 
 public partial class ShootingGallery : Node3D
 {
+    [Export] private CanvasLayer headsUpDisplay;
+    [Export] private PauseMenu pauseMenu;
+   
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
@@ -81,6 +85,11 @@ public partial class ShootingGallery : Node3D
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
 
+        // Connect to the PauseMenu's visibility changes
+        if (pauseMenu != null)
+        {
+            pauseMenu.VisibilityChanged += OnPauseMenuVisibilityChanged;
+        }
     }
 
     /// Loads balls in from a randomized queue
@@ -124,11 +133,29 @@ public partial class ShootingGallery : Node3D
         return new Vector3(path.Position.X * flipper, path.Position.Y, 0.0f);
     }
 
+    /// Create a transient popup over the center of the screen
+    private void ScorePopup(string txt)
+    {
+        var hud = GetNode<CanvasLayer>("HeadsUpDisplay");
+        PackedScene scene = GD.Load<PackedScene>("res://Scenes/score_indicator.tscn");
+        var popup = scene.Instantiate<ScoreIndicator>();
+        // Add as child early to call _Ready &c
+        hud.AddChild(popup);
+
+        // Set position based on center of screen
+        Vector2 position = GetViewport().GetVisibleRect().Size * 0.5f;
+        position += new Vector2(45.0f, 10.0f);
+
+        popup.SetText(txt);
+        popup.Position = position;
+    }
+
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
         var ball = LoadRandomBall().Instantiate();
         Vector3 spawn = GetSpawnPosition();
+        // target here is a bit over the middle of the backboard
         var target = new Vector3(0, 7.0f, 0);
         ball.Call("Initialize", spawn, target);
         AddChild(ball);
@@ -175,15 +202,18 @@ public partial class ShootingGallery : Node3D
         _health.Heal(1.0f);
     }
 
+    /// Add/remove health based on how many valid targets hit with laser
     private void OnLaserReport(Godot.Collections.Array<CollisionObject3D> targets)
     {
-        // Add/remove health based on how many targets hit with laser
-        // TODO: Bug where hitting a bullet will count positively here
-        //       And the world boundary... which is infinitely wide....
         // $$ f(x) = 5x^{1.5} - 4 $$
-        // Hits: f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
+        // f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
-        _health.Heal(f(targets.Count));
+        // Count targets which inherit Ball
+        int count = targets.Count(e => e is Ball);
+        _health.Heal(f(count));
+
+        // Notify player of score
+        ScorePopup($"{f(count)} POINTS");
     }
 
     private void OnBodyFellOut(Node3D body)
@@ -213,5 +243,11 @@ public partial class ShootingGallery : Node3D
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
         light.Rotation = new Vector3(0, 1.0f, 0);
         light.LightColor = new Color("darkred");
+    }
+
+    private void OnPauseMenuVisibilityChanged()
+    {
+        // Turn HUD off when pause menu is visible, or vice versa
+        headsUpDisplay.Visible = !pauseMenu.Visible;
     }
 }

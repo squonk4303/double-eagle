@@ -17,7 +17,14 @@ public partial class Marksman : CharacterBody3D
     private Vector2 _accumulatedRotation;
     private Vector3 _feetPosition;
 
-    [Export] public float MouseSensitivity = 0.00045f;
+    private PauseMenu _pauseMenu;
+
+    private float _mouseSensitivity = 0.5f;
+    // Sensitivity factor to tweak overall sensitivity
+    private float _sensitivityFactor = 0.1f;
+
+    // Comment out this since the sensitivity is loaded from config
+    //[Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
     [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
@@ -41,6 +48,18 @@ public partial class Marksman : CharacterBody3D
         MotionMode = MotionModeEnum.Floating;
         _feetPosition = GlobalPosition;
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
+        _pauseMenu = GetNode<PauseMenu>("PauseMenu");
+
+        // Load sensitivity from config
+        var config = new ConfigFile();
+        if (config.Load("user://settings.cfg") == Error.Ok)
+            _mouseSensitivity = (float)config.GetValue("controls", "sensitivity", 0.5f);
+    }
+
+    // Called when sensitivity is changed in options menu
+    public void OnSensitivityChanged(float value)
+    {
+        _mouseSensitivity = value;
     }
 
     /// Handle marksman-related input callbacks
@@ -53,7 +72,9 @@ public partial class Marksman : CharacterBody3D
         )
         {
             // Accumulate mouse travel intro a Vector2
-            _accumulatedRotation += -1.0f * mouseMotion.ScreenRelative * MouseSensitivity;
+            _accumulatedRotation += (
+                -1.0f * mouseMotion.ScreenRelative * _mouseSensitivity * _sensitivityFactor
+            );
 
             // Reset rotation
             Transform3D transform = Transform;
@@ -97,7 +118,7 @@ public partial class Marksman : CharacterBody3D
             // --- Escape mouse capture with Esc key ---
             if (keyEvent.Keycode == Key.Escape)
             {
-                Input.MouseMode = Input.MouseModeEnum.Visible;
+                _pauseMenu.TogglePause();
             }
         }
 

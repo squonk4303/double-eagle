@@ -1,0 +1,131 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4sklqg32h87t"]
+
+[ext_resource type="Script" uid="uid://d1kkngln3febk" path="res://Scripts/OptionsPanel.cs" id="1_828ss"]
+
+[node name="OptionsPanel" type="Control" node_paths=PackedStringArray("sensitivitySlider", "sensitivityValueLabel", "backButton")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_828ss")
+sensitivitySlider = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel/SensitivitySlider")
+sensitivityValueLabel = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel")
+backButton = NodePath("VBoxContainer/BackButton")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -99.75
+offset_right = 44.0
+offset_bottom = 99.75
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+text = "Options"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+text = "Sensitivity: "
+
+[node name="SensitivityValueLabel" type="Label" parent="VBoxContainer/HBoxContainer/Label"]
+layout_mode = 0
+offset_left = 92.0
+offset_right = 93.0
+offset_bottom = 23.0
+text = "0.00"
+
+[node name="SensitivitySlider" type="HSlider" parent="VBoxContainer/HBoxContainer/Label/SensitivityValueLabel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 27.5
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Sound:"
+
+[node name="SoundValueLabel" type="Label" parent="VBoxContainer/HBoxContainer2/Label"]
+layout_mode = 0
+offset_left = 92.0
+offset_right = 93.0
+offset_bottom = 23.0
+text = "0.00"
+
+[node name="SoundSlider" type="HSlider" parent="VBoxContainer/HBoxContainer2/Label/SoundValueLabel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 27.5
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "FOV"
+
+[node name="FOVValueLabel" type="Label" parent="VBoxContainer/HBoxContainer3/Label"]
+layout_mode = 0
+offset_left = 92.0
+offset_right = 93.0
+offset_bottom = 23.0
+text = "0.00"
+
+[node name="FOVSlider" type="HSlider" parent="VBoxContainer/HBoxContainer3/Label/FOVValueLabel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 27.5
+offset_top = -7.0
+offset_right = 147.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Back"
