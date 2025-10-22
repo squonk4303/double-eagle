@@ -28,16 +28,8 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path1/Stretch",
     };
 
-    // A queue which determines randomized spawnrates
-    private MyLoopingQueue _spawnQueue = new MyLoopingQueue(
-        setup: new Dictionary<string,int>
-        {
-            { "res://Scenes/balloon.tscn",    2 },
-            { "res://Scenes/watermelon.tscn", 2 },
-            { "res://Scenes/small_ball.tscn", 16 }
-        },
-        threshold: 2
-    );
+    // A queue for ball types to spawn in
+    private List<string> _spawnQueue = new List<string>();
 
     private AudioStreamPlayer _audioPlayer;
 
@@ -116,11 +108,30 @@ public partial class ShootingGallery : Node3D
         popup.Position = position;
     }
 
+    /// Load next ball in queue
+    private PackedScene LoadNextBall()
+    {
+        string path;
+        // Get next in queue for balls
+        // If there is none, get a smallball
+        if (_spawnQueue.Count > 0)
+        {
+            path = _spawnQueue[0];
+            _spawnQueue.RemoveAt(0);
+        }
+        else
+        {
+            path = "res://Scenes/small_ball.tscn";
+        }
+        var scene = GD.Load<PackedScene>(path);
+        return scene;
+    }
+
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
         // Load a ball from the randomized queue
-        PackedScene ballScene = GD.Load<PackedScene>(_spawnQueue.Pop());
+        PackedScene ballScene = LoadNextBall();
         var ball = ballScene.Instantiate();
         Vector3 spawn = GetSpawnPosition();
         // target here is a bit over the middle of the backboard
