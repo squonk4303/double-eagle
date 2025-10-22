@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.Collections.Generic;  // For List
+using System.Collections.Generic;  // For List and Dictionary
 using System.Linq;  // for [].Count
 
 
@@ -28,22 +28,17 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path1/Stretch",
     };
 
-    // A queue (shuffled elsewhere) which determines rate of balls spawning
-    private string[] _ballQueueTemplate = new string[]
-    {
-        "res://Scenes/balloon.tscn",
-        "res://Scenes/balloon.tscn",
-        "res://Scenes/watermelon.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-    };
+    // A queue which determines randomized spawnrates
+    private MyLoopingQueue _spawnQueue = new MyLoopingQueue(
+        setup: new Dictionary<string,int>
+        {
+            { "res://Scenes/balloon.tscn",    2 },
+            { "res://Scenes/watermelon.tscn", 2 },
+            { "res://Scenes/small_ball.tscn", 16 }
+        },
+        threshold: 2
+    );
 
-    private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
 
     private Health _health;
@@ -92,35 +87,6 @@ public partial class ShootingGallery : Node3D
         }
     }
 
-    /// Loads balls in from a randomized queue
-    private PackedScene LoadRandomBall()
-    {
-        PackedScene ballScene;
-
-        // When queue is empty
-        if (_ballQueue.Count == 0)
-        {
-            // Reload queue with a shuffled template
-            Random.Shared.Shuffle(_ballQueueTemplate);
-            _ballQueue = new List<string>(_ballQueueTemplate);
-
-            // Load and return one with uniform randomness
-            // For a bit o' spice
-            ballScene = GD.Load<PackedScene>(
-                PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
-            );
-            return ballScene;
-        }
-        else
-        {
-            // Load one item and remove it from the queue
-            ballScene = GD.Load<PackedScene>(_ballQueue[0]);
-            _ballQueue.RemoveAt(0);
-        }
-
-        return ballScene;
-    }
-
     private Vector3 GetSpawnPosition()
     {
         var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
@@ -153,7 +119,9 @@ public partial class ShootingGallery : Node3D
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        var ball = LoadRandomBall().Instantiate();
+        // Load a ball from the randomized queue
+        PackedScene ballScene = GD.Load<PackedScene>(_spawnQueue.Pop());
+        var ball = ballScene.Instantiate();
         Vector3 spawn = GetSpawnPosition();
         // target here is a bit over the middle of the backboard
         var target = new Vector3(0, 7.0f, 0);
