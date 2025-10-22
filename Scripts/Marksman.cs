@@ -19,9 +19,9 @@ public partial class Marksman : CharacterBody3D
 
     private PauseMenu _pauseMenu;
 
-    private float _mouseSensitivity = 0.5f;
+    private float _mouseSensitivity;
     // Sensitivity factor to tweak overall sensitivity
-    private float _sensitivityFactor = 0.1f;
+    private float _sensitivityFactor = 0.001f;
 
     // Comment out this since the sensitivity is loaded from config
     //[Export] public float MouseSensitivity = 0.02f;
@@ -73,7 +73,10 @@ public partial class Marksman : CharacterBody3D
         {
             // Accumulate mouse travel intro a Vector2
             _accumulatedRotation += (
-                -1.0f * mouseMotion.ScreenRelative * _mouseSensitivity * _sensitivityFactor
+                -1.0f *
+                mouseMotion.ScreenRelative *
+                _mouseSensitivity *
+                _sensitivityFactor
             );
 
             // Reset rotation
@@ -177,11 +180,11 @@ public partial class Marksman : CharacterBody3D
 
         // --- Noclip Movement ---
 
-        // Initialize direction vector
-        Vector3 direction = Vector3.Zero;
-
         if (NoclipMode)
         {
+            // Initialize direction vector
+            Vector3 direction = Vector3.Zero;
+
             // Move in the direction you are facing
             // by getting the camera's directional vectors
             if (Input.IsActionPressed("move_forward"))
@@ -196,14 +199,14 @@ public partial class Marksman : CharacterBody3D
                 direction += GlobalTransform.Basis.Y;
             if (Input.IsActionPressed("move_down"))
                 direction -= GlobalTransform.Basis.Y;
-        }
 
-        // If there is any movement, normalize direction and move marksman
-        if (direction != Vector3.Zero)
-        {
-            direction = direction.Normalized();
-            // Update marksman global position
-            GlobalPosition += direction * NoclipSpeed * (float)delta;
+            // If there is any movement, normalize direction and move marksman
+            if (direction != Vector3.Zero)
+            {
+                direction = direction.Normalized();
+                // Update marksman global position
+                GlobalPosition += direction * NoclipSpeed * (float)delta;
+            }
         }
     }
 }
