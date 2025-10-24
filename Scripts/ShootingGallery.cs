@@ -158,7 +158,8 @@ public partial class ShootingGallery : Node3D
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
         // Cost health for shootin
-        _health.TakeDamage(1.0f);
+        ScorePopup("-2 HP");
+        _health.TakeDamage(2.0f);
 
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
@@ -192,6 +193,7 @@ public partial class ShootingGallery : Node3D
     private void OnBulletReport()
     {
         // Refund the health lost by shooting in the first place
+        ScorePopup("1 HP");
         _health.Heal(1.0f);
     }
 
@@ -203,14 +205,14 @@ public partial class ShootingGallery : Node3D
         var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
         // Count targets which inherit Ball
         int count = targets.Count(e => e is Ball);
-        _health.Heal(f(count));
         if (f(count) > 0.0f)
         {
             AddScore(f(count) * 10.0f);
         }
 
         // Notify player of score
-        ScorePopup($"{f(count)} HP");
+        _health.Heal(f(count) - 1.0f);
+        ScorePopup($"{f(count) - 1.0f} HP");
 
         if (count == 1)
         {
