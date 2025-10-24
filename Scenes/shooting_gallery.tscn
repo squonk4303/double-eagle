@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=18 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -6,8 +6,10 @@
 [ext_resource type="Script" uid="uid://fkq8gldnfuyw" path="res://Scripts/HPBar.cs" id="4_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
+[ext_resource type="Material" uid="uid://dvk213kt26k23" path="res://Images/Prototyping/Dark/prototype_dark.tres" id="6_wwb8y"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 [ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
+[ext_resource type="Texture2D" uid="uid://dcuodhuqsvbya" path="res://Images/Skybox/Panorama_Sky_20-512x512.png" id="9_vap05"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -23,6 +25,16 @@ texture_filter = 0
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_wwb8y"]
+panorama = ExtResource("9_vap05")
+
+[sub_resource type="Sky" id="Sky_e0w87"]
+sky_material = SubResource("PanoramaSkyMaterial_wwb8y")
+
+[sub_resource type="Environment" id="Environment_2s1gh"]
+background_mode = 2
+sky = SubResource("Sky_e0w87")
 
 [node name="Shooting_Gallery" type="Node3D"]
 script = ExtResource("1_npy5q")
@@ -103,6 +115,20 @@ transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
 
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Props"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Props/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.25, 34)
+radius = 71.0
+height = 6.5
+material = ExtResource("6_wwb8y")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Props/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18.5, 1)
+operation = 2
+size = Vector3(19, 28, 9)
+material = ExtResource("6_wwb8y")
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="FalloutZone" type="Area3D" parent="."]
@@ -116,5 +142,8 @@ shape = SubResource("WorldBoundaryShape3D_npy5q")
 script = ExtResource("7_ahrfq")
 
 [node name="PauseMenu" parent="." instance=ExtResource("8_clrr7")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2s1gh")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
