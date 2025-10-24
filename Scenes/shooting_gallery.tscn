@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
-[ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
+[ext_resource type="PackedScene" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -24,11 +24,8 @@ texture_filter = 0
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
-[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu", "crosshair")]
+[node name="Shooting_Gallery" type="Node3D"]
 script = ExtResource("1_npy5q")
-headsUpDisplay = NodePath("HeadsUpDisplay")
-pauseMenu = NodePath("PauseMenu")
-crosshair = NodePath("HeadsUpDisplay/Crosshair")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
@@ -37,7 +34,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
 transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 12.4747)
 
 [node name="BallTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 1.5
 autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]

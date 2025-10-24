@@ -193,6 +193,15 @@ public partial class ShootingGallery : Node3D
 
         // Notify player of score
         ScorePopup($"{f(count)} POINTS");
+
+        if (count == 1)
+        {
+            _spawnQueue.Add("res://Scenes/watermelon.tscn");
+        }
+        else if (count >= 2)
+        {
+            _spawnQueue.Add("res://Scenes/balloon.tscn");
+        }
     }
 
     private void OnBodyFellOut(Node3D body)
