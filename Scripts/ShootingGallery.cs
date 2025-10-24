@@ -210,7 +210,7 @@ public partial class ShootingGallery : Node3D
         }
 
         // Notify player of score
-        ScorePopup($"{f(count)} POINTS");
+        ScorePopup($"{f(count)} HP");
 
         if (count == 1)
         {
@@ -227,11 +227,11 @@ public partial class ShootingGallery : Node3D
         // Remove health when balls fall out of reach
         if (body is Watermelon)
         {
-            _health.TakeDamage(3.0f);
+            // _health.TakeDamage(3.0f);
         }
         else if (body is Balloon)
         {
-            _health.TakeDamage(2.0f);
+            // _health.TakeDamage(2.0f);
         }
     }
 
