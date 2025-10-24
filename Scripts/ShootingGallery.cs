@@ -36,6 +36,8 @@ public partial class ShootingGallery : Node3D
     private Health _health;
     private HPBar _hpBar;
     private Label _healthLabel;
+    private int _score = 0;
+    public bool IsDead = false;
 
     public override void _Ready()
     {
@@ -106,6 +108,18 @@ public partial class ShootingGallery : Node3D
 
         popup.SetText(txt);
         popup.Position = position;
+    }
+
+    private void AddScore(float n)
+    {
+        if (!IsDead)
+        {
+            var label = GetNode<Label>("HeadsUpDisplay/ScoreDisplay");
+            _score += (int)Math.Round(n);
+            string txt;
+            txt = _score.ToString("Score: 00000");
+            label.Text = txt;
+        }
     }
 
     /// Load next ball in queue
@@ -190,6 +204,10 @@ public partial class ShootingGallery : Node3D
         // Count targets which inherit Ball
         int count = targets.Count(e => e is Ball);
         _health.Heal(f(count));
+        if (f(count) > 0.0f)
+        {
+            AddScore(f(count) * 10.0f);
+        }
 
         // Notify player of score
         ScorePopup($"{f(count)} POINTS");
@@ -226,6 +244,7 @@ public partial class ShootingGallery : Node3D
 
     private void OnPlayerDied()
     {
+        IsDead = true;
         _healthLabel.Text = "Game over, man...";
         Engine.TimeScale = 0.2;
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");

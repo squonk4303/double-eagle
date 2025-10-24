@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
-[ext_resource type="PackedScene" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
+[ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -46,6 +46,7 @@ texture = ExtResource("5_au61t")
 offset = Vector2(0.5, 0.5)
 
 [node name="Health" type="Label" parent="HeadsUpDisplay"]
+visible = false
 offset_left = 331.0
 offset_top = 325.0
 offset_right = 389.0
@@ -65,6 +66,14 @@ script = ExtResource("4_oy0ci")
 layout_mode = 0
 offset_right = 157.0
 offset_bottom = 27.0
+
+[node name="ScoreDisplay" type="Label" parent="HeadsUpDisplay"]
+offset_left = 254.0
+offset_top = 70.0
+offset_right = 351.0
+offset_bottom = 93.0
+scale = Vector2(2, 2)
+text = "Score: 00000"
 
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
