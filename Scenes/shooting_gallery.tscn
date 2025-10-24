@@ -118,8 +118,8 @@ mesh = SubResource("QuadMesh_pqnnw")
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="Props"]
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Props/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.25, 34)
-radius = 71.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.25, 34)
+radius = 84.0
 height = 6.5
 material = ExtResource("6_wwb8y")
 

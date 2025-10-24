@@ -13,7 +13,7 @@ public partial class Health : Node
 
     // Maximum health value
     [Export]
-    public float MaxHealth { get; set; } = 30.0f;
+    public float MaxHealth { get; set; } = 60.0f;
 
     // Backing field for current health
     private float _currentHealth;
