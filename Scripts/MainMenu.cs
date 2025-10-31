@@ -27,17 +27,24 @@ public partial class MainMenu : Control
         optionsContainer.AddChild(options);
         mainButtons.Visible = false;
 
-        var marksman = GetParent().GetNode<Marksman>("Marksman");
-        options.SensitivityChanged += marksman.OnSensitivityChanged;
+        // No need to connect Marksman in main menu since it doesn't exist here; no need for real time updates
 
-        // Connect back signal
+        // Connect back-signal
         options.BackPressed += OnOptionsBack;
+
     }
 
     private void OnOptionsBack()
     {
         GD.Print("Back pressed in OptionsPanel from MainMenu");
         mainButtons.Visible = true;
+
+        // Clear the options container
+        if (optionsContainer != null && optionsContainer.GetChildCount() > 0)
+        {
+            foreach (Node child in optionsContainer.GetChildren())
+                child.QueueFree();
+        }
     }
 
     private void OnQuitPressed()

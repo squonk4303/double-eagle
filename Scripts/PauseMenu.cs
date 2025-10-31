@@ -64,6 +64,7 @@ public partial class PauseMenu : Control
         var marksman = GetParent().GetNode<Marksman>("Marksman");
         options.SensitivityChanged += marksman.OnSensitivityChanged;
 
+        // Connect back-signal
         options.BackPressed += OnOptionsBack;
     }
 
