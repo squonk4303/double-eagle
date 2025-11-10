@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=14 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 [ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
+[ext_resource type="Script" uid="uid://bo3vd306b57gd" path="res://Scripts/DeathPopup.cs" id="9_vap05"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -24,11 +25,10 @@ texture_filter = 0
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
-[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu", "crosshair")]
+[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
 headsUpDisplay = NodePath("HeadsUpDisplay")
 pauseMenu = NodePath("PauseMenu")
-crosshair = NodePath("HeadsUpDisplay/Crosshair")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
@@ -41,6 +41,7 @@ wait_time = 0.5
 autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay"]
 position = Vector2(360, 270)
@@ -110,5 +111,34 @@ shape = SubResource("WorldBoundaryShape3D_npy5q")
 script = ExtResource("7_ahrfq")
 
 [node name="PauseMenu" parent="." instance=ExtResource("8_clrr7")]
+visible = false
+
+[node name="DeathPopup" type="PopupPanel" parent="."]
+oversampling_override = 1.0
+position = Vector2i(308, 219)
+size = Vector2i(104, 101)
+visible = true
+script = ExtResource("9_vap05")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeathPopup"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 100.0
+offset_bottom = 97.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "You ded"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "Retry"
+
+[node name="MainMenuButton" type="Button" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

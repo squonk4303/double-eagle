@@ -45,6 +45,8 @@ public partial class ShootingGallery : Node3D
     private HPBar _hpBar;
     private Label _healthLabel;
 
+    private DeathPopup _deathPopup;
+
     public override void _Ready()
     {
         // Connect signals from periodic spawn-timer
@@ -79,6 +81,9 @@ public partial class ShootingGallery : Node3D
 
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
+
+        
+        _deathPopup = GetNode<DeathPopup>("DeathPopup");
 
         // Connect to the PauseMenu's visibility changes
         if (pauseMenu != null)
@@ -211,6 +216,7 @@ public partial class ShootingGallery : Node3D
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
         light.Rotation = new Vector3(0, 1.0f, 0);
         light.LightColor = new Color("darkred");
+        _deathPopup.ShowDeathMenu();
     }
 
     private void OnPauseMenuVisibilityChanged()
