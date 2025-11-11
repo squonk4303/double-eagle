@@ -17,13 +17,13 @@ _data = {
 }
 point_count = 2
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
 albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
 [node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
@@ -90,14 +90,6 @@ curve = SubResource("Curve3D_npy5q")
 [node name="Stretch" type="PathFollow3D" parent="Spawns/Path1"]
 transform = Transform3D(1.3113333e-07, 0.999995, -0.00077207346, -6.7496515e-11, -0.0007720712, -0.999998, -0.999994, 1.3113355e-07, -3.3748403e-11, -10.008, -4, 0)
 
-[node name="Props" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ow0e6")
-mesh = SubResource("QuadMesh_pqnnw")
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="FalloutZone" type="Area3D" parent="."]
@@ -140,5 +132,13 @@ text = "Retry"
 [node name="MainMenuButton" type="Button" parent="DeathPopup/VBoxContainer"]
 layout_mode = 2
 text = "Main Menu"
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_ow0e6")
+mesh = SubResource("QuadMesh_pqnnw")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
