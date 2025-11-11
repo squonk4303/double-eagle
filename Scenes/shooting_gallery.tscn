@@ -41,7 +41,6 @@ wait_time = 0.5
 autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay"]
 position = Vector2(360, 270)
@@ -103,7 +102,6 @@ shape = SubResource("WorldBoundaryShape3D_npy5q")
 script = ExtResource("7_ahrfq")
 
 [node name="PauseMenu" parent="." instance=ExtResource("8_clrr7")]
-visible = false
 
 [node name="DeathPopup" type="PopupPanel" parent="."]
 oversampling_override = 1.0

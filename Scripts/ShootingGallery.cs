@@ -216,7 +216,7 @@ public partial class ShootingGallery : Node3D
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
         light.Rotation = new Vector3(0, 1.0f, 0);
         light.LightColor = new Color("darkred");
-        _deathPopup.ShowDeathMenu();
+        //_deathPopup.ShowDeathMenu();
     }
 
     private void OnPauseMenuVisibilityChanged()

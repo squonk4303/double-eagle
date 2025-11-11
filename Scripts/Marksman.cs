@@ -20,6 +20,8 @@ public partial class Marksman : CharacterBody3D
 
     private PauseMenu _pauseMenu;
 
+    private GunRecoil _gunRecoil;
+
     private float _mouseSensitivity = 0.5f;
     // Sensitivity factor to tweak overall sensitivity
     private float _sensitivityFactor = 0.1f;
@@ -57,6 +59,7 @@ public partial class Marksman : CharacterBody3D
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _pauseMenu = GetNode<PauseMenu>("PauseMenu");
+        _gunRecoil = GetNode<GunRecoil>("Pivot/Camera3D/gun");
 
         // Load sensitivity from config
         var config = new ConfigFile();
@@ -101,6 +104,9 @@ public partial class Marksman : CharacterBody3D
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, _camera.GlobalRotation);
             EmitSignal(SignalName.GunFire00, bulletPosition, _camera.GlobalRotation);
+
+            _gunRecoil.ApplyRecoil();
+            
         }
 
         if (@event.IsActionPressed("secondary_fire"))
