@@ -44,6 +44,7 @@ public partial class ShootingGallery : Node3D
     private Health _health;
     private HPBar _hpBar;
     private Label _healthLabel;
+    private Sprite2D _crosshair;
 
     private DeathPopup _deathPopup;
 
@@ -77,10 +78,11 @@ public partial class ShootingGallery : Node3D
         _health.Died += OnPlayerDied;
 
         // Get HUD elements
-        _hpBar = GetNode<HPBar>("HeadsUpDisplay/HPBar");
+        _hpBar = GetNode<HPBar>("HeadsUpDisplay/Control/HPBar");
+        _crosshair = GetNode<Sprite2D>("HeadsUpDisplay/Control/Crosshair");
 
         // Initialize HP-HUD
-        _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
+        _healthLabel = GetNode<Label>("HeadsUpDisplay/Control/Health");
 
         
         _deathPopup = GetNode<DeathPopup>("DeathPopup");
@@ -90,6 +92,11 @@ public partial class ShootingGallery : Node3D
         {
             pauseMenu.VisibilityChanged += OnPauseMenuVisibilityChanged;
         }
+
+        GetTree().Root.SizeChanged += UpdateCrosshairPosition;
+        UpdateCrosshairPosition();
+
+        Engine.TimeScale = 1.0f;
     }
 
     private Vector3 GetSpawnPosition()
@@ -224,4 +231,11 @@ public partial class ShootingGallery : Node3D
         // Turn HUD off when pause menu is visible, or vice versa
         headsUpDisplay.Visible = !pauseMenu.Visible;
     }
+
+    private void UpdateCrosshairPosition()
+    {
+        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+        _crosshair.Position = viewportSize / 2;
+    }
+
 }

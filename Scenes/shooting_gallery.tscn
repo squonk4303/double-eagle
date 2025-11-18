@@ -42,32 +42,53 @@ autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
 
-[node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay"]
-position = Vector2(360, 270)
-scale = Vector2(5, 5)
-texture = ExtResource("5_au61t")
-offset = Vector2(0.5, 0.5)
+[node name="Control" type="Control" parent="HeadsUpDisplay"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Health" type="Label" parent="HeadsUpDisplay"]
+[node name="HPBar" type="Control" parent="HeadsUpDisplay/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_oy0ci")
+
+[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/Control/HPBar"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -157.0
+offset_top = -27.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay/Control"]
+scale = Vector2(2, 2)
+texture = ExtResource("5_au61t")
+
+[node name="Health" type="Label" parent="HeadsUpDisplay/Control"]
+visible = false
+layout_mode = 0
 offset_left = 331.0
 offset_top = 325.0
 offset_right = 389.0
 offset_bottom = 348.0
 text = "HP: 999"
-
-[node name="HPBar" type="Control" parent="HeadsUpDisplay"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 525.0
-offset_top = 470.0
-offset_right = 565.0
-offset_bottom = 510.0
-script = ExtResource("4_oy0ci")
-
-[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/HPBar"]
-layout_mode = 0
-offset_right = 157.0
-offset_bottom = 27.0
 
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
@@ -107,7 +128,6 @@ script = ExtResource("7_ahrfq")
 oversampling_override = 1.0
 position = Vector2i(308, 219)
 size = Vector2i(104, 101)
-visible = true
 script = ExtResource("9_vap05")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DeathPopup"]
