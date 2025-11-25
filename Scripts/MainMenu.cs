@@ -12,11 +12,20 @@ public partial class MainMenu : Control
         GetNode<Button>("MainButtons/PlayButton").Pressed += OnPlayPressed;
         GetNode<Button>("MainButtons/OptionsButton").Pressed += OnOptionsPressed;
         GetNode<Button>("MainButtons/QuitButton").Pressed += OnQuitPressed;
+
+        // Set initial state to MENU when main menu loads
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.MENU);
     }
 
     private void OnPlayPressed()
     {
         GD.Print("Play pressed");
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
+
         GetTree().ChangeSceneToFile("res://Scenes/shooting_gallery.tscn");
     }
 

@@ -21,23 +21,30 @@ public partial class DeathPopup : PopupPanel
 
     public void ShowDeathMenu()
     {
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.LOST);
+
         PopupCentered();
-        // Cursor mode
-        Input.MouseMode = Input.MouseModeEnum.Visible;
-        GetTree().Paused = true;
     }
 
     private void OnRetryPressed()
     {
         Hide();
-        GetTree().Paused = false;
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
+
         GetTree().ReloadCurrentScene();
     }
 
     private void OnMainMenuPressed()
     {
         Hide();
-        GetTree().Paused = false;
-        GetTree().ChangeSceneToFile("res://scenes/main_menu.tscn"); 
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.MENU);
+
+        GetTree().ChangeSceneToFile("res://scenes/main_menu.tscn");
     }
 }

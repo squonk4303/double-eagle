@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=15 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 [ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
 [ext_resource type="Script" uid="uid://bo3vd306b57gd" path="res://Scripts/DeathPopup.cs" id="9_vap05"]
+[ext_resource type="Script" uid="uid://cuybir12u3wjl" path="res://Scripts/GameStateManager.cs" id="10_wwb8y"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -126,17 +127,23 @@ script = ExtResource("7_ahrfq")
 
 [node name="DeathPopup" type="PopupPanel" parent="."]
 oversampling_override = 1.0
-position = Vector2i(308, 219)
+initial_position = 1
 size = Vector2i(104, 101)
+visible = true
 script = ExtResource("9_vap05")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DeathPopup"]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 100.0
-offset_bottom = 97.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -46.5
+offset_right = 48.0
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Label" type="Label" parent="DeathPopup/VBoxContainer"]
 layout_mode = 2
@@ -158,5 +165,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
+
+[node name="GameStateManager" type="Node" parent="."]
+script = ExtResource("10_wwb8y")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

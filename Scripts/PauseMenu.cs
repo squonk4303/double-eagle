@@ -12,6 +12,7 @@ public partial class PauseMenu : Control
         // Connect button signals
         GetNode<Button>("PauseButtons/ResumeButton").Pressed += OnResumePressed;
         GetNode<Button>("PauseButtons/OptionsButton").Pressed += OnOptionsPressed;
+        GetNode<Button>("PauseButtons/RetryButton").Pressed += OnRetryPressed;
         GetNode<Button>("PauseButtons/MainMenuButton").Pressed += OnMainMenuPressed;
 
         Visible = false;
@@ -26,27 +27,35 @@ public partial class PauseMenu : Control
 
     public void TogglePause()
     {
-        // Toggle (in)visiblity and (un)pause
-        Visible = !Visible;
-        bool isPaused = !GetTree().Paused;
-        GetTree().Paused = isPaused;
-        if (isPaused)
+        var stateManager = GameStateManager.Instance;
+        if (stateManager == null)
         {
-            // Pausing - show cursor
-            Input.MouseMode = Input.MouseModeEnum.Visible;
+            GD.PrintErr("GameStateManager instance not found!");
+            return;
+        }
+
+        // Only allow toggling pause from PLAYING or PAUSED states
+        if (stateManager.IsPlaying())
+        {
+            // Transition to PAUSED
+            stateManager.ChangeState(GameState.PAUSED);
+            Visible = true;
             pauseButtons.Visible = true;
         }
-        else
+        else if (stateManager.IsPaused())
         {
-            // Unpausing - capture mouse
-            Input.MouseMode = Input.MouseModeEnum.Captured;
+            // Transition back to PLAYING
+            stateManager.ChangeState(GameState.PLAYING);
+            Visible = false;
+
+            // Clear options panel if it exists
+            if (optionsContainer != null && optionsContainer.GetChildCount() > 0)
+            {
+                foreach (Node child in optionsContainer.GetChildren())
+                    child.QueueFree();
+            }
         }
-        // Clear options panel if it exists
-        if (optionsContainer != null && optionsContainer.GetChildCount() > 0)
-        {
-            foreach (Node child in optionsContainer.GetChildren())
-                child.QueueFree();
-        }
+        // If in LOST or WON state, ignore pause input
     }
 
     private void OnResumePressed() => TogglePause();
@@ -74,9 +83,21 @@ public partial class PauseMenu : Control
         pauseButtons.Visible = true;
     }
 
+    private void OnRetryPressed()
+    {
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
+
+        GetTree().ReloadCurrentScene();
+    }
+
     private void OnMainMenuPressed()
     {
-        GetTree().Paused = false;
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.MENU);
+
         GetTree().ChangeSceneToFile("res://Scenes/main_menu.tscn");
     }
 }
