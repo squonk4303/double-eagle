@@ -97,6 +97,11 @@ public partial class ShootingGallery : Node3D
         UpdateCrosshairPosition();
 
         Engine.TimeScale = 1.0f;
+
+        // Set game state to PLAYING when scene loads
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
     }
 
     private Vector3 GetSpawnPosition()
