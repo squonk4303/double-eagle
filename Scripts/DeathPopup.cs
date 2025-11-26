@@ -15,8 +15,18 @@ public partial class DeathPopup : PopupPanel
         // Interactable when paused
         ProcessMode = ProcessModeEnum.Always;
 
-        // Must use buttons
-        Exclusive = true;
+        // Prevent popup from closing when clicking outside
+        PopupHide += OnPopupHideAttempt;
+    }
+
+    private void OnPopupHideAttempt()
+    {
+        // If in LOST state and popup tries to hide (from clicking outside),
+        // immediately show it again. Probably a better way to do this...
+        if (GameStateManager.Instance?.IsLost() == true)
+        {
+            CallDeferred(MethodName.Show);
+        }
     }
 
     public void ShowDeathMenu()
