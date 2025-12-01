@@ -12,11 +12,11 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_828ss")
-sensitivitySlider = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel/SensitivitySlider")
-sensitivityValueLabel = NodePath("VBoxContainer/HBoxContainer/Label/SensitivityValueLabel")
-backButton = NodePath("VBoxContainer/BackButton")
+sensitivitySlider = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Label/SensitivityValueLabel/SensitivitySlider")
+sensitivityValueLabel = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Label/SensitivityValueLabel")
+backButton = NodePath("MarginContainer/VBoxContainer/BackButton")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -24,38 +24,39 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -44.0
-offset_top = -99.75
+offset_top = -42.5
 offset_right = 44.0
-offset_bottom = 99.75
+offset_bottom = 42.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
 alignment = 1
 
-[node name="Label" type="RichTextLabel" parent="VBoxContainer"]
+[node name="Label" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Options"
 fit_content = true
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_stretch_ratio = 4.96
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 0
 text = "Sensitivity: "
 
-[node name="SensitivityValueLabel" type="Label" parent="VBoxContainer/HBoxContainer/Label"]
+[node name="SensitivityValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Label"]
 layout_mode = 0
 offset_left = 92.0
 offset_right = 93.0
 offset_bottom = 23.0
 text = "0.00"
 
-[node name="SensitivitySlider" type="HSlider" parent="VBoxContainer/HBoxContainer/Label/SensitivityValueLabel"]
+[node name="SensitivitySlider" type="HSlider" parent="MarginContainer/VBoxContainer/HBoxContainer/Label/SensitivityValueLabel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -69,22 +70,22 @@ offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Sound:"
 
-[node name="SoundValueLabel" type="Label" parent="VBoxContainer/HBoxContainer2/Label"]
+[node name="SoundValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer2/Label"]
 layout_mode = 0
 offset_left = 92.0
 offset_right = 93.0
 offset_bottom = 23.0
 text = "0.00"
 
-[node name="SoundSlider" type="HSlider" parent="VBoxContainer/HBoxContainer2/Label/SoundValueLabel"]
+[node name="SoundSlider" type="HSlider" parent="MarginContainer/VBoxContainer/HBoxContainer2/Label/SoundValueLabel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -98,22 +99,22 @@ offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3"]
 layout_mode = 2
 text = "FOV"
 
-[node name="FOVValueLabel" type="Label" parent="VBoxContainer/HBoxContainer3/Label"]
+[node name="FOVValueLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer3/Label"]
 layout_mode = 0
 offset_left = 92.0
 offset_right = 93.0
 offset_bottom = 23.0
 text = "0.00"
 
-[node name="FOVSlider" type="HSlider" parent="VBoxContainer/HBoxContainer3/Label/FOVValueLabel"]
+[node name="FOVSlider" type="HSlider" parent="MarginContainer/VBoxContainer/HBoxContainer3/Label/FOVValueLabel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -127,6 +128,7 @@ offset_bottom = 9.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackButton" type="Button" parent="VBoxContainer"]
+[node name="BackButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 text = "Back"

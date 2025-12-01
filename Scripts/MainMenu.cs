@@ -9,9 +9,9 @@ public partial class MainMenu : Control
 
     public override void _Ready()
     {
-        GetNode<Button>("MainButtons/PlayButton").Pressed += OnPlayPressed;
-        GetNode<Button>("MainButtons/OptionsButton").Pressed += OnOptionsPressed;
-        GetNode<Button>("MainButtons/QuitButton").Pressed += OnQuitPressed;
+        GetNode<Button>("MarginContainer/MainButtons/PlayButton").Pressed += OnPlayPressed;
+        GetNode<Button>("MarginContainer/MainButtons/OptionsButton").Pressed += OnOptionsPressed;
+        GetNode<Button>("MarginContainer/MainButtons/QuitButton").Pressed += OnQuitPressed;
 
         // Set initial state to MENU when main menu loads
         var stateManager = GameStateManager.Instance;
