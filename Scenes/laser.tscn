@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cg17gbpxu81nh" path="res://Scripts/Laser.cs" id="1_mou6w"]
 [ext_resource type="Texture2D" uid="uid://dw512o4mfhjl4" path="res://Images/icon.svg" id="1_r1bh0"]
-[ext_resource type="AudioStream" uid="uid://630af34x0oiq" path="res://Audio/laser_2.wav" id="2_3pc01"]
+[ext_resource type="AudioStream" uid="uid://cn5p3b4hbe7ho" path="res://Audio/laser_3.ogg" id="2_3pc01"]
 
 [sub_resource type="Animation" id="Animation_mou6w"]
 length = 0.001

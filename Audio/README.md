@@ -1,8 +1,8 @@
 # Audio Copyright and Info
 
 ## https://freesound.org/people/Daleonfire/sounds/505235/
-- Licence: CC0, with requests to divulge usage to uploader.
-- Used in `laser_shoot.ogg`.
+- License: CC0, with requests to divulge usage to uploader.
+- Used in `laser_shoot.ogg`, `laser_3.ogg`.
 
 ## https://freesound.org/people/nlux/sounds/621216/
 - License: [Attribution 4.0](https://creativecommons.org/licenses/by/4.0/)

@@ -3,7 +3,7 @@ using System;
 
 public partial class Marksman : CharacterBody3D
 {
-    private const string GUNFIRE_SFX = "res://Audio/gun_fire.wav";
+    private const string GUNFIRE_SFX = "res://Audio/582265__rocketpancake__justa-slap-smack.wav";
 
     // Where to limit pitch
     private const double MAX_PITCH = Mathf.Pi * 0.5f;
@@ -99,6 +99,10 @@ public partial class Marksman : CharacterBody3D
 
             // Instantiate and play sfx
             _audioPlayer.Stream = _gunfireSfx;
+
+            _audioPlayer.PitchScale = 0.2f;
+            _audioPlayer.VolumeDb = -110.0f;
+
             _audioPlayer.Play();
 
             // Emit signal to spawn a bullet in parent scene
