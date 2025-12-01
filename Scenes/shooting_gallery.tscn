@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=19 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -104,10 +104,10 @@ text = "HP: 999"
 
 [node name="ScoreDisplay" type="Label" parent="HeadsUpDisplay/Control"]
 layout_mode = 0
-offset_left = 254.0
-offset_top = 70.0
-offset_right = 351.0
-offset_bottom = 93.0
+offset_left = 381.0
+offset_top = 39.0
+offset_right = 478.0
+offset_bottom = 62.0
 scale = Vector2(2, 2)
 text = "Score: 00000"
 
