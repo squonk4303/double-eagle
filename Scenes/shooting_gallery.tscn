@@ -1,5 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://noelnt65qoxs"]
-[gd_scene load_steps=14 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=17 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -7,10 +6,8 @@
 [ext_resource type="Script" uid="uid://fkq8gldnfuyw" path="res://Scripts/HPBar.cs" id="4_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
-[ext_resource type="Material" uid="uid://dvk213kt26k23" path="res://Images/Prototyping/Dark/prototype_dark.tres" id="6_wwb8y"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 [ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
-[ext_resource type="Texture2D" uid="uid://dcuodhuqsvbya" path="res://Images/Skybox/Panorama_Sky_20-512x512.png" id="9_vap05"]
 [ext_resource type="Script" uid="uid://bo3vd306b57gd" path="res://Scripts/DeathPopup.cs" id="9_vap05"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
@@ -22,16 +19,7 @@ point_count = 2
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
-albedo_texture = ExtResource("1_es7xq")
-texture_filter = 0
-
-[sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
-
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_wwb8y"]
-panorama = ExtResource("9_vap05")
 
 [sub_resource type="Sky" id="Sky_e0w87"]
 sky_material = SubResource("PanoramaSkyMaterial_wwb8y")
@@ -40,7 +28,12 @@ sky_material = SubResource("PanoramaSkyMaterial_wwb8y")
 background_mode = 2
 sky = SubResource("Sky_e0w87")
 
-[node name="Shooting_Gallery" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
+albedo_texture = ExtResource("1_es7xq")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+
 [node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
 headsUpDisplay = NodePath("HeadsUpDisplay")
@@ -97,8 +90,6 @@ grow_vertical = 0
 scale = Vector2(2, 2)
 texture = ExtResource("5_au61t")
 
-[node name="Health" type="Label" parent="HeadsUpDisplay"]
-visible = false
 [node name="Health" type="Label" parent="HeadsUpDisplay/Control"]
 visible = false
 layout_mode = 0
@@ -148,7 +139,7 @@ environment = SubResource("Environment_2s1gh")
 [node name="DeathPopup" type="PopupPanel" parent="."]
 oversampling_override = 1.0
 initial_position = 1
-size = Vector2i(104, 101)
+size = Vector2i(195, 153)
 visible = true
 script = ExtResource("9_vap05")
 
@@ -158,16 +149,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -46.5
-offset_right = 48.0
-offset_bottom = 46.5
+offset_left = -93.5
+offset_top = -72.5
+offset_right = 93.5
+offset_bottom = 72.5
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Label" type="Label" parent="DeathPopup/VBoxContainer"]
 layout_mode = 2
-text = "You ded"
+text = "You dead
+Try again..
+..or give up?"
 horizontal_alignment = 1
 
 [node name="RetryButton" type="Button" parent="DeathPopup/VBoxContainer"]
