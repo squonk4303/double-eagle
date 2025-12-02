@@ -21,7 +21,7 @@ public partial class MainMenu : Control
 
     private void OnPlayPressed()
     {
-        GD.Print("Play pressed");
+        // GD.Print("Play pressed");
         var stateManager = GameStateManager.Instance;
         if (stateManager != null)
             stateManager.ChangeState(GameState.PLAYING);
@@ -45,7 +45,7 @@ public partial class MainMenu : Control
 
     private void OnOptionsBack()
     {
-        GD.Print("Back pressed in OptionsPanel from MainMenu");
+        // GD.Print("Back pressed in OptionsPanel from MainMenu");
         mainButtons.Visible = true;
 
         // Clear the options container

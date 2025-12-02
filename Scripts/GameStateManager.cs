@@ -77,20 +77,20 @@ public partial class GameStateManager : Node
     {
         if (_currentState == newState)
         {
-            GD.Print($"Already in state {newState}");
+            // GD.Print($"Already in state {newState}");
             return;
         }
 
         if (!CanTransitionTo(newState))
         {
-            GD.PrintErr($"Invalid state transition from {_currentState} to {newState}");
+            // GD.PrintErr($"Invalid state transition from {_currentState} to {newState}");
             return;
         }
 
         GameState oldState = _currentState;
         _currentState = newState;
 
-        GD.Print($"State changed: {oldState} -> {newState}");
+        // GD.Print($"State changed: {oldState} -> {newState}");
 
         // Handle pause state based on game state
         UpdatePauseState();

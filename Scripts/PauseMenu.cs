@@ -30,7 +30,7 @@ public partial class PauseMenu : Control
         var stateManager = GameStateManager.Instance;
         if (stateManager == null)
         {
-            GD.PrintErr("GameStateManager instance not found!");
+            // GD.PrintErr("GameStateManager instance not found!");
             return;
         }
 
@@ -62,7 +62,7 @@ public partial class PauseMenu : Control
 
     private void OnOptionsPressed()
     {
-        GD.Print("Options pressed in PauseMenu");
+        // GD.Print("Options pressed in PauseMenu");
         // Load and instance optios_panel scene
         var optionsScene = GD.Load<PackedScene>("res://Scenes/options_panel.tscn");
         var options = optionsScene.Instantiate<OptionsPanel>();
@@ -79,7 +79,7 @@ public partial class PauseMenu : Control
 
     private void OnOptionsBack()
     {
-        GD.Print("Back pressed in OptionsPanel from PauseMenu");
+        // GD.Print("Back pressed in OptionsPanel from PauseMenu");
         pauseButtons.Visible = true;
     }
 
