@@ -7,7 +7,7 @@ public partial class Marksman : CharacterBody3D
 
     // Where to limit camera rotations
     private const float TO_RADIANS = Mathf.Pi * 0.005555555555555556f;
-    private const float MAX_PITCH = 30.0f * TO_RADIANS;
+    private const float MAX_PITCH = 75.0f * TO_RADIANS;
     private const float MIN_PITCH = -30.0f * TO_RADIANS;
     private const float MAX_YAW = 45.0f * TO_RADIANS;
     private const float MIN_YAW = -45.0f * TO_RADIANS;
@@ -17,15 +17,13 @@ public partial class Marksman : CharacterBody3D
     private Vector2 _accumulatedRotation;
     private Vector3 _feetPosition;
 
+    private GunRecoil _gunRecoil;
     private PauseMenu _pauseMenu;
 
-    private float _mouseSensitivity;
-    private GunRecoil _gunRecoil;
     // Sensitivity factor to tweak overall sensitivity
     private float _sensitivityFactor = 0.001f;
+    private float _mouseSensitivity;
 
-    // Comment out this since the sensitivity is loaded from config
-    //[Export] public float MouseSensitivity = 0.02f;
     [Export] public float LeanSpeed = 6.0f;
     [Export] public float LeanLength = 8.0f;
     [Export] public float NoclipSpeed = 5.0f;
@@ -97,7 +95,7 @@ public partial class Marksman : CharacterBody3D
         // Check for mouse buttons
         if (@event.IsActionPressed("primary_fire"))
         {
-            // Tweak position before emitting
+            // Tweak position before spawning bullet
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
             Vector3 bulletPosition = GlobalPosition + offset;
 
@@ -116,8 +114,10 @@ public partial class Marksman : CharacterBody3D
 
         if (@event.IsActionPressed("secondary_fire"))
         {
+            // Tweak position before spawning laser
             Vector3 offset = new Vector3(1.0f, -1.0f, -1.0f) * 0.1f;
             Vector3 bulletPosition = GlobalPosition + offset;
+
             EmitSignal(SignalName.GunFireRay, bulletPosition, GlobalRotation);
         }
 
