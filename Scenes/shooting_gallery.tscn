@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=19 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -6,8 +6,11 @@
 [ext_resource type="Script" uid="uid://fkq8gldnfuyw" path="res://Scripts/HPBar.cs" id="4_oy0ci"]
 [ext_resource type="Texture2D" uid="uid://b73y5cam3211y" path="res://Images/crosshair_plus.png" id="5_au61t"]
 [ext_resource type="Script" uid="uid://d3fmfiwnvebe7" path="res://Scripts/Fallout.cs" id="5_oy0ci"]
+[ext_resource type="Material" uid="uid://dvk213kt26k23" path="res://Images/Prototyping/Dark/prototype_dark.tres" id="6_wwb8y"]
 [ext_resource type="Script" uid="uid://dl8lk34n1pdks" path="res://Scripts/Health.cs" id="7_ahrfq"]
 [ext_resource type="PackedScene" uid="uid://d3raqji0c2v08" path="res://Scenes/pause_menu.tscn" id="8_clrr7"]
+[ext_resource type="Texture2D" uid="uid://dcuodhuqsvbya" path="res://Images/Skybox/Panorama_Sky_20-512x512.png" id="9_vap05"]
+[ext_resource type="Script" uid="uid://bo3vd306b57gd" path="res://Scripts/DeathPopup.cs" id="10_vap05"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
 _data = {
@@ -16,19 +19,28 @@ _data = {
 }
 point_count = 2
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_wwb8y"]
+panorama = ExtResource("9_vap05")
+
+[sub_resource type="Sky" id="Sky_e0w87"]
+sky_material = SubResource("PanoramaSkyMaterial_wwb8y")
+
+[sub_resource type="Environment" id="Environment_2s1gh"]
+background_mode = 2
+sky = SubResource("Sky_e0w87")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ow0e6"]
 albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
-
-[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu", "crosshair")]
+[node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
 headsUpDisplay = NodePath("HeadsUpDisplay")
 pauseMenu = NodePath("PauseMenu")
-crosshair = NodePath("HeadsUpDisplay/Crosshair")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
@@ -37,37 +49,67 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
 transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 12.4747)
 
 [node name="BallTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 1.5
 autostart = true
 
 [node name="HeadsUpDisplay" type="CanvasLayer" parent="."]
 
-[node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay"]
-position = Vector2(360, 270)
-scale = Vector2(5, 5)
-texture = ExtResource("5_au61t")
-offset = Vector2(0.5, 0.5)
+[node name="Control" type="Control" parent="HeadsUpDisplay"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[node name="Health" type="Label" parent="HeadsUpDisplay"]
+[node name="HPBar" type="Control" parent="HeadsUpDisplay/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+script = ExtResource("4_oy0ci")
+
+[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/Control/HPBar"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -157.0
+offset_top = -27.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Crosshair" type="Sprite2D" parent="HeadsUpDisplay/Control"]
+scale = Vector2(2, 2)
+texture = ExtResource("5_au61t")
+
+[node name="Health" type="Label" parent="HeadsUpDisplay/Control"]
+visible = false
+layout_mode = 0
 offset_left = 331.0
 offset_top = 325.0
 offset_right = 389.0
 offset_bottom = 348.0
 text = "HP: 999"
 
-[node name="HPBar" type="Control" parent="HeadsUpDisplay"]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 525.0
-offset_top = 470.0
-offset_right = 565.0
-offset_bottom = 510.0
-script = ExtResource("4_oy0ci")
-
-[node name="ProgressBar" type="ProgressBar" parent="HeadsUpDisplay/HPBar"]
+[node name="ScoreDisplay" type="Label" parent="HeadsUpDisplay/Control"]
 layout_mode = 0
-offset_right = 157.0
-offset_bottom = 27.0
+offset_left = 381.0
+offset_top = 39.0
+offset_right = 478.0
+offset_bottom = 62.0
+scale = Vector2(2, 2)
+text = "Score: 00000"
 
 [node name="EditorCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
@@ -89,14 +131,6 @@ curve = SubResource("Curve3D_npy5q")
 [node name="Stretch" type="PathFollow3D" parent="Spawns/Path1"]
 transform = Transform3D(1.3113333e-07, 0.999995, -0.00077207346, -6.7496515e-11, -0.0007720712, -0.999998, -0.999994, 1.3113355e-07, -3.3748403e-11, -10.008, -4, 0)
 
-[node name="Props" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_ow0e6")
-mesh = SubResource("QuadMesh_pqnnw")
-
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="FalloutZone" type="Area3D" parent="."]
@@ -110,5 +144,65 @@ shape = SubResource("WorldBoundaryShape3D_npy5q")
 script = ExtResource("7_ahrfq")
 
 [node name="PauseMenu" parent="." instance=ExtResource("8_clrr7")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_2s1gh")
+
+[node name="DeathPopup" type="PopupPanel" parent="."]
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(195, 153)
+visible = true
+script = ExtResource("10_vap05")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DeathPopup"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.5
+offset_top = -72.5
+offset_right = 93.5
+offset_bottom = 72.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "You dead
+Try again..
+..or give up?"
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "Retry"
+
+[node name="MainMenuButton" type="Button" parent="DeathPopup/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_ow0e6")
+mesh = SubResource("QuadMesh_pqnnw")
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Props"]
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Props/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -12.25, 34)
+radius = 84.0
+height = 6.5
+material = ExtResource("6_wwb8y")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Props/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18.5, 1)
+operation = 2
+size = Vector3(19, 28, 9)
+material = ExtResource("6_wwb8y")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]

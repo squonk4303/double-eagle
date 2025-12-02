@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://d2fjk8sjrgt5b"]
+[gd_scene load_steps=4 format=3 uid="uid://d2fjk8sjrgt5b"]
 
 [ext_resource type="Script" uid="uid://cld883p4rngl8" path="res://Scripts/Marksman.cs" id="1_x7t1k"]
+[ext_resource type="PackedScene" uid="uid://upri1xovpre7" path="res://Meshes/gun.glb" id="2_35i88"]
+[ext_resource type="Script" uid="uid://d3cjbrcinv5jf" path="res://Scripts/GunRecoil.cs" id="3_qte2g"]
 
 [node name="Marksman" type="CharacterBody3D"]
 script = ExtResource("1_x7t1k")
@@ -8,5 +10,11 @@ script = ExtResource("1_x7t1k")
 [node name="Camera3D" type="Camera3D" parent="."]
 current = true
 fov = 20.0
+
+[node name="gun" parent="Pivot/Camera3D" instance=ExtResource("2_35i88")]
+transform = Transform3D(-0.99619466, 0, -0.087155804, 0, 1, 0, 0.087155804, 0, -0.99619466, 0.75, -0.4, -8.75)
+script = ExtResource("3_qte2g")
+
+[node name="Marker3D" type="Marker3D" parent="Pivot/Camera3D/gun"]
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]

@@ -1,6 +1,6 @@
 using Godot;
 using System;
-using System.Collections.Generic;  // For List
+using System.Collections.Generic;  // For List and Dictionary
 using System.Linq;  // for [].Count
 
 
@@ -28,27 +28,19 @@ public partial class ShootingGallery : Node3D
         "Spawns/Path1/Stretch",
     };
 
-    // A queue (shuffled elsewhere) which determines rate of balls spawning
-    private string[] _ballQueueTemplate = new string[]
-    {
-        "res://Scenes/balloon.tscn",
-        "res://Scenes/balloon.tscn",
-        "res://Scenes/watermelon.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/small_ball.tscn",
-    };
+    // A queue for ball types to spawn in
+    private List<string> _spawnQueue = new List<string>();
 
-    private List<string> _ballQueue = new List<string>();
     private AudioStreamPlayer _audioPlayer;
 
     private Health _health;
     private HPBar _hpBar;
     private Label _healthLabel;
+    private Sprite2D _crosshair;
+    private int _score = 0;
+    public bool IsDead = false;
+
+    private DeathPopup _deathPopup;
 
     public override void _Ready()
     {
@@ -80,45 +72,30 @@ public partial class ShootingGallery : Node3D
         _health.Died += OnPlayerDied;
 
         // Get HUD elements
-        _hpBar = GetNode<HPBar>("HeadsUpDisplay/HPBar");
+        _hpBar = GetNode<HPBar>("HeadsUpDisplay/Control/HPBar");
+        _crosshair = GetNode<Sprite2D>("HeadsUpDisplay/Control/Crosshair");
 
         // Initialize HP-HUD
-        _healthLabel = GetNode<Label>("HeadsUpDisplay/Health");
+        _healthLabel = GetNode<Label>("HeadsUpDisplay/Control/Health");
+
+        
+        _deathPopup = GetNode<DeathPopup>("DeathPopup");
 
         // Connect to the PauseMenu's visibility changes
         if (pauseMenu != null)
         {
             pauseMenu.VisibilityChanged += OnPauseMenuVisibilityChanged;
         }
-    }
 
-    /// Loads balls in from a randomized queue
-    private PackedScene LoadRandomBall()
-    {
-        PackedScene ballScene;
+        GetTree().Root.SizeChanged += UpdateCrosshairPosition;
+        UpdateCrosshairPosition();
 
-        // When queue is empty
-        if (_ballQueue.Count == 0)
-        {
-            // Reload queue with a shuffled template
-            Random.Shared.Shuffle(_ballQueueTemplate);
-            _ballQueue = new List<string>(_ballQueueTemplate);
+        Engine.TimeScale = 1.0f;
 
-            // Load and return one with uniform randomness
-            // For a bit o' spice
-            ballScene = GD.Load<PackedScene>(
-                PATH_BALLS[GD.Randi() % PATH_BALLS.Length]
-            );
-            return ballScene;
-        }
-        else
-        {
-            // Load one item and remove it from the queue
-            ballScene = GD.Load<PackedScene>(_ballQueue[0]);
-            _ballQueue.RemoveAt(0);
-        }
-
-        return ballScene;
+        // Set game state to PLAYING when scene loads
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
     }
 
     private Vector3 GetSpawnPosition()
@@ -150,10 +127,43 @@ public partial class ShootingGallery : Node3D
         popup.Position = position;
     }
 
+    private void AddScore(float n)
+    {
+        if (!IsDead)
+        {
+            var label = GetNode<Label>("HeadsUpDisplay/ScoreDisplay");
+            _score += (int)Math.Round(n);
+            string txt;
+            txt = _score.ToString("Score: 00000");
+            label.Text = txt;
+        }
+    }
+
+    /// Load next ball in queue
+    private PackedScene LoadNextBall()
+    {
+        string path;
+        // Get next in queue for balls
+        // If there is none, get a smallball
+        if (_spawnQueue.Count > 0)
+        {
+            path = _spawnQueue[0];
+            _spawnQueue.RemoveAt(0);
+        }
+        else
+        {
+            path = "res://Scenes/small_ball.tscn";
+        }
+        var scene = GD.Load<PackedScene>(path);
+        return scene;
+    }
+
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
     {
-        var ball = LoadRandomBall().Instantiate();
+        // Load a ball from the randomized queue
+        PackedScene ballScene = LoadNextBall();
+        var ball = ballScene.Instantiate();
         Vector3 spawn = GetSpawnPosition();
         // target here is a bit over the middle of the backboard
         var target = new Vector3(0, 7.0f, 0);
@@ -165,7 +175,8 @@ public partial class ShootingGallery : Node3D
     private void OnGunFire00(Vector3 position, Vector3 rotation)
     {
         // Cost health for shootin
-        _health.TakeDamage(1.0f);
+        ScorePopup("-2 HP");
+        _health.TakeDamage(2.0f);
 
         // Loads, instantiates, and spawns bullet
         PackedScene scene = GD.Load<PackedScene>(PATH_BULLET);
@@ -199,6 +210,7 @@ public partial class ShootingGallery : Node3D
     private void OnBulletReport()
     {
         // Refund the health lost by shooting in the first place
+        ScorePopup("1 HP");
         _health.Heal(1.0f);
     }
 
@@ -210,10 +222,23 @@ public partial class ShootingGallery : Node3D
         var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
         // Count targets which inherit Ball
         int count = targets.Count(e => e is Ball);
-        _health.Heal(f(count));
+        if (f(count) > 0.0f)
+        {
+            AddScore(f(count) * 10.0f);
+        }
 
         // Notify player of score
-        ScorePopup($"{f(count)} POINTS");
+        _health.Heal(f(count) - 1.0f);
+        ScorePopup($"{f(count) - 1.0f} HP");
+
+        if (count == 1)
+        {
+            _spawnQueue.Add("res://Scenes/watermelon.tscn");
+        }
+        else if (count >= 2)
+        {
+            _spawnQueue.Add("res://Scenes/balloon.tscn");
+        }
     }
 
     private void OnBodyFellOut(Node3D body)
@@ -221,11 +246,11 @@ public partial class ShootingGallery : Node3D
         // Remove health when balls fall out of reach
         if (body is Watermelon)
         {
-            _health.TakeDamage(3.0f);
+            // _health.TakeDamage(3.0f);
         }
         else if (body is Balloon)
         {
-            _health.TakeDamage(2.0f);
+            // _health.TakeDamage(2.0f);
         }
     }
 
@@ -238,11 +263,15 @@ public partial class ShootingGallery : Node3D
 
     private void OnPlayerDied()
     {
+        IsDead = true;
         _healthLabel.Text = "Game over, man...";
         Engine.TimeScale = 0.2;
         var light = GetNode<DirectionalLight3D>("DirectionalLight3D");
         light.Rotation = new Vector3(0, 1.0f, 0);
         light.LightColor = new Color("darkred");
+
+        // Add a delay before showing death popup to prevent accidental double-click retry
+        GetTree().CreateTimer(0.3f).Timeout += () => _deathPopup.ShowDeathMenu();
     }
 
     private void OnPauseMenuVisibilityChanged()
@@ -250,4 +279,11 @@ public partial class ShootingGallery : Node3D
         // Turn HUD off when pause menu is visible, or vice versa
         headsUpDisplay.Visible = !pauseMenu.Visible;
     }
+
+    private void UpdateCrosshairPosition()
+    {
+        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+        _crosshair.Position = viewportSize / 2;
+    }
+
 }

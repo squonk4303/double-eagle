@@ -9,14 +9,23 @@ public partial class MainMenu : Control
 
     public override void _Ready()
     {
-        GetNode<Button>("MainButtons/PlayButton").Pressed += OnPlayPressed;
-        GetNode<Button>("MainButtons/OptionsButton").Pressed += OnOptionsPressed;
-        GetNode<Button>("MainButtons/QuitButton").Pressed += OnQuitPressed;
+        GetNode<Button>("MarginContainer/MainButtons/PlayButton").Pressed += OnPlayPressed;
+        GetNode<Button>("MarginContainer/MainButtons/OptionsButton").Pressed += OnOptionsPressed;
+        GetNode<Button>("MarginContainer/MainButtons/QuitButton").Pressed += OnQuitPressed;
+
+        // Set initial state to MENU when main menu loads
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.MENU);
     }
 
     private void OnPlayPressed()
     {
-        GD.Print("Play pressed");
+        // GD.Print("Play pressed");
+        var stateManager = GameStateManager.Instance;
+        if (stateManager != null)
+            stateManager.ChangeState(GameState.PLAYING);
+
         GetTree().ChangeSceneToFile("res://Scenes/shooting_gallery.tscn");
     }
 
@@ -27,17 +36,24 @@ public partial class MainMenu : Control
         optionsContainer.AddChild(options);
         mainButtons.Visible = false;
 
-        var marksman = GetParent().GetNode<Marksman>("Marksman");
-        options.SensitivityChanged += marksman.OnSensitivityChanged;
+        // No need to connect Marksman in main menu since it doesn't exist here; no need for real time updates
 
-        // Connect back signal
+        // Connect back-signal
         options.BackPressed += OnOptionsBack;
+
     }
 
     private void OnOptionsBack()
     {
-        GD.Print("Back pressed in OptionsPanel from MainMenu");
+        // GD.Print("Back pressed in OptionsPanel from MainMenu");
         mainButtons.Visible = true;
+
+        // Clear the options container
+        if (optionsContainer != null && optionsContainer.GetChildCount() > 0)
+        {
+            foreach (Node child in optionsContainer.GetChildren())
+                child.QueueFree();
+        }
     }
 
     private void OnQuitPressed()

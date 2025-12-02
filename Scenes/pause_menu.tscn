@@ -33,6 +33,10 @@ grow_vertical = 2
 layout_mode = 2
 text = "Resume"
 
+[node name="RetryButton" type="Button" parent="PauseButtons"]
+layout_mode = 2
+text = "Retry"
+
 [node name="OptionsButton" type="Button" parent="PauseButtons"]
 layout_mode = 2
 text = "Options"
