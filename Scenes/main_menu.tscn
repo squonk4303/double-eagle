@@ -12,41 +12,39 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_28flt")
-mainButtons = NodePath("MainButtons")
-optionsContainer = NodePath("OptionsContainer")
+mainButtons = NodePath("MarginContainer/MainButtons")
+optionsContainer = NodePath("MarginContainer/OptionsContainer")
 
-[node name="MainButtons" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = -50.5
-offset_right = 35.0
-offset_bottom = 50.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 80
 
-[node name="PlayButton" type="Button" parent="MainButtons"]
+[node name="MainButtons" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="PlayButton" type="Button" parent="MarginContainer/MainButtons"]
 layout_mode = 2
 text = "Play"
 
-[node name="OptionsButton" type="Button" parent="MainButtons"]
+[node name="OptionsButton" type="Button" parent="MarginContainer/MainButtons"]
 layout_mode = 2
 text = "Options"
 
-[node name="QuitButton" type="Button" parent="MainButtons"]
+[node name="QuitButton" type="Button" parent="MarginContainer/MainButtons"]
 layout_mode = 2
 text = "Quit"
 
-[node name="OptionsContainer" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="OptionsContainer" type="Control" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4

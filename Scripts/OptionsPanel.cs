@@ -20,7 +20,7 @@ public partial class OptionsPanel : Control
 
     public override void _Ready()
     {
-        GD.Print("OptionsPanel ready");
+        // GD.Print("OptionsPanel ready");
         sensitivitySlider.MinValue = 0.1f;
         sensitivitySlider.MaxValue = 1.0f;
         sensitivitySlider.Step = 0.05f;
@@ -51,7 +51,7 @@ public partial class OptionsPanel : Control
     // Handle back button press
     private void OnBackPressed()
     {
-        GD.Print("Back pressed in OptionsPanel");
+        // GD.Print("Back pressed in OptionsPanel");
         EmitSignal(SignalName.BackPressed);
         SaveSettings();
         QueueFree();

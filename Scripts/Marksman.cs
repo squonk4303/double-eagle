@@ -3,7 +3,7 @@ using System;
 
 public partial class Marksman : CharacterBody3D
 {
-    private const string GUNFIRE_SFX = "res://Audio/gun_fire.wav";
+    private const string GUNFIRE_SFX = "res://Audio/582265__rocketpancake__justa-slap-smack.wav";
 
     // Where to limit pitch
     private const double MAX_PITCH = Mathf.Pi * 0.5f;
@@ -19,6 +19,8 @@ public partial class Marksman : CharacterBody3D
     private AudioStreamPlayer3D _audioPlayer;
 
     private PauseMenu _pauseMenu;
+
+    private GunRecoil _gunRecoil;
 
     private float _mouseSensitivity = 0.5f;
     // Sensitivity factor to tweak overall sensitivity
@@ -57,6 +59,7 @@ public partial class Marksman : CharacterBody3D
         _camera = GetNode<Camera3D>("Pivot/Camera3D");
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _pauseMenu = GetNode<PauseMenu>("PauseMenu");
+        _gunRecoil = GetNode<GunRecoil>("Pivot/Camera3D/gun");
 
         // Load sensitivity from config
         var config = new ConfigFile();
@@ -96,11 +99,18 @@ public partial class Marksman : CharacterBody3D
 
             // Instantiate and play sfx
             _audioPlayer.Stream = _gunfireSfx;
+
+            _audioPlayer.PitchScale = 0.2f;
+            _audioPlayer.VolumeDb = -110.0f;
+
             _audioPlayer.Play();
 
             // Emit signal to spawn a bullet in parent scene
             // Gun00Fired.emit(bulletPosition, _camera.GlobalRotation);
             EmitSignal(SignalName.GunFire00, bulletPosition, _camera.GlobalRotation);
+
+            _gunRecoil.ApplyRecoil();
+            
         }
 
         if (@event.IsActionPressed("secondary_fire"))
