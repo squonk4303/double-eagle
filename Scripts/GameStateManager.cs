@@ -19,7 +19,7 @@ public partial class GameStateManager : Node
     [Signal]
     public delegate void StateChangedEventHandler(GameState oldState, GameState newState);
 
-    private GameState _currentState = GameState.PLAYING;
+    private GameState _currentState = GameState.MENU;
 
     public GameState CurrentState => _currentState;
 
