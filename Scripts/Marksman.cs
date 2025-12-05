@@ -48,7 +48,7 @@ public partial class Marksman : CharacterBody3D
         _feetPosition = GlobalPosition;
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _pauseMenu = GetNode<PauseMenu>("PauseMenu");
-        _gunRecoil = GetNode<GunRecoil>("Pivot/Camera3D/gun");
+        _gunRecoil = GetNode<GunRecoil>("Camera3D/gun");
 
         // Load sensitivity from config
         var config = new ConfigFile();
