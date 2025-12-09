@@ -12,21 +12,11 @@ public partial class ShootingGallery : Node3D
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
-
-    private const double MAX_HP = 100.0d;
-
-    private readonly string[] PATH_BALLS = new string[]
-    {
-        "res://Scenes/balloon.tscn",
-        "res://Scenes/small_ball.tscn",
-        "res://Scenes/watermelon.tscn",
-    };
-
-    private readonly string[] PATH_LOCATIONS = new string[]
-    {
-        "Spawns/Path0/Stretch",
-        "Spawns/Path1/Stretch",
-    };
+    private const string PATH_SPAWNPATH = "Spawns/Path0/Stretch";
+    private const string PATH_BALL = "res://Scenes/small_ball.tscn";
+    private const string PATH_WATERMELON = "res://Scenes/watermelon.tscn";
+    private const string PATH_BALLOON = "res://Scenes/balloon.tscn";
+    private const string PATH_SCORE_INDICATOR = "res://Scenes/score_indicator.tscn";
 
     // A queue for ball types to spawn in
     private List<string> _spawnQueue = new List<string>();
@@ -100,7 +90,7 @@ public partial class ShootingGallery : Node3D
 
     private Vector3 GetSpawnPosition()
     {
-        var path = GetNode<PathFollow3D>(PATH_LOCATIONS[0]);
+        var path = GetNode<PathFollow3D>(PATH_SPAWNPATH);
 
         // Picks a random spot on the path to spawn.
         // TODO: Would prefer to use C#'s Random class (perhaps for seed control?).
@@ -114,7 +104,7 @@ public partial class ShootingGallery : Node3D
     private void ScorePopup(string txt)
     {
         var hud = GetNode<CanvasLayer>("HeadsUpDisplay");
-        PackedScene scene = GD.Load<PackedScene>("res://Scenes/score_indicator.tscn");
+        PackedScene scene = GD.Load<PackedScene>(PATH_SCORE_INDICATOR);
         var popup = scene.Instantiate<ScoreIndicator>();
         // Add as child early to call _Ready &c
         hud.AddChild(popup);
@@ -152,7 +142,7 @@ public partial class ShootingGallery : Node3D
         }
         else
         {
-            path = "res://Scenes/small_ball.tscn";
+            path = PATH_BALL;
         }
         var scene = GD.Load<PackedScene>(path);
         return scene;
@@ -233,11 +223,11 @@ public partial class ShootingGallery : Node3D
 
         if (count == 1)
         {
-            _spawnQueue.Add("res://Scenes/watermelon.tscn");
+            _spawnQueue.Add(PATH_WATERMELON);
         }
         else if (count >= 2)
         {
-            _spawnQueue.Add("res://Scenes/balloon.tscn");
+            _spawnQueue.Add(PATH_BALLOON);
         }
     }
 
