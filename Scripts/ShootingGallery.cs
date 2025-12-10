@@ -6,9 +6,7 @@ using System.Linq;  // for [].Count
 
 public partial class ShootingGallery : Node3D
 {
-    [Export] private CanvasLayer headsUpDisplay;
-    [Export] private PauseMenu pauseMenu;
-   
+    // Consts
     private const string PATH_BULLET = "res://Scenes/bullet.tscn";
     private const string PATH_LASER = "res://Scenes/laser.tscn";
     private const string PATH_BGM = "res://Audio/621216__nlux__yp-plague-drone-loop-06.wav";
@@ -18,19 +16,24 @@ public partial class ShootingGallery : Node3D
     private const string PATH_BALLOON = "res://Scenes/balloon.tscn";
     private const string PATH_SCORE_INDICATOR = "res://Scenes/score_indicator.tscn";
 
+    // Exports
+    [Export] private CanvasLayer headsUpDisplay;
+    [Export] private PauseMenu pauseMenu;
+
+    // Others
+    private int _score = 0;
+    public bool IsDead = false;
+
     // A queue for ball types to spawn in
     private List<string> _spawnQueue = new List<string>();
 
+    // OnReadies
     private AudioStreamPlayer _audioPlayer;
-
+    private DeathPopup _deathPopup;
     private Health _health;
     private HPBar _hpBar;
     private Label _healthLabel;
     private Sprite2D _crosshair;
-    private int _score = 0;
-    public bool IsDead = false;
-
-    private DeathPopup _deathPopup;
 
     public override void _Ready()
     {
@@ -93,7 +96,6 @@ public partial class ShootingGallery : Node3D
         var path = GetNode<PathFollow3D>(PATH_SPAWNPATH);
 
         // Picks a random spot on the path to spawn.
-        // TODO: Would prefer to use C#'s Random class (perhaps for seed control?).
         path.ProgressRatio = GD.Randf();
         // Randomly flip the Y-coordinate
         float flipper = (GD.Randi() % 2 - 0.5f) * 2.0f;
@@ -147,6 +149,16 @@ public partial class ShootingGallery : Node3D
         var scene = GD.Load<PackedScene>(path);
         return scene;
     }
+
+    private void UpdateCrosshairPosition()
+    {
+        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
+        _crosshair.Position = viewportSize / 2;
+    }
+
+    // -----
+    // Slots
+    // -----
 
     /// Spawn a ball at a random location
     private void OnBallTimerTimeout()
@@ -269,11 +281,4 @@ public partial class ShootingGallery : Node3D
         // Turn HUD off when pause menu is visible, or vice versa
         headsUpDisplay.Visible = !pauseMenu.Visible;
     }
-
-    private void UpdateCrosshairPosition()
-    {
-        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
-        _crosshair.Position = viewportSize / 2;
-    }
-
 }
