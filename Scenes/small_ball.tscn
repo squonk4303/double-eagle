@@ -47,7 +47,7 @@ _data = {
 }
 
 [node name="SmallBall" type="RigidBody3D"]
-collision_mask = 0
+axis_lock_linear_z = true
 script = ExtResource("1_d60mj")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

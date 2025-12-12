@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=21 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -13,11 +13,6 @@
 [ext_resource type="Script" uid="uid://bo3vd306b57gd" path="res://Scripts/DeathPopup.cs" id="10_vap05"]
 
 [sub_resource type="Curve3D" id="Curve3D_npy5q"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -10.008, -4, 0, 0, 0, 0, 0, 0, 0, -10, 6, 0),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_npy5q"]
 
@@ -36,6 +31,13 @@ albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
+size = Vector2(2, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2s1gh"]
+albedo_texture = ExtResource("1_es7xq")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0w87"]
+albedo_texture = ExtResource("1_es7xq")
 
 [node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
@@ -43,7 +45,7 @@ headsUpDisplay = NodePath("HeadsUpDisplay")
 pauseMenu = NodePath("PauseMenu")
 
 [node name="Marksman" parent="." instance=ExtResource("3_npy5q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4717)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.0233329, 0.969812, -0.242734, -0.778095, -0.134833, -0.613505, -0.627713, 0.203185, 0.75146, 0, 0, 12.4747)
@@ -112,7 +114,7 @@ scale = Vector2(2, 2)
 text = "Score: 00000"
 
 [node name="EditorCamera" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 32.4783)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 fov = 19.6142
 
 [node name="Spawns" type="Node3D" parent="."]
@@ -204,5 +206,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -18.5, 1)
 operation = 2
 size = Vector3(19, 28, 9)
 material = ExtResource("6_wwb8y")
+
+[node name="Framing" type="Node3D" parent="Props"]
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Props/Framing"]
+use_collision = true
+
+[node name="RightFrame" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 2.5)
+size = Vector3(1, 18, 5)
+material = SubResource("StandardMaterial3D_2s1gh")
+
+[node name="LeftFram" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 2.5)
+size = Vector3(1, 18, 5)
+material = SubResource("StandardMaterial3D_2s1gh")
+
+[node name="TopFrame" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, 2.5)
+use_collision = true
+size = Vector3(20, 1, 5)
+material = SubResource("StandardMaterial3D_e0w87")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
