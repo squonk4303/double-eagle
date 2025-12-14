@@ -10,11 +10,16 @@
 
 ---
 
+## Evaluation Rubric
+Everything at default values works for me, but I guess it sort of depends a bit on how the two others want to evaluate the group based ones.
+
+---
 ## Introduction
 
 I was responsible for the UI-related aspects of the game.
 
 (When a file extension isn't specified it means both .cs script and .tscn scene)
+
 
 ### Files Exclusively My Contribution
 
@@ -512,10 +517,10 @@ Learned to call `QueueFree()` when closing dynamic UI to prevent memory leaks.
 
 ## Integration and Collaboration
 
-### Working with Teammate Code
+### Working with Group Members' Code
 
 **Challenge:**
-My UI needed to interact with teammate's ShootingGallery and Marksman classes without creating circular dependencies.
+My UI needed to interact with group member's ShootingGallery and Marksman classes without creating circular dependencies.
 
 **Solutions Used:**
 1. **Signals for one-way communication:** Health→HPBar (I emit, they listen)
@@ -602,9 +607,9 @@ Test edge cases (missing config file, corrupted values, first-time user experien
 
 The video will showcase the following engine-integrated features (~3-4 minutes total):
 
-### 1. Signal Connections (~30 seconds)
+### 1. Signal Connections (~90 seconds)
 **What to Show:**
-- Open `Health.tscn` in Godot editor
+- Open `Health` in Godot editor
 - Navigate to Health node's signals panel, show `OnDied` and `OnHealthChanged` signals
 - Open `HPBar.cs`, show connection code or editor connection
 - Play the game, take damage to demonstrate:
@@ -612,15 +617,37 @@ The video will showcase the following engine-integrated features (~3-4 minutes t
   - Death triggering → DeathPopup appearing
 - **Why this matters:** Demonstrates event-driven architecture that's not visible in code alone
 
-### 2. ProcessMode.Always for Pause Menu (~30 seconds)
+### 2. Mouse Mode Switching (~60 seconds)
 **What to Show:**
-- Open `PauseMenu.tscn` in editor, show inspector with `ProcessMode = Always` setting
-- Play game and pause
-- Demonstrate menu buttons still respond while background is frozen
-- Compare to a `ProcessMode.Pausable` node that stops updating (e.g., show game timer frozen)
-- **Why this matters:** Shows understanding of Godot's scene tree processing modes
+- Start game in main menu (cursor visible and clickable)
+- Click "Start Game" → cursor disappears (captured mode for FPS controls)
+- Demonstrate looking around with captured mouse
+- Press ESC to pause → cursor reappears (visible mode for menu interaction)
+- Click resume → cursor captured again
+- Die → cursor visible for death popup
+- Return to menu → cursor visible
+- **Why this matters:** Shows centralized Input.MouseMode management based on game state
 
-### 3. State Machine Transitions (~45 seconds)
+### 3. Settings Persistence (~80 seconds)
+**What to Show:**
+- Play game, open options
+- Change sensitivity slider to an unusual value (e.g., 2.5)
+- Show file explorer with `user://` directory location
+- Show `settings.cfg` file created with new value
+- Close and restart game completely
+- Open options, show sensitivity loaded correctly at 2.5
+- **Why this matters:** Godot's ConfigFile system and user data persistence
+
+### 4. Dynamic Scene Loading (~70 seconds)
+**What to Show:**
+- Open Godot's Remote Scene Tree tab (while game running)
+- Show OptionsPanel not in scene tree initially
+- Click options button in main menu or pause menu
+- Show OptionsPanel appear in remote scene tree as child of current scene
+- Close options, show node removed from tree (cleanup via `QueueFree()`)
+- **Why this matters:** Runtime scene instancing and memory management
+
+### 5. State Machine Transitions (~90 seconds)
 **What to Show:**
 - Add temporary debug prints to `GameStateManager.ChangeState()`:
   ```csharp
@@ -633,38 +660,7 @@ The video will showcase the following engine-integrated features (~3-4 minutes t
   - PLAYING → LOST (die)
   - LOST → MENU (return to menu)
 - Show console output displaying state transitions
-- Optionally: Attempt invalid transition (e.g., modify code to try PLAYING→MENU directly) and show it's rejected
 - **Why this matters:** FSM validation logic in action
-
-### 4. Dynamic Scene Loading (~30 seconds)
-**What to Show:**
-- Open Godot's Remote Scene Tree tab (while game running)
-- Show OptionsPanel not in scene tree initially
-- Click options button in main menu or pause menu
-- Show OptionsPanel appear in remote scene tree as child of current scene
-- Close options, show node removed from tree (cleanup via `QueueFree()`)
-- **Why this matters:** Runtime scene instancing and memory management
-
-### 5. Settings Persistence (~30 seconds)
-**What to Show:**
-- Play game, open options
-- Change sensitivity slider to an unusual value (e.g., 2.5)
-- Show file explorer with `user://` directory location
-- Show `settings.cfg` file created with new value
-- Close and restart game completely
-- Open options, show sensitivity loaded correctly at 2.5
-- **Why this matters:** Godot's ConfigFile system and user data persistence
-
-### 6. Mouse Mode Switching (~30 seconds)
-**What to Show:**
-- Start game in main menu (cursor visible and clickable)
-- Click "Start Game" → cursor disappears (captured mode for FPS controls)
-- Demonstrate looking around with captured mouse
-- Press ESC to pause → cursor reappears (visible mode for menu interaction)
-- Click resume → cursor captured again
-- Die → cursor visible for death popup
-- Return to menu → cursor visible
-- **Why this matters:** Shows centralized Input.MouseMode management based on game state
 
 ---
 
