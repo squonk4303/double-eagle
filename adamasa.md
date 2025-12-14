@@ -605,6 +605,8 @@ Test edge cases (missing config file, corrupted values, first-time user experien
 
 ## Video Demonstration
 
+Video link: https://www.youtube.com/watch?v=6IH7KloS0SY
+
 The video will showcase the following engine-integrated features (~3-4 minutes total):
 
 ### 1. Signal Connections (~90 seconds)
