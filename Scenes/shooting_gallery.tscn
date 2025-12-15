@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://noelnt65qoxs"]
+[gd_scene load_steps=20 format=3 uid="uid://noelnt65qoxs"]
 
 [ext_resource type="Texture2D" uid="uid://dxbkjfh5l0n4o" path="res://Images/checker.png" id="1_es7xq"]
 [ext_resource type="Script" uid="uid://ban0o8ii830un" path="res://Scripts/ShootingGallery.cs" id="1_npy5q"]
@@ -31,13 +31,14 @@ albedo_texture = ExtResource("1_es7xq")
 texture_filter = 0
 
 [sub_resource type="QuadMesh" id="QuadMesh_pqnnw"]
-size = Vector2(2, 1.8)
+size = Vector2(2, 2.2)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2s1gh"]
 albedo_texture = ExtResource("1_es7xq")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e0w87"]
-albedo_texture = ExtResource("1_es7xq")
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
+uv1_triplanar_sharpness = 5.0
+uv1_world_triplanar = true
 
 [node name="Shooting_Gallery" type="Node3D" node_paths=PackedStringArray("headsUpDisplay", "pauseMenu")]
 script = ExtResource("1_npy5q")
@@ -189,7 +190,7 @@ text = "Main Menu"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Props"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 0, 0)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 1.205, 0, 2, 0)
 material_override = SubResource("StandardMaterial3D_ow0e6")
 mesh = SubResource("QuadMesh_pqnnw")
 
@@ -213,19 +214,13 @@ material = ExtResource("6_wwb8y")
 use_collision = true
 
 [node name="RightFrame" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 2.5)
-size = Vector3(1, 18, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 2.5)
+size = Vector3(1, 22, 5)
 material = SubResource("StandardMaterial3D_2s1gh")
 
 [node name="LeftFram" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 2.5)
-size = Vector3(1, 18, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, 2.5)
+size = Vector3(1, 22, 5)
 material = SubResource("StandardMaterial3D_2s1gh")
-
-[node name="TopFrame" type="CSGBox3D" parent="Props/Framing/CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.5, 2.5)
-use_collision = true
-size = Vector3(20, 1, 5)
-material = SubResource("StandardMaterial3D_e0w87")
 
 [connection signal="timeout" from="BallTimer" to="." method="_on_ball_timer_timeout"]
