@@ -17,14 +17,13 @@ Our Repository:
 
 # A video of the gameplay showing off the important parts of the game
 
-% TODO
+[![Double Eagle Gameplay](https://img.youtube.com/vi/Iq5Gi6kKTD4/0.jpg)](https://youtu.be/Iq5Gi6kKTD4)
 
 
 # Group discussion on the development process
 
-Strengths and weaknesses of engine you used in your game How you controlled process and
-communication systems during development Use of version control systems, ticket
-tracking, branching, version control
+The following is a discussion about our choice of game engine and an exposure about some of
+our development practises.
 
 
 ## Choice of Engine
