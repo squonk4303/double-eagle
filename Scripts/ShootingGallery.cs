@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;  // For List and Dictionary
 using System.Linq;  // for [].Count
 
-
 public partial class ShootingGallery : Node3D
 {
     // Consts
@@ -19,6 +18,14 @@ public partial class ShootingGallery : Node3D
     // Exports
     [Export] private CanvasLayer headsUpDisplay;
     [Export] private PauseMenu pauseMenu;
+
+    // Combo (HP multiplier) settings
+    [Export] private float ComboWindowSec = 3.0f;
+    [Export] private float ComboHealMultiplierStep = 0.25f;
+    [Export] private int ComboMax = 8;
+
+    private int _comboCount = 0;
+    private SceneTreeTimer _comboTimer;
 
     // Others
     private int _score = 0;
@@ -71,7 +78,6 @@ public partial class ShootingGallery : Node3D
         // Initialize HP-HUD
         _healthLabel = GetNode<Label>("HeadsUpDisplay/Control/Health");
 
-        
         _deathPopup = GetNode<DeathPopup>("DeathPopup");
 
         // Connect to the PauseMenu's visibility changes
@@ -156,6 +162,35 @@ public partial class ShootingGallery : Node3D
         _crosshair.Position = viewportSize / 2;
     }
 
+    // -----------------
+    // Combo helpers
+    // -----------------
+
+    private void RegisterComboHit()
+    {
+        _comboCount = Mathf.Clamp(_comboCount + 1, 1, ComboMax);
+
+        if (_comboTimer != null)
+            _comboTimer.Timeout -= OnComboExpired;
+
+        _comboTimer = GetTree().CreateTimer(ComboWindowSec);
+        _comboTimer.Timeout += OnComboExpired;
+    }
+
+    private void OnComboExpired()
+    {
+        _comboCount = 0;
+    }
+
+    private float ApplyComboToHeal(float baseHeal)
+    {
+        if (_comboCount <= 1)
+            return baseHeal;
+
+        float multiplier = 1.0f + (_comboCount - 1) * ComboHealMultiplierStep;
+        return baseHeal * multiplier;
+    }
+
     // -----
     // Slots
     // -----
@@ -200,7 +235,6 @@ public partial class ShootingGallery : Node3D
         // Connect Laser's signal to ShootingGallery's slot
         laser.Connect(
             "LaserReport",
-            // Make a callable From this lambda
             Callable.From(
                 (Godot.Collections.Array<CollisionObject3D> targets) => OnLaserReport(targets)
             )
@@ -211,9 +245,14 @@ public partial class ShootingGallery : Node3D
 
     private void OnBulletReport()
     {
+        RegisterComboHit();
+
         // Refund the health lost by shooting in the first place
-        ScorePopup("1 HP");
-        _health.Heal(1.0f);
+        float baseHeal = 1.0f;
+        float healed = ApplyComboToHeal(baseHeal);
+
+        ScorePopup($"{healed:0.#} HP");
+        _health.Heal(healed);
     }
 
     /// Add/remove health based on how many valid targets hit with laser
@@ -222,16 +261,23 @@ public partial class ShootingGallery : Node3D
         // $$ f(x) = 5x^{1.5} - 4 $$
         // f(0) = -4; f(1) = 1; f(2) = 10.14; f(3) = 21.98;
         var f = (int x) => (float)Math.Round(5 * Math.Pow(x, 1.5) - 4);
+
         // Count targets which inherit Ball
         int count = targets.Count(e => e is Ball);
+
+        if (count > 0)
+            RegisterComboHit();
+
         if (f(count) > 0.0f)
         {
             AddScore(f(count) * 10.0f);
         }
 
-        // Notify player of score
-        _health.Heal(f(count) - 1.0f);
-        ScorePopup($"{f(count) - 1.0f} HP");
+        float baseHeal = f(count) - 1.0f;
+        float healed = ApplyComboToHeal(baseHeal);
+
+        _health.Heal(healed);
+        ScorePopup($"{healed:0.#} HP");
 
         if (count == 1)
         {

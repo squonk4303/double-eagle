@@ -19,51 +19,38 @@ public partial class Ball : RigidBody3D
     [Export] public float PitchFactor = 1.5f;
     [Export] public float PitchConstant = 0.5f;
 
+    // Slow effect settings
+    [Export] public float LaserSlowDurationSec = 2.0f;
+    [Export] public float LaserSlowVelocityMultiplier = 0.25f;
+    [Export] public float LaserSlowExtraDamp = 6.0f;
+
+    private uint _slowToken = 0;
+    private float _baseLinearDamp;
+    private float _baseAngularDamp;
+
     public override void _Ready()
     {
         _audioPlayer = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
         _animation = GetNode<AnimationPlayer>("AnimationPlayer");
         _animation.SpeedScale = AnimationSpeedScale;
 
-        // Load sfx resources
         _bulletHitSfx = GD.Load<AudioStream>(BULLET_HIT_SFX);
         _laserHitSfx = GD.Load<AudioStream>(LASER_HIT_SFX);
+
+        // Capture original physics values once
+        _baseLinearDamp = LinearDamp;
+        _baseAngularDamp = AngularDamp;
     }
 
-    /// Prepare for getting spawned in
-    public virtual void Initialize(Vector3 spawn, Vector3 target)
-    {
-        Position = spawn;
-
-        // --- Get force with which to spawn ---
-        Vector3 difference = target - spawn;
-        // TODO: All this does is get a higher angle. There should be a way
-        // to get the same result in a more controlled way.
-        difference.Z = 0.0f;
-        difference *= 0.5f;
-        difference.Y += 3.0f;
-
-        ApplyForce(difference * (EntryForceFactor + GD.Randf() * EntryForceConstant));
-
-        // --- Make up an angle to spawn with ---
-        Rotation = difference.Normalized();
-    }
-
-    /// How to respond when hit by a bullet
     public void bulletHit(Vector3 b_pos)
     {
-        // Get direction from center of bullet to center of self
         Vector3 direction = b_pos.DirectionTo(GlobalPosition);
-        // Suppress force applied in z-direction
-        // NOTE: This denormalizes the vector
         direction.Z = 0.0f;
         ApplyForce(direction * CollisionForce);
 
-        // Select and playe sfx
         _audioPlayer.Stream = _bulletHitSfx;
-        // Randomize pitch [0.5, 2.0]
-        _audioPlayer.PitchScale = PitchConstant + GD.Randf() * PitchFactor ;
-        _audioPlayer.VolumeDb = 00.0f;
+        _audioPlayer.PitchScale = PitchConstant + GD.Randf() * PitchFactor;
+        _audioPlayer.VolumeDb = 0.0f;
         _audioPlayer.Play();
     }
 
@@ -71,28 +58,56 @@ public partial class Ball : RigidBody3D
     {
         if (_timesHit <= 0)
         {
-            // Turn red
             _animation.Play("turn_red");
 
-            // Select and playe sfx
             _audioPlayer.Stream = _laserHitSfx;
-            // Randomize pitch [0.5, 2.0]
             _audioPlayer.PitchScale = PitchConstant + GD.Randf() * PitchFactor;
             _audioPlayer.VolumeDb = 70.0f;
             _audioPlayer.Play();
 
-            // Disable collision
             CollisionLayer = 0x0000;
         }
+
         _timesHit += 1;
+
+        ApplyLaserSlow();
+    }
+
+    private async void ApplyLaserSlow()
+    {
+        _slowToken++;
+        uint myToken = _slowToken;
+
+        LinearVelocity *= LaserSlowVelocityMultiplier;
+        AngularVelocity *= LaserSlowVelocityMultiplier;
+
+        LinearDamp = _baseLinearDamp + LaserSlowExtraDamp;
+        AngularDamp = _baseAngularDamp + LaserSlowExtraDamp;
+
+        await ToSignal(GetTree().CreateTimer(LaserSlowDurationSec),
+                       SceneTreeTimer.SignalName.Timeout);
+
+        if (myToken != _slowToken) return;
+
+        LinearDamp = _baseLinearDamp;
+        AngularDamp = _baseAngularDamp;
     }
 
     public override void _Process(double delta)
     {
-        // Despawn once low enough
         if (Position.Y <= -400.0f)
-        {
             QueueFree();
-        }
+    }
+
+    public virtual void Initialize(Vector3 spawn, Vector3 target)
+    {
+        Position = spawn;
+        Vector3 difference = target - spawn;
+        difference.Z = 0.0f;
+        difference *= 0.5f;
+        difference.Y += 3.0f;
+
+        ApplyForce(difference * (EntryForceFactor + GD.Randf() * EntryForceConstant));
+        Rotation = difference.Normalized();
     }
 }
