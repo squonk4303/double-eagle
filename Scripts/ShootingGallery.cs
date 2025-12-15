@@ -123,7 +123,7 @@ public partial class ShootingGallery : Node3D
     {
         if (!IsDead)
         {
-            var label = GetNode<Label>("HeadsUpDisplay/ScoreDisplay");
+            var label = GetNode<Label>("HeadsUpDisplay/Control/ScoreDisplay");
             _score += (int)Math.Round(n);
             string txt;
             txt = _score.ToString("Score: 00000");
